@@ -70,6 +70,23 @@ public class GroupDAO extends BaseDAO {
 			.fetchOneInto(OGroup.class);
 	}
 	
+	public List<OGroup> selectByUser(Connection con, String domainId, String userId) {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(GROUPS.GROUP_ID,GROUPS.DESCRIPTION)
+			.from(GROUPS)
+			.where(GROUPS.DOMAIN_ID.in(domainId,"*")
+					.and(GROUPS.GROUP_ID.in(
+							dsl.select(GROUPS.GROUP_ID)
+							.from(USERS_GROUPS)
+							.where(USERS_GROUPS.DOMAIN_ID.in(domainId,"*")
+									.and(USERS_GROUPS.USER_ID.equal(userId))
+							)
+					))
+			)
+			.fetchInto(OGroup.class);
+	}
+	
 	public int insert(Connection con, OGroup item) {
 		DSLContext dsl = getDSL(con);
 		GroupsRecord record = dsl.newRecord(GROUPS, item);
