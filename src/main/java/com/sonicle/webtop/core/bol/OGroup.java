@@ -41,6 +41,10 @@ import com.sonicle.webtop.core.jooq.tables.pojos.Groups;
  */
 public class OGroup extends Groups {
 
+	public OGroup() {
+		
+	}
+	
 	public OGroup(String domainId, String groupId, String description) {
 		super(domainId, groupId, description);
 	}
