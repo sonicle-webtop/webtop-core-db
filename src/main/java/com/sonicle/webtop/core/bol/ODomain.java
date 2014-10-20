@@ -41,8 +41,7 @@ import com.sonicle.webtop.core.jooq.tables.pojos.Domains;
  */
 public class ODomain extends Domains {
 
-	public ODomain(String domainId, String description, String domainName, String authUri, String authUsername, String authPassword, Boolean enabled, Boolean caseSensitiveAuth, Boolean userAutoCreation, Boolean webtopAdvSecurity) {
-		super(domainId, description, domainName, authUri, authUsername, authPassword, enabled, caseSensitiveAuth, userAutoCreation, webtopAdvSecurity);
+	public ODomain() {
+		
 	}
-	
 }

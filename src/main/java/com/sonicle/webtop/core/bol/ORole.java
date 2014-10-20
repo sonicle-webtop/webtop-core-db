@@ -41,8 +41,7 @@ import com.sonicle.webtop.core.jooq.tables.pojos.Roles;
  */
 public class ORole extends Roles {
 
-	public ORole(String domainId, String roleId, String description) {
-		super(domainId, roleId, description);
+	public ORole() {
+		
 	}
-	
 }

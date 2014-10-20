@@ -41,8 +41,7 @@ import com.sonicle.webtop.core.jooq.tables.pojos.GroupsRoles;
  */
 public class OGroupRole extends GroupsRoles {
 
-	public OGroupRole(String domainId, String groupId, String roleId) {
-		super(domainId, groupId, roleId);
+	public OGroupRole() {
+		
 	}
-	
 }

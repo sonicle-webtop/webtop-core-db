@@ -41,7 +41,7 @@ import com.sonicle.webtop.core.jooq.tables.pojos.Settings;
  */
 public class OSetting extends Settings {
 	
-	public OSetting(String serviceId, String key, String value) {
-		super(serviceId, key, value);
+	public OSetting() {
+		
 	}
 }

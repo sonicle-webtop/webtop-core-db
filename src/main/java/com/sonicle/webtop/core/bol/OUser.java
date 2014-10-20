@@ -14,8 +14,7 @@ import com.sonicle.webtop.core.jooq.tables.pojos.Users;
  */
 public class OUser extends Users {
 
-	public OUser(String domainId, String userId, String password, String passwordType) {
-		super(domainId, userId, password, passwordType);
+	public OUser() {
+		
 	}
-
 }

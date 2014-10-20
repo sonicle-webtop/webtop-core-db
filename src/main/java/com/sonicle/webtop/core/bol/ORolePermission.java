@@ -41,8 +41,7 @@ import com.sonicle.webtop.core.jooq.tables.pojos.RolesPermissions;
  */
 public class ORolePermission extends RolesPermissions {
 
-	public ORolePermission(String domainId, String roleId, String permission) {
-		super(domainId, roleId, permission);
+	public ORolePermission() {
+		
 	}
-	
 }

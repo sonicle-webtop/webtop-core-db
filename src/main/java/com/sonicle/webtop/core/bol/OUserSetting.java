@@ -41,7 +41,7 @@ import com.sonicle.webtop.core.jooq.tables.pojos.UserSettings;
  */
 public class OUserSetting extends UserSettings {
 	
-	public OUserSetting(String domainId, String userId, String serviceId, String key, String value) {
-		super(domainId, userId, serviceId, key, value);
+	public OUserSetting() {
+		
 	}
 }
