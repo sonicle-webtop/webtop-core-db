@@ -37,33 +37,17 @@ import com.sonicle.webtop.core.bol.OUser;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.UsersRecord;
 import java.sql.Connection;
-import java.util.List;
 import org.jooq.DSLContext;
 
 /**
  *
  * @author gbulfon
  */
-public class UserDAO extends BaseDAO {
+public class UserDataDAO extends BaseDAO {
 	
-	private final static UserDAO INSTANCE = new UserDAO();
-	public static UserDAO getInstance() {
+	private final static UserDataDAO INSTANCE = new UserDataDAO();
+	public static UserDataDAO getInstance() {
 		return INSTANCE;
-	}
-	
-	public List<OUser> selectAll(Connection con) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.select(
-				USERS.DOMAIN_ID,
-				USERS.USER_ID,
-				USERS.PASSWORD,
-				USERS.PASSWORD_TYPE,
-				USERS.SECRET,
-				USERS.LOCALE_LANGUAGE,
-				USERS.LOCALE_COUNTRY
-			).from(USERS)
-			.fetchInto(OUser.class);
 	}
 	
 	public OUser selectByDomainUser(Connection con, String domainId, String userId) throws DAOException {
@@ -72,11 +56,27 @@ public class UserDAO extends BaseDAO {
 			.select(
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
-				USERS.PASSWORD,
-				USERS.PASSWORD_TYPE,
-				USERS.SECRET,
-				USERS.LOCALE_LANGUAGE,
-				USERS.LOCALE_COUNTRY
+				USERS.TITLE,
+				USERS.FIRST_NAME,
+				USERS.LAST_NAME,
+				USERS.ADDRESS,
+				USERS.POSTAL_CODE,
+				USERS.CITY,
+				USERS.STATE,
+				USERS.COUNTRY,
+				USERS.EMAIL,
+				USERS.MOBILE,
+				USERS.TELEPHONE,
+				USERS.FAX,
+				USERS.COMPANY,
+				USERS.FUNCTION,
+				USERS.WORK_EMAIL,
+				USERS.WORK_MOBILE,
+				USERS.WORK_TELEPHONE,
+				USERS.WORK_FAX,
+				USERS.CUSTOM_1,
+				USERS.CUSTOM_2,
+				USERS.CUSTOM_3
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -85,49 +85,35 @@ public class UserDAO extends BaseDAO {
 			.fetchOneInto(OUser.class);
 	}
 	
-	public int insert(Connection con, OUser item) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		UsersRecord record = dsl.newRecord(USERS, item);
-		return dsl
-			.insertInto(USERS)
-			.set(record)
-			.execute();
-	}
-	
 	public int update(Connection con, OUser item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		UsersRecord record = dsl.newRecord(USERS, item);
 		return dsl
 			.update(USERS)
-			.set(USERS.PASSWORD, item.getPassword())
-			.set(USERS.PASSWORD_TYPE, item.getPasswordType())
-			.set(USERS.SECRET, item.getSecret())
-			.set(USERS.LOCALE_LANGUAGE, item.getLocaleLanguage())
-			.set(USERS.LOCALE_COUNTRY, item.getLocaleCountry())
+			.set(USERS.TITLE, item.getTitle())
+			.set(USERS.FIRST_NAME, item.getFirstName())
+			.set(USERS.LAST_NAME, item.getLastName())
+			.set(USERS.ADDRESS, item.getAddress())
+			.set(USERS.POSTAL_CODE, item.getPostalCode())
+			.set(USERS.CITY, item.getCity())
+			.set(USERS.STATE, item.getState())
+			.set(USERS.COUNTRY, item.getCountry())
+			.set(USERS.EMAIL, item.getEmail())
+			.set(USERS.MOBILE, item.getMobile())
+			.set(USERS.TELEPHONE, item.getTelephone())
+			.set(USERS.FAX, item.getFax())
+			.set(USERS.COMPANY, item.getCompany())
+			.set(USERS.FUNCTION, item.getFunction())
+			.set(USERS.WORK_EMAIL, item.getWorkEmail())
+			.set(USERS.WORK_MOBILE, item.getWorkMobile())
+			.set(USERS.WORK_TELEPHONE, item.getWorkTelephone())
+			.set(USERS.WORK_FAX, item.getFax())
+			.set(USERS.CUSTOM_1, item.getCustom_1())
+			.set(USERS.CUSTOM_2, item.getCustom_2())
+			.set(USERS.CUSTOM_3, item.getCustom_3())
 			.where(
 				USERS.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS.USER_ID.equal(item.getUserId()))
-			)
-			.execute();
-	}
-	
-	public int updateSecretByDomainUser(Connection con, String domainId, String userId, String secret) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.update(USERS)
-			.set(USERS.SECRET, secret)
-			.where(USERS.DOMAIN_ID.equal(domainId)
-					.and(USERS.USER_ID.equal(userId))
-			)
-			.execute();
-	}
-	
-	public int deleteByDomainUser(Connection con, String domainId, String userId) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.delete(USERS)
-			.where(USERS.DOMAIN_ID.equal(domainId)
-					.and(USERS.USER_ID.equal(userId))
 			)
 			.execute();
 	}

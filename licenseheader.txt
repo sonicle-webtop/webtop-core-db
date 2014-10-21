@@ -1,5 +1,5 @@
 /*
- * webtop-core-db is a library developed by Sonicle S.r.l.
+ * ${project.name} is a library developed by Sonicle S.r.l.
  * Copyright (C) 2014 Sonicle S.r.l.
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -31,24 +31,3 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.dal;
-
-import java.sql.Connection;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-
-/**
- *
- * @author malbinola
- */
-public class BaseDAO {
-	
-	public SQLDialect getDialect(Connection con) {
-		return SQLDialect.POSTGRES;
-	}
-	
-	public DSLContext getDSL(Connection con) {
-		return DSL.using(con, getDialect(con));
-	}
-}
