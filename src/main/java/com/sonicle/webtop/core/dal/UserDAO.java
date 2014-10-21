@@ -32,7 +32,7 @@ public class UserDAO extends BaseDAO {
 			.fetchInto(OUser.class);
 	}
 	
-	public OUser selectById(Connection con, String domainId, String userId) {
+	public OUser selectByDomainUser(Connection con, String domainId, String userId) {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -64,7 +64,7 @@ public class UserDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteById(Connection con, String domainId, String userId) {
+	public int deleteByDomainUser(Connection con, String domainId, String userId) {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(USERS)
