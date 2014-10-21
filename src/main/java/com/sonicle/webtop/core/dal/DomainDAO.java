@@ -39,6 +39,7 @@ import org.jooq.DSLContext;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.*;
 import java.util.List;
+import org.jooq.exception.DataAccessException;
 
 /**
  *
@@ -51,7 +52,7 @@ public class DomainDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<ODomain> selectAll(Connection con) {
+	public List<ODomain> selectAll(Connection con) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -59,7 +60,7 @@ public class DomainDAO extends BaseDAO {
 			.fetchInto(ODomain.class);
 	}
 	
-	public ODomain selectById(Connection con, String domainId) {
+	public ODomain selectById(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -68,7 +69,7 @@ public class DomainDAO extends BaseDAO {
 			.fetchOneInto(ODomain.class);
 	}
 	
-	public int insert(Connection con, ODomain item) {
+	public int insert(Connection con, ODomain item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		DomainsRecord record = dsl.newRecord(DOMAINS, item);
 		return dsl
@@ -77,7 +78,7 @@ public class DomainDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, ODomain item) {
+	public int update(Connection con, ODomain item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		DomainsRecord record = dsl.newRecord(DOMAINS, item);
 		return dsl
@@ -87,7 +88,7 @@ public class DomainDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteById(Connection con, String domainId) {
+	public int deleteById(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(DOMAINS)

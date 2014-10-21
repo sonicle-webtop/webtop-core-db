@@ -39,6 +39,7 @@ import com.sonicle.webtop.core.jooq.tables.records.GroupsRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 
 /**
  *
@@ -51,7 +52,7 @@ public class GroupDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<OGroup> selectAll(Connection con) {
+	public List<OGroup> selectAll(Connection con) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -59,7 +60,7 @@ public class GroupDAO extends BaseDAO {
 			.fetchInto(OGroup.class);
 	}
 	
-	public OGroup selectById(Connection con, String domainId, String groupId) {
+	public OGroup selectById(Connection con, String domainId, String groupId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -70,7 +71,7 @@ public class GroupDAO extends BaseDAO {
 			.fetchOneInto(OGroup.class);
 	}
 	
-	public List<OGroup> selectByUser(Connection con, String domainId, String userId) {
+	public List<OGroup> selectByUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(GROUPS.GROUP_ID,GROUPS.DESCRIPTION)
@@ -87,7 +88,7 @@ public class GroupDAO extends BaseDAO {
 			.fetchInto(OGroup.class);
 	}
 	
-	public int insert(Connection con, OGroup item) {
+	public int insert(Connection con, OGroup item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		GroupsRecord record = dsl.newRecord(GROUPS, item);
 		return dsl
@@ -96,7 +97,7 @@ public class GroupDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, OGroup item) {
+	public int update(Connection con, OGroup item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		GroupsRecord record = dsl.newRecord(GROUPS, item);
 		return dsl
@@ -108,7 +109,7 @@ public class GroupDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteById(Connection con, String domainId, String groupId) {
+	public int deleteById(Connection con, String domainId, String groupId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(GROUPS)

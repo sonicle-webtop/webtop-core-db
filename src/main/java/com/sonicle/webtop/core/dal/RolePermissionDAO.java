@@ -39,6 +39,7 @@ import com.sonicle.webtop.core.jooq.tables.records.RolesPermissionsRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 
 /**
  *
@@ -51,7 +52,7 @@ public class RolePermissionDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<ORolePermission> selectByRoleId(Connection con, String domainId, String roleId) {
+	public List<ORolePermission> selectByRoleId(Connection con, String domainId, String roleId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -62,7 +63,7 @@ public class RolePermissionDAO extends BaseDAO {
 			.fetchInto(ORolePermission.class);
 	}
 	
-	public int insert(Connection con, ORolePermission item) {
+	public int insert(Connection con, ORolePermission item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		RolesPermissionsRecord record = dsl.newRecord(ROLES_PERMISSIONS, item);
 		return dsl
@@ -71,7 +72,7 @@ public class RolePermissionDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, ORolePermission item) {
+	public int update(Connection con, ORolePermission item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		RolesPermissionsRecord record = dsl.newRecord(ROLES_PERMISSIONS, item);
 		return dsl
@@ -84,7 +85,7 @@ public class RolePermissionDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int delete(Connection con, String domainId, String roleId, String permission) {
+	public int delete(Connection con, String domainId, String roleId, String permission) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES_PERMISSIONS)

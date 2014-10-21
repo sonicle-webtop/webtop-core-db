@@ -39,6 +39,7 @@ import org.jooq.DSLContext;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.*;
 import java.util.List;
+import org.jooq.exception.DataAccessException;
 
 /**
  *
@@ -51,7 +52,7 @@ public class UserSettingDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<OUserSetting> selectByDomainUserService(Connection con, String domainId, String userId, String serviceId) {
+	public List<OUserSetting> selectByDomainUserService(Connection con, String domainId, String userId, String serviceId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -66,7 +67,7 @@ public class UserSettingDAO extends BaseDAO {
 			.fetchInto(OUserSetting.class);
 	}
 	
-	public List<OUserSetting> selectByDomainServiceUserKeyLike(Connection con, String domainId, String userId, String serviceId, String keyLike) {
+	public List<OUserSetting> selectByDomainServiceUserKeyLike(Connection con, String domainId, String userId, String serviceId, String keyLike) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -82,7 +83,7 @@ public class UserSettingDAO extends BaseDAO {
 			.fetchInto(OUserSetting.class);
 	}
 	
-	public OUserSetting selectByDomainUserServiceKey(Connection con, String domainId, String userId, String serviceId, String key) {
+	public OUserSetting selectByDomainUserServiceKey(Connection con, String domainId, String userId, String serviceId, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -95,7 +96,7 @@ public class UserSettingDAO extends BaseDAO {
 			.fetchOneInto(OUserSetting.class);
 	}
 	
-	public int insert(Connection con, OUserSetting item) {
+	public int insert(Connection con, OUserSetting item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		UserSettingsRecord record = dsl.newRecord(USER_SETTINGS, item);
 		return dsl
@@ -104,7 +105,7 @@ public class UserSettingDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, OUserSetting item) {
+	public int update(Connection con, OUserSetting item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		UserSettingsRecord record = dsl.newRecord(USER_SETTINGS, item);
 		return dsl
@@ -118,7 +119,7 @@ public class UserSettingDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByDomainServiceUserKey(Connection con, String domainId, String userId, String serviceId, String key) {
+	public int deleteByDomainServiceUserKey(Connection con, String domainId, String userId, String serviceId, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(USER_SETTINGS)

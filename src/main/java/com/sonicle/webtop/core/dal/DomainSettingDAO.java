@@ -39,6 +39,7 @@ import org.jooq.DSLContext;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.*;
 import java.util.List;
+import org.jooq.exception.DataAccessException;
 
 /**
  *
@@ -51,7 +52,7 @@ public class DomainSettingDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<ODomainSetting> selectByDomainService(Connection con, String domainId, String serviceId) {
+	public List<ODomainSetting> selectByDomainService(Connection con, String domainId, String serviceId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -62,7 +63,7 @@ public class DomainSettingDAO extends BaseDAO {
 			.fetchInto(ODomainSetting.class);
 	}
 	
-	public ODomainSetting selectByDomainServiceKey(Connection con, String domainId, String serviceId, String key) {
+	public ODomainSetting selectByDomainServiceKey(Connection con, String domainId, String serviceId, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -74,7 +75,7 @@ public class DomainSettingDAO extends BaseDAO {
 			.fetchOneInto(ODomainSetting.class);
 	}
 	
-	public int insert(Connection con, ODomainSetting item) {
+	public int insert(Connection con, ODomainSetting item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		DomainSettingsRecord record = dsl.newRecord(DOMAIN_SETTINGS, item);
 		return dsl
@@ -83,7 +84,7 @@ public class DomainSettingDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, ODomainSetting item) {
+	public int update(Connection con, ODomainSetting item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		DomainSettingsRecord record = dsl.newRecord(DOMAIN_SETTINGS, item);
 		return dsl
@@ -96,7 +97,7 @@ public class DomainSettingDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByDomainServiceKey(Connection con, String domainId, String serviceId, String key) {
+	public int deleteByDomainServiceKey(Connection con, String domainId, String serviceId, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(DOMAIN_SETTINGS)

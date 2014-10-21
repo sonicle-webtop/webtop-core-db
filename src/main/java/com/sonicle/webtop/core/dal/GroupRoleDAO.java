@@ -39,6 +39,7 @@ import com.sonicle.webtop.core.jooq.tables.records.GroupsRolesRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 
 /**
  *
@@ -50,7 +51,7 @@ public class GroupRoleDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<OGroupRole> selectByGroupId(Connection con, String domainId, String groupId) {
+	public List<OGroupRole> selectByGroupId(Connection con, String domainId, String groupId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -61,7 +62,7 @@ public class GroupRoleDAO extends BaseDAO {
 			.fetchInto(OGroupRole.class);
 	}
 	
-	public int insert(Connection con, OGroupRole item) {
+	public int insert(Connection con, OGroupRole item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		GroupsRolesRecord record = dsl.newRecord(GROUPS_ROLES, item);
 		return dsl
@@ -70,7 +71,7 @@ public class GroupRoleDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, OGroupRole item) {
+	public int update(Connection con, OGroupRole item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		GroupsRolesRecord record = dsl.newRecord(GROUPS_ROLES, item);
 		return dsl
@@ -83,7 +84,7 @@ public class GroupRoleDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int delete(Connection con, String domainId, String groupId, String roleId) {
+	public int delete(Connection con, String domainId, String groupId, String roleId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(GROUPS_ROLES)

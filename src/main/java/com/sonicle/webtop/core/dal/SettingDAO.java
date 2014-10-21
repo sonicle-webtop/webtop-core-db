@@ -39,6 +39,7 @@ import org.jooq.DSLContext;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.*;
 import java.util.List;
+import org.jooq.exception.DataAccessException;
 
 /**
  *
@@ -51,7 +52,7 @@ public class SettingDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<OSetting> selectByService(Connection con, String serviceId) {
+	public List<OSetting> selectByService(Connection con, String serviceId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -60,7 +61,7 @@ public class SettingDAO extends BaseDAO {
 			.fetchInto(OSetting.class);
 	}
 	
-	public OSetting selectByServiceKey(Connection con, String serviceId, String key) {
+	public OSetting selectByServiceKey(Connection con, String serviceId, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -71,7 +72,7 @@ public class SettingDAO extends BaseDAO {
 			.fetchOneInto(OSetting.class);
 	}
 	
-	public int insert(Connection con, OSetting item) {
+	public int insert(Connection con, OSetting item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		SettingsRecord record = dsl.newRecord(SETTINGS, item);
 		return dsl
@@ -80,7 +81,7 @@ public class SettingDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, OSetting item) {
+	public int update(Connection con, OSetting item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		SettingsRecord record = dsl.newRecord(SETTINGS, item);
 		return dsl
@@ -92,7 +93,7 @@ public class SettingDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByServiceKey(Connection con, String serviceId, String key) {
+	public int deleteByServiceKey(Connection con, String serviceId, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(SETTINGS)
