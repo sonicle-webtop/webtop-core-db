@@ -76,7 +76,9 @@ public class UserDAO extends BaseDAO {
 				USERS.PASSWORD_TYPE,
 				USERS.SECRET,
 				USERS.LOCALE_LANGUAGE,
-				USERS.LOCALE_COUNTRY
+				USERS.LOCALE_COUNTRY,
+				USERS.FIRST_NAME,
+				USERS.LAST_NAME
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
