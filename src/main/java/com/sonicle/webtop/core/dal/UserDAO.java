@@ -62,6 +62,10 @@ public class UserDAO extends BaseDAO {
 				USERS.SECRET,
 				USERS.LANGUAGE_TAG,
 				USERS.DISPLAY_NAME
+				/*
+					Do not add any userData fields (like firstName, lastName, email, etc...)
+					Get these field using userData provider!
+				*/
 			).from(USERS)
 			.fetchInto(OUser.class);
 	}
@@ -77,6 +81,10 @@ public class UserDAO extends BaseDAO {
 				USERS.SECRET,
 				USERS.LANGUAGE_TAG,
 				USERS.DISPLAY_NAME
+				/*
+					Do not add any userData fields (like firstName, lastName, email, etc...)
+					Get these field using userData provider!
+				*/
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -104,6 +112,10 @@ public class UserDAO extends BaseDAO {
 			.set(USERS.SECRET, item.getSecret())
 			.set(USERS.LANGUAGE_TAG, item.getLanguageTag())
 			.set(USERS.DISPLAY_NAME, item.getDisplayName())
+			/*
+				Do not add any userData fields (like firstName, lastName, email, etc...)
+				Update these field using userData provider!
+			*/
 			.where(
 				USERS.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS.USER_ID.equal(item.getUserId()))
