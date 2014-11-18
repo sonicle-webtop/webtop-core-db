@@ -60,8 +60,8 @@ public class UserDAO extends BaseDAO {
 				USERS.PASSWORD,
 				USERS.PASSWORD_TYPE,
 				USERS.SECRET,
-				USERS.LOCALE_LANGUAGE,
-				USERS.LOCALE_COUNTRY
+				USERS.LANGUAGE_TAG,
+				USERS.DISPLAY_NAME
 			).from(USERS)
 			.fetchInto(OUser.class);
 	}
@@ -75,8 +75,8 @@ public class UserDAO extends BaseDAO {
 				USERS.PASSWORD,
 				USERS.PASSWORD_TYPE,
 				USERS.SECRET,
-				USERS.LOCALE_LANGUAGE,
-				USERS.LOCALE_COUNTRY
+				USERS.LANGUAGE_TAG,
+				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -102,8 +102,8 @@ public class UserDAO extends BaseDAO {
 			.set(USERS.PASSWORD, item.getPassword())
 			.set(USERS.PASSWORD_TYPE, item.getPasswordType())
 			.set(USERS.SECRET, item.getSecret())
-			.set(USERS.LOCALE_LANGUAGE, item.getLocaleLanguage())
-			.set(USERS.LOCALE_COUNTRY, item.getLocaleCountry())
+			.set(USERS.LANGUAGE_TAG, item.getLanguageTag())
+			.set(USERS.DISPLAY_NAME, item.getDisplayName())
 			.where(
 				USERS.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS.USER_ID.equal(item.getUserId()))
