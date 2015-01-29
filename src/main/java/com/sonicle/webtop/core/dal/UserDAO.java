@@ -61,6 +61,7 @@ public class UserDAO extends BaseDAO {
 				USERS.PASSWORD_TYPE,
 				USERS.SECRET,
 				USERS.LANGUAGE_TAG,
+				USERS.TIMEZONE,
 				USERS.DISPLAY_NAME
 				/*
 					Do not add any userData fields (like firstName, lastName, email, etc...)
@@ -80,6 +81,7 @@ public class UserDAO extends BaseDAO {
 				USERS.PASSWORD_TYPE,
 				USERS.SECRET,
 				USERS.LANGUAGE_TAG,
+				USERS.TIMEZONE,
 				USERS.DISPLAY_NAME
 				/*
 					Do not add any userData fields (like firstName, lastName, email, etc...)
@@ -111,6 +113,7 @@ public class UserDAO extends BaseDAO {
 			.set(USERS.PASSWORD_TYPE, item.getPasswordType())
 			.set(USERS.SECRET, item.getSecret())
 			.set(USERS.LANGUAGE_TAG, item.getLanguageTag())
+			.set(USERS.TIMEZONE, item.getTimezone())
 			.set(USERS.DISPLAY_NAME, item.getDisplayName())
 			/*
 				Do not add any userData fields (like firstName, lastName, email, etc...)

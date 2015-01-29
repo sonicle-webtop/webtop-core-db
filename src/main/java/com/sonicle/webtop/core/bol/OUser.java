@@ -9,6 +9,7 @@ package com.sonicle.webtop.core.bol;
 import com.sonicle.commons.LangUtils;
 import com.sonicle.webtop.core.jooq.tables.pojos.Users;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  *
@@ -26,5 +27,13 @@ public class OUser extends Users {
 	
 	public void setLocale(Locale locale) {
 		setLanguageTag(locale.toString());
+	}
+	
+	public TimeZone getTimeZone() {
+		return TimeZone.getTimeZone(getTimezone());
+	}
+	
+	public void setTimeZone(TimeZone timeZone) {
+		setTimezone(timeZone.getID());
 	}
 }

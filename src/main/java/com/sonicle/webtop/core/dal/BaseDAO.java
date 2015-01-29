@@ -34,7 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
@@ -50,5 +52,12 @@ public class BaseDAO {
 	
 	public DSLContext getDSL(Connection con) {
 		return DSL.using(con, getDialect(con));
+	}
+	
+	public static class FieldsMap extends HashMap<Field<?>, Object> {
+		
+		public FieldsMap() {
+			super();
+		}
 	}
 }
