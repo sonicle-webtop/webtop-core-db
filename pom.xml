@@ -69,6 +69,20 @@
 							<includes>.*</includes>
 							<excludes></excludes>
 							<inputSchema>public</inputSchema>
+							<customTypes>
+								<customType>
+									<name>JodaDateTime</name>
+									<type>org.joda.time.DateTime</type>
+									<converter>com.sonicle.webtop.core.jooq.DateTimeConverter</converter>
+								</customType>
+							</customTypes>
+							<forcedTypes>
+								<forcedType>
+									<name>JodaDateTime</name>
+									<expressions>.*</expressions>
+									<types>date.*|timestamp.*</types>
+								</forcedType>
+							</forcedTypes>
 						</database>
 						<target>
 							<packageName>com.sonicle.webtop.core.jooq</packageName>
