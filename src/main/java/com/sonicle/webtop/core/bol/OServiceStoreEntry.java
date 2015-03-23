@@ -33,12 +33,12 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.ServiceEntries;
+import com.sonicle.webtop.core.jooq.tables.pojos.ServicestoreEntries;
 
 /**
  *
  * @author malbinola
  */
-public class OServiceEntry extends ServiceEntries {
+public class OServiceStoreEntry extends ServicestoreEntries {
 	
 }
