@@ -34,9 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.ODomain;
+import static com.sonicle.webtop.core.jooq.Tables.DOMAINS;
 import java.sql.Connection;
 import org.jooq.DSLContext;
-import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.*;
 import java.util.List;
 

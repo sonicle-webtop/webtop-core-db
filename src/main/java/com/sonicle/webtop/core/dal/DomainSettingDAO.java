@@ -36,7 +36,7 @@ package com.sonicle.webtop.core.dal;
 import com.sonicle.webtop.core.bol.ODomainSetting;
 import java.sql.Connection;
 import org.jooq.DSLContext;
-import static com.sonicle.webtop.core.jooq.Tables.*;
+import static com.sonicle.webtop.core.jooq.Tables.DOMAIN_SETTINGS;
 import com.sonicle.webtop.core.jooq.tables.records.*;
 import java.util.List;
 
