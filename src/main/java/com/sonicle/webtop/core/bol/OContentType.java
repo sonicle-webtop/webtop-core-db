@@ -41,7 +41,4 @@ import com.sonicle.webtop.core.jooq.tables.pojos.ContentTypes;
  */
 public class OContentType extends ContentTypes {
 	
-	public OContentType() {
-		
-	}
 }

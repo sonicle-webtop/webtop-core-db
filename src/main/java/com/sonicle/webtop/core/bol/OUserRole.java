@@ -41,7 +41,4 @@ import com.sonicle.webtop.core.jooq.tables.pojos.UsersRoles;
  */
 public class OUserRole extends UsersRoles {
 
-	public OUserRole() {
-		
-	}
 }

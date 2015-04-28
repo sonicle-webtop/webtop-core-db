@@ -41,7 +41,4 @@ import com.sonicle.webtop.core.jooq.tables.pojos.Settings;
  */
 public class OSetting extends Settings {
 	
-	public OSetting() {
-		
-	}
 }

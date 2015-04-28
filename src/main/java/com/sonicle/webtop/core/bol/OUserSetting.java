@@ -41,7 +41,4 @@ import com.sonicle.webtop.core.jooq.tables.pojos.UserSettings;
  */
 public class OUserSetting extends UserSettings {
 	
-	public OUserSetting() {
-		
-	}
 }

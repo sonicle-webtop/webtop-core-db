@@ -40,8 +40,5 @@ import com.sonicle.webtop.core.jooq.tables.pojos.Groups;
  * @author gbulfon
  */
 public class OGroup extends Groups {
-
-	public OGroup() {
-		
-	}
+	
 }

@@ -40,8 +40,5 @@ import com.sonicle.webtop.core.jooq.tables.pojos.GroupsRoles;
  * @author gbulfon
  */
 public class OGroupRole extends GroupsRoles {
-
-	public OGroupRole() {
-		
-	}
+	
 }

@@ -51,6 +51,18 @@ public class UserSettingDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
+	public List<OUserSetting> selectByServiceKeyValue(Connection con, String serviceId, String key, String value) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select()
+			.from(USER_SETTINGS)
+			.where(USER_SETTINGS.SERVICE_ID.equal(serviceId)
+				.and(USER_SETTINGS.KEY.equal(key))
+				.and(USER_SETTINGS.VALUE.equal(value))
+			)
+			.fetchInto(OUserSetting.class);
+	}
+	
 	public List<OUserSetting> selectByDomainUserService(Connection con, String domainId, String userId, String serviceId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl

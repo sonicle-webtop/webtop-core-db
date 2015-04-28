@@ -41,7 +41,4 @@ import com.sonicle.webtop.core.jooq.tables.pojos.DomainSettings;
  */
 public class ODomainSetting extends DomainSettings {
 	
-	public ODomainSetting() {
-		
-	}
 }

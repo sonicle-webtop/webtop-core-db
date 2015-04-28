@@ -17,10 +17,6 @@ import java.util.TimeZone;
  */
 public class OUser extends Users {
 
-	public OUser() {
-		
-	}
-	
 	public Locale getLocale() {
 		return LangUtils.languageTagToLocale(getLanguageTag());
 	}
