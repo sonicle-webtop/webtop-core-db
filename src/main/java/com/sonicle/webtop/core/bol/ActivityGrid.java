@@ -1,5 +1,5 @@
 /*
- * WebTop Services is a Web Application framework developed by Sonicle S.r.l.
+ * webtop-core-db is a library developed by Sonicle S.r.l.
  * Copyright (C) 2014 Sonicle S.r.l.
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -33,12 +33,17 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.UsersRoles;
-
 /**
  *
- * @author gbulfon
+ * @author malbinola
  */
-public class OUserRole extends UsersRoles {
-	
+public class ActivityGrid {
+	public Integer activityId;
+	public String domainId;
+	public String domainDescription;
+	public String userId;
+	public String userDescription;
+	public String description;
+	public Boolean readOnly;
+	public String externalId;
 }

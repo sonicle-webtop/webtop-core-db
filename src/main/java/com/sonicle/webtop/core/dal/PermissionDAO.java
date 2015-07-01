@@ -1,5 +1,5 @@
 /*
- * WebTop Services is a Web Application framework developed by Sonicle S.r.l.
+ * webtop-core-db is a library developed by Sonicle S.r.l.
  * Copyright (C) 2014 Sonicle S.r.l.
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -31,14 +31,32 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.bol;
+package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.UsersRoles;
+import com.sonicle.webtop.core.bol.OPermission;
+import static com.sonicle.webtop.core.jooq.Tables.PERMISSIONS;
+import java.sql.Connection;
+import java.util.List;
+import org.jooq.DSLContext;
 
 /**
  *
- * @author gbulfon
+ * @author malbinola
  */
-public class OUserRole extends UsersRoles {
+public class PermissionDAO extends BaseDAO {
+	private final static PermissionDAO INSTANCE = new PermissionDAO();
+	public static PermissionDAO getInstance() {
+		return INSTANCE;
+	}
 	
+	public List<OPermission> selectByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select()
+			.from(PERMISSIONS)
+			.where(PERMISSIONS.DOMAIN_ID.equal(domainId)
+					.and(PERMISSIONS.ROLE_ID.equal(roleId))
+			)
+			.fetchInto(OPermission.class);
+	}
 }

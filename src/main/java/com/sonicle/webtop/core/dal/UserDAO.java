@@ -71,6 +71,29 @@ public class UserDAO extends BaseDAO {
 			.fetchInto(OUser.class);
 	}
 	
+	public List<OUser> selectByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.PASSWORD,
+				USERS.PASSWORD_TYPE,
+				USERS.SECRET,
+				USERS.LANGUAGE_TAG,
+				USERS.TIMEZONE,
+				USERS.DISPLAY_NAME
+				/*
+					Do not add any userData fields (like firstName, lastName, email, etc...)
+					Get these field using userData provider!
+				*/
+			).from(USERS)
+			.where(
+				USERS.DOMAIN_ID.equal(domainId)
+			)
+			.fetchInto(OUser.class);
+	}
+	
 	public OUser selectByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl

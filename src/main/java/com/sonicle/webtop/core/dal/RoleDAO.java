@@ -42,7 +42,7 @@ import org.jooq.DSLContext;
 
 /**
  *
- * @author gbulfon
+ * @author malbinola
  */
 public class RoleDAO extends BaseDAO {
 	private final static RoleDAO INSTANCE = new RoleDAO();
@@ -58,12 +58,13 @@ public class RoleDAO extends BaseDAO {
 			.fetchInto(ORole.class);
 	}
 	
-	public ORole selectById(Connection con, String domainId, String roleId) throws DAOException {
+	public ORole selectByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
 			.from(ROLES)
-			.where(ROLES.DOMAIN_ID.equal(domainId)
+			.where(
+					ROLES.DOMAIN_ID.equal(domainId)
 					.and(ROLES.ROLE_ID.equal(roleId))
 			)
 			.fetchOneInto(ORole.class);
@@ -84,17 +85,28 @@ public class RoleDAO extends BaseDAO {
 		return dsl
 			.update(ROLES)
 			.set(record)
-			.where(ROLES.DOMAIN_ID.equal(item.getDomainId())
-					.and(ROLES.ROLE_ID.equal(item.getRoleId()))
+			.where(
+					ROLES.UID.equal(item.getUid())
 			)
 			.execute();
 	}
 	
-	public int deleteById(Connection con, String domainId, String roleId) throws DAOException {
+	public int delete(Connection con, int uid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES)
-			.where(ROLES.DOMAIN_ID.equal(domainId)
+			.where(
+					ROLES.UID.equal(uid)
+			)
+			.execute();
+	}
+	
+	public int deleteByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(ROLES)
+			.where(
+					ROLES.DOMAIN_ID.equal(domainId)
 					.and(ROLES.ROLE_ID.equal(roleId))
 			)
 			.execute();

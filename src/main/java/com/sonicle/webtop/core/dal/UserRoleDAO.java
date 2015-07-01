@@ -34,6 +34,7 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OUserRole;
+import com.sonicle.webtop.core.bol.UserRole;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.UsersRolesRecord;
 import java.sql.Connection;
@@ -50,15 +51,24 @@ public class UserRoleDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<OUserRole> selectByUserId(Connection con, String domainId, String userId) throws DAOException {
+	public List<UserRole> viewByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.select()
+			.select(
+					USERS_ROLES.fields()
+			)
+			.select(
+					ROLES.DESCRIPTION.as("role_description")
+			)
 			.from(USERS_ROLES)
+			.join(ROLES).on(
+					USERS_ROLES.DOMAIN_ID.equal(ROLES.DOMAIN_ID)
+					.and(USERS_ROLES.ROLE_ID.equal(ROLES.ROLE_ID))
+			)
 			.where(USERS_ROLES.DOMAIN_ID.equal(domainId)
 					.and(USERS_ROLES.USER_ID.equal(userId))
 			)
-			.fetchInto(OUserRole.class);
+			.fetchInto(UserRole.class);
 	}
 	
 	public int insert(Connection con, OUserRole item) throws DAOException {
@@ -70,26 +80,34 @@ public class UserRoleDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, OUserRole item) throws DAOException {
+	public int delete(Connection con, int uid) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		UsersRolesRecord record = dsl.newRecord(USERS_ROLES, item);
 		return dsl
-			.update(USERS_ROLES)
-			.set(record)
-			.where(USERS_ROLES.DOMAIN_ID.equal(item.getDomainId())
-					.and(USERS_ROLES.USER_ID.equal(item.getUserId()))
-						.and(USERS_ROLES.ROLE_ID.equal(item.getRoleId()))
+			.delete(USERS_ROLES)
+			.where(
+					USERS_ROLES.UID.equal(uid)
 			)
 			.execute();
 	}
 	
-	public int delete(Connection con, String domainId, String userId, String roleId) throws DAOException {
+	public int deleteByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(USERS_ROLES)
-			.where(USERS_ROLES.DOMAIN_ID.equal(domainId)
+			.where(
+					USERS_ROLES.DOMAIN_ID.equal(domainId)
 					.and(USERS_ROLES.USER_ID.equal(userId))
-						.and(USERS_ROLES.ROLE_ID.equal(roleId))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS_ROLES)
+			.where(
+					USERS_ROLES.DOMAIN_ID.equal(domainId)
+					.and(USERS_ROLES.ROLE_ID.equal(roleId))
 			)
 			.execute();
 	}

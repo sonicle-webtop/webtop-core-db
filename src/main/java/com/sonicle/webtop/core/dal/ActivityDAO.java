@@ -33,11 +33,13 @@
  */
 package com.sonicle.webtop.core.dal;
 
+import com.sonicle.webtop.core.bol.ActivityGrid;
 import com.sonicle.webtop.core.bol.OActivity;
 import static com.sonicle.webtop.core.jooq.Sequences.SEQ_ACTIVITIES;
-import static com.sonicle.webtop.core.jooq.Tables.ACTIVITIES;
+import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.ActivitiesRecord;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 import org.jooq.DSLContext;
 
@@ -58,7 +60,45 @@ public class ActivityDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<OActivity> viewByDomainUser(Connection con, String domainId, String userId) throws DAOException {
+	public List<ActivityGrid> viewLiveByDomains(Connection con, Collection<String> domainIds) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+				.select(
+						ACTIVITIES.ACTIVITY_ID,
+						ACTIVITIES.DOMAIN_ID,
+						ACTIVITIES.USER_ID,
+						ACTIVITIES.DESCRIPTION,
+						ACTIVITIES.READ_ONLY,
+						ACTIVITIES.EXTERNAL_ID
+				)
+				.select(
+						USERS.DISPLAY_NAME.as("user_description")
+				)
+				.select(
+						DOMAINS.DESCRIPTION.as("domain_description")
+				)
+				.from(ACTIVITIES)
+				.leftOuterJoin(USERS).on(
+						ACTIVITIES.DOMAIN_ID.equal(USERS.DOMAIN_ID)
+						.and(ACTIVITIES.USER_ID.equal(USERS.USER_ID))
+				)
+				.leftOuterJoin(DOMAINS).on(
+						ACTIVITIES.DOMAIN_ID.equal(DOMAINS.DOMAIN_ID)
+				)
+				.where(
+						ACTIVITIES.DOMAIN_ID.in(domainIds)
+				)
+				.and(
+						ACTIVITIES.STATUS.notEqual("D")
+						.or(ACTIVITIES.STATUS.isNull())
+				)
+				.orderBy(
+						ACTIVITIES.DESCRIPTION.asc()
+				)
+				.fetchInto(ActivityGrid.class);
+	}
+	
+	public List<OActivity> selectLiveByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 				.select()
@@ -89,6 +129,17 @@ public class ActivityDAO extends BaseDAO {
 				.fetchInto(OActivity.class);
 	}
 	
+	public OActivity select(Connection con, Integer activityId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select()
+			.from(ACTIVITIES)
+			.where(
+					ACTIVITIES.ACTIVITY_ID.equal(activityId)
+			)
+			.fetchOneInto(OActivity.class);
+	}
+	
 	public int insert(Connection con, OActivity item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		ActivitiesRecord record = dsl.newRecord(ACTIVITIES, item);
@@ -98,5 +149,29 @@ public class ActivityDAO extends BaseDAO {
 			.execute();
 	}
 	
+	public int update(Connection con, OActivity item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.update(ACTIVITIES)
+			.set(ACTIVITIES.DOMAIN_ID, item.getDomainId())
+			.set(ACTIVITIES.USER_ID, item.getUserId())
+			.set(ACTIVITIES.DESCRIPTION, item.getDescription())
+			.set(ACTIVITIES.READ_ONLY, item.getReadOnly())
+			.set(ACTIVITIES.EXTERNAL_ID, item.getExternalId())
+			.where(
+				ACTIVITIES.ACTIVITY_ID.equal(item.getActivityId())
+			)
+			.execute();
+	}
 	
+	public int delete(Connection con, Integer activityId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.update(ACTIVITIES)
+			.set(ACTIVITIES.STATUS, "D")
+			.where(
+				ACTIVITIES.ACTIVITY_ID.equal(activityId)
+			)
+			.execute();
+	}
 }

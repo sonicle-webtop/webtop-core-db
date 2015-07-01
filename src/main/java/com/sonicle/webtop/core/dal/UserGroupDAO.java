@@ -33,9 +33,9 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.ORolePermission;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.RolesPermissionsRecord;
+import com.sonicle.webtop.core.bol.OUserGroup;
+import static com.sonicle.webtop.core.jooq.Tables.USERS_GROUPS;
+import com.sonicle.webtop.core.jooq.tables.records.UsersGroupsRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
@@ -44,63 +44,60 @@ import org.jooq.DSLContext;
  *
  * @author malbinola
  */
-public class RolePermissionDAO extends BaseDAO {
-
-	private final static RolePermissionDAO INSTANCE = new RolePermissionDAO();
-	public static RolePermissionDAO getInstance() {
+public class UserGroupDAO extends BaseDAO {
+	private final static UserGroupDAO INSTANCE = new UserGroupDAO();
+	public static UserGroupDAO getInstance() {
 		return INSTANCE;
 	}
 	
-	public List<ORolePermission> selectByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+	public List<OUserGroup> selectByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
-			.from(ROLES_PERMISSIONS)
-			.where(
-					ROLES_PERMISSIONS.DOMAIN_ID.equal(domainId)
-					.and(ROLES_PERMISSIONS.ROLE_ID.equal(roleId))
+			.from(USERS_GROUPS)
+			.where(USERS_GROUPS.DOMAIN_ID.equal(domainId)
+					.and(USERS_GROUPS.USER_ID.equal(userId))
 			)
-			.fetchInto(ORolePermission.class);
+			.fetchInto(OUserGroup.class);
 	}
 	
-	public int insert(Connection con, ORolePermission item) throws DAOException {
+	public int insert(Connection con, OUserGroup item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		RolesPermissionsRecord record = dsl.newRecord(ROLES_PERMISSIONS, item);
+		UsersGroupsRecord record = dsl.newRecord(USERS_GROUPS, item);
 		return dsl
-			.insertInto(ROLES_PERMISSIONS)
+			.insertInto(USERS_GROUPS)
 			.set(record)
-			.execute();
-	}
-	
-	public int update(Connection con, ORolePermission item) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		RolesPermissionsRecord record = dsl.newRecord(ROLES_PERMISSIONS, item);
-		return dsl
-			.update(ROLES_PERMISSIONS)
-			.set(record)
-			.where(
-					ROLES_PERMISSIONS.UID.equal(item.getUid())
-			)
 			.execute();
 	}
 	
 	public int delete(Connection con, int uid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(ROLES_PERMISSIONS)
+			.delete(USERS_GROUPS)
 			.where(
-					ROLES_PERMISSIONS.UID.equal(uid)
+					USERS_GROUPS.UID.equal(uid)
 			)
 			.execute();
 	}
 	
-	public int deleteByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+	public int deleteByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(ROLES_PERMISSIONS)
+			.delete(USERS_GROUPS)
 			.where(
-					ROLES_PERMISSIONS.DOMAIN_ID.equal(domainId)
-					.and(ROLES_PERMISSIONS.ROLE_ID.equal(roleId))
+					USERS_GROUPS.DOMAIN_ID.equal(domainId)
+					.and(USERS_GROUPS.USER_ID.equal(userId))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomainGroup(Connection con, String domainId, String groupId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS_GROUPS)
+			.where(
+					USERS_GROUPS.DOMAIN_ID.equal(domainId)
+					.and(USERS_GROUPS.GROUP_ID.equal(groupId))
 			)
 			.execute();
 	}

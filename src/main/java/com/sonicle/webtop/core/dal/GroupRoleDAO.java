@@ -33,6 +33,7 @@
  */
 package com.sonicle.webtop.core.dal;
 
+import com.sonicle.webtop.core.bol.GroupRole;
 import com.sonicle.webtop.core.bol.OGroupRole;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.GroupsRolesRecord;
@@ -48,6 +49,26 @@ public class GroupRoleDAO extends BaseDAO {
 	private final static GroupRoleDAO INSTANCE = new GroupRoleDAO();
 	public static GroupRoleDAO getInstance() {
 		return INSTANCE;
+	}
+	
+	public List<GroupRole> viewByGroup(Connection con, String domainId, String groupId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+					GROUPS_ROLES.fields()
+			)
+			.select(
+					ROLES.DESCRIPTION.as("role_description")
+			)
+			.from(GROUPS_ROLES)
+			.join(ROLES).on(
+					GROUPS_ROLES.DOMAIN_ID.equal(ROLES.DOMAIN_ID)
+					.and(GROUPS_ROLES.ROLE_ID.equal(ROLES.ROLE_ID))
+			)
+			.where(GROUPS_ROLES.DOMAIN_ID.equal(domainId)
+					.and(GROUPS_ROLES.GROUP_ID.equal(groupId))
+			)
+			.fetchInto(GroupRole.class);
 	}
 	
 	public List<OGroupRole> selectByGroupId(Connection con, String domainId, String groupId) throws DAOException {
