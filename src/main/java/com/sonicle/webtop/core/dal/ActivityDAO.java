@@ -72,9 +72,7 @@ public class ActivityDAO extends BaseDAO {
 						ACTIVITIES.EXTERNAL_ID
 				)
 				.select(
-						USERS.DISPLAY_NAME.as("user_description")
-				)
-				.select(
+						USERS.DISPLAY_NAME.as("user_description"),
 						DOMAINS.DESCRIPTION.as("domain_description")
 				)
 				.from(ACTIVITIES)

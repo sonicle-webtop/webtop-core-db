@@ -10,6 +10,7 @@ import com.sonicle.commons.LangUtils;
 import com.sonicle.webtop.core.jooq.tables.pojos.Users;
 import java.util.Locale;
 import java.util.TimeZone;
+import org.joda.time.DateTimeZone;
 
 /**
  *
@@ -25,11 +26,11 @@ public class OUser extends Users {
 		setLanguageTag(locale.toString());
 	}
 	
-	public TimeZone getTimeZone() {
-		return TimeZone.getTimeZone(getTimezone());
+	public DateTimeZone getTimeZone() {
+		return DateTimeZone.forID(getTimezone());
 	}
 	
-	public void setTimeZone(TimeZone timeZone) {
-		setTimezone(timeZone.getID());
+	public void setTimeZone(DateTimeZone tz) {
+		setTimezone(tz.getID());
 	}
 }

@@ -37,14 +37,14 @@ package com.sonicle.webtop.core.bol;
  *
  * @author malbinola
  */
-public class GroupRole extends OGroupRole {
-	private String roleDescription;
+public class IncomingShare extends OShare {
+	private String userDescription;
 
-	public String getRoleDescription() {
-		return roleDescription;
+	public String getUserDescription() {
+		return userDescription;
 	}
 
-	public void setRoleDescription(String roleDescription) {
-		this.roleDescription = roleDescription;
+	public void setUserDescription(String userDescription) {
+		this.userDescription = userDescription;
 	}
 }

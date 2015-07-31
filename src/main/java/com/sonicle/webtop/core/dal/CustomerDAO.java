@@ -63,6 +63,25 @@ public class CustomerDAO extends BaseDAO {
 	public static Field<String> POSTALCODE = field("postalcode", String.class);
 	public static Field<String> COUNTRTY = field("country", String.class);
 	
+	public OCustomer viewById(Connection con, String customerId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+				.select(
+						CUSTOMER_ID,
+						PARENT_ID,
+						EXTERNAL_ID,
+						DESCRIPTION
+				)
+				.from("customers")
+				.where(
+						CUSTOMER_ID.equal(customerId)
+				)
+				.orderBy(
+						DESCRIPTION.asc()
+				)
+				.fetchOneInto(OCustomer.class);
+	}
+	
 	public List<OCustomer> viewByLike(Connection con, String likeDescription) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl

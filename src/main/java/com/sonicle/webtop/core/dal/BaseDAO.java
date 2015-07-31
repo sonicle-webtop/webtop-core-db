@@ -35,6 +35,8 @@ package com.sonicle.webtop.core.dal;
 
 import java.sql.Connection;
 import java.util.HashMap;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.SQLDialect;
@@ -58,6 +60,26 @@ public class BaseDAO {
 		
 		public FieldsMap() {
 			super();
+		}
+	}
+	
+	public static class RevisionInfo {
+		public DateTime lastModified;
+		public String lastDevice;
+		public String lastUser;
+		
+		public RevisionInfo() {
+			this(null, null);
+		}
+		
+		public RevisionInfo(String lastDevice, String lastUser) {
+			this(DateTime.now(DateTimeZone.UTC), lastDevice, lastUser);
+		}
+		
+		public RevisionInfo(DateTime lastModified, String lastDevice, String lastUser) {
+			this.lastModified = lastModified;
+			this.lastDevice = lastDevice;
+			this.lastUser = lastUser;
 		}
 	}
 }

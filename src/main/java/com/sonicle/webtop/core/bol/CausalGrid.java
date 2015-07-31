@@ -37,14 +37,15 @@ package com.sonicle.webtop.core.bol;
  *
  * @author malbinola
  */
-public class GroupRole extends OGroupRole {
-	private String roleDescription;
-
-	public String getRoleDescription() {
-		return roleDescription;
-	}
-
-	public void setRoleDescription(String roleDescription) {
-		this.roleDescription = roleDescription;
-	}
+public class CausalGrid {
+	public Integer causalId;
+	public String domainId;
+	public String domainDescription;
+	public String userId;
+	public String userDescription;
+	public String customerId;
+	public String customerDescription;
+	public String description;
+	public Boolean readOnly;
+	public String externalId;
 }

@@ -33,8 +33,9 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.OShare;
+import com.sonicle.webtop.core.bol.IncomingShare;
 import static com.sonicle.webtop.core.jooq.Tables.SHARES;
+import static com.sonicle.webtop.core.jooq.Tables.USERS;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
@@ -50,27 +51,32 @@ public class ShareDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<OShare> selectIncomingByServiceDomainUserResource(Connection con, String serviceId, String domainId, String userId, String resource) throws DAOException {
+	public List<IncomingShare> viewIncomingByServiceDomainUserResource(Connection con, String serviceId, String domainId, String userId, String resource) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
 				SHARES.SHARE_ID,
 				SHARES.DOMAIN_ID,
 				SHARES.USER_ID,
+				USERS.DISPLAY_NAME.as("user_description"),
 				SHARES.SERVICE_ID,
-				SHARES.TARGET_DOMAIN_ID,
 				SHARES.TARGET_USER_ID,
 				SHARES.RESOURCE,
 				SHARES.REFERENCE_ID,
 				SHARES.REFERENCE_NAME,
 				SHARES.PARAMETERS
-			).from(SHARES)
+			)
+			.from(SHARES)
+			.leftOuterJoin(USERS).on(
+					SHARES.DOMAIN_ID.equal(USERS.DOMAIN_ID)
+					.and(SHARES.USER_ID.equal(USERS.USER_ID))
+			)
 			.where(
 				SHARES.SERVICE_ID.equal(serviceId)
-				.and(SHARES.TARGET_DOMAIN_ID.equal(domainId))
+				.and(SHARES.DOMAIN_ID.equal(domainId))
 				.and(SHARES.TARGET_USER_ID.equal(userId))
 				.and(SHARES.RESOURCE.equal(resource))
 			)
-			.fetchInto(OShare.class);
+			.fetchInto(IncomingShare.class);
 	}
 }
