@@ -34,8 +34,11 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.IncomingShare;
+import com.sonicle.webtop.core.bol.OShare;
+import static com.sonicle.webtop.core.jooq.Sequences.SEQ_SHARES;
 import static com.sonicle.webtop.core.jooq.Tables.SHARES;
 import static com.sonicle.webtop.core.jooq.Tables.USERS;
+import com.sonicle.webtop.core.jooq.tables.records.SharesRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
@@ -51,6 +54,12 @@ public class ShareDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
+	public Long getSequence(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		Long nextID = dsl.nextval(SEQ_SHARES);
+		return nextID;
+	}
+	
 	public List<IncomingShare> viewIncomingByServiceDomainUserResource(Connection con, String serviceId, String domainId, String userId, String resource) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -59,11 +68,11 @@ public class ShareDAO extends BaseDAO {
 				SHARES.DOMAIN_ID,
 				SHARES.USER_ID,
 				USERS.DISPLAY_NAME.as("user_description"),
-				SHARES.SERVICE_ID,
 				SHARES.TARGET_USER_ID,
+				SHARES.SERVICE_ID,
 				SHARES.RESOURCE,
-				SHARES.REFERENCE_ID,
-				SHARES.REFERENCE_NAME,
+				SHARES.INSTANCE,
+				SHARES.NAME,
 				SHARES.PARAMETERS
 			)
 			.from(SHARES)
@@ -78,5 +87,85 @@ public class ShareDAO extends BaseDAO {
 				.and(SHARES.RESOURCE.equal(resource))
 			)
 			.fetchInto(IncomingShare.class);
+	}
+	
+	public OShare selectById(Connection con, String id) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SHARES.SHARE_ID,
+				SHARES.DOMAIN_ID,
+				SHARES.USER_ID,
+				SHARES.TARGET_USER_ID,
+				SHARES.SERVICE_ID,
+				SHARES.RESOURCE,
+				SHARES.INSTANCE,
+				SHARES.NAME,
+				SHARES.PARAMETERS
+			)
+			.from(SHARES)
+			.where(
+				SHARES.SHARE_ID.equal(id)
+			)
+			.fetchOneInto(OShare.class);
+	}
+	
+	public List<OShare> selectByDomainTargetServiceResource(Connection con, String domainId, String targetUserId, String serviceId, String resource) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SHARES.SHARE_ID,
+				SHARES.DOMAIN_ID,
+				SHARES.USER_ID,
+				SHARES.TARGET_USER_ID,
+				SHARES.SERVICE_ID,
+				SHARES.RESOURCE,
+				SHARES.INSTANCE,
+				SHARES.NAME,
+				SHARES.PARAMETERS
+			)
+			.from(SHARES)
+			.where(
+				SHARES.DOMAIN_ID.equal(domainId)
+				.and(SHARES.TARGET_USER_ID.equal(targetUserId))
+				.and(SHARES.SERVICE_ID.equal(serviceId))
+				.and(SHARES.RESOURCE.equal(resource))
+			)
+			.fetchInto(OShare.class);
+	}
+	
+	public OShare selectByDomainUserTargetServiceResourceInstance(Connection con, String domainId, String userId, String targetUserId, String serviceId, String resource, String instance) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SHARES.SHARE_ID,
+				SHARES.DOMAIN_ID,
+				SHARES.USER_ID,
+				SHARES.TARGET_USER_ID,
+				SHARES.SERVICE_ID,
+				SHARES.RESOURCE,
+				SHARES.INSTANCE,
+				SHARES.NAME,
+				SHARES.PARAMETERS
+			)
+			.from(SHARES)
+			.where(
+				SHARES.DOMAIN_ID.equal(domainId)
+				.and(SHARES.USER_ID.equal(userId))
+				.and(SHARES.TARGET_USER_ID.equal(targetUserId))
+				.and(SHARES.SERVICE_ID.equal(serviceId))
+				.and(SHARES.RESOURCE.equal(resource))
+				.and(SHARES.INSTANCE.equal(instance))
+			)
+			.fetchOneInto(OShare.class);
+	}
+	
+	public int insert(Connection con, OShare item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		SharesRecord record = dsl.newRecord(SHARES, item);
+		return dsl
+			.insertInto(SHARES)
+			.set(record)
+			.execute();
 	}
 }

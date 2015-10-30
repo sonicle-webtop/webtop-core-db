@@ -33,30 +33,65 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.OPermission;
-import static com.sonicle.webtop.core.jooq.Tables.PERMISSIONS;
+import com.sonicle.webtop.core.bol.OUserInfo;
+import static com.sonicle.webtop.core.jooq.Tables.USERS_INFO;
+import com.sonicle.webtop.core.jooq.tables.records.UsersInfoRecord;
 import java.sql.Connection;
-import java.util.List;
 import org.jooq.DSLContext;
 
 /**
  *
  * @author malbinola
  */
-public class PermissionDAO extends BaseDAO {
-	private final static PermissionDAO INSTANCE = new PermissionDAO();
-	public static PermissionDAO getInstance() {
+public class UserInfoDAO extends BaseDAO {
+	private final static UserInfoDAO INSTANCE = new UserInfoDAO();
+	public static UserInfoDAO getInstance() {
 		return INSTANCE;
 	}
 	
-	public List<OPermission> selectByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+	public OUserInfo selectByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
-			.from(PERMISSIONS)
-			.where(PERMISSIONS.DOMAIN_ID.equal(domainId)
-					.and(PERMISSIONS.ROLE_ID.equal(roleId))
+			.from(USERS_INFO)
+			.where(
+				USERS_INFO.DOMAIN_ID.equal(domainId)
+				.and(USERS_INFO.USER_ID.equal(userId))
 			)
-			.fetchInto(OPermission.class);
+			.fetchOneInto(OUserInfo.class);
+	}
+	
+	public int insert(Connection con, String domainId, String userId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.insertInto(USERS_INFO,
+					USERS_INFO.DOMAIN_ID,
+					USERS_INFO.USER_ID
+			)
+			.values(domainId, userId)
+			.execute();
+	}
+	
+	public int update(Connection con, OUserInfo item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		UsersInfoRecord record = dsl.newRecord(USERS_INFO, item);
+		return dsl
+			.update(USERS_INFO)
+			.set(record)
+			.where(
+				USERS_INFO.DOMAIN_ID.equal(item.getDomainId())
+				.and(USERS_INFO.USER_ID.equal(item.getUserId()))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomainUser(Connection con, String domainId, String userId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS_INFO)
+			.where(USERS_INFO.DOMAIN_ID.equal(domainId)
+					.and(USERS_INFO.USER_ID.equal(userId))
+			)
+			.execute();
 	}
 }

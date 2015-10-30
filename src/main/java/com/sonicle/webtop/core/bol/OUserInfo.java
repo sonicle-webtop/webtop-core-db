@@ -33,12 +33,12 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.Permissions;
+import com.sonicle.webtop.core.jooq.tables.pojos.UsersInfo;
 
 /**
  *
  * @author malbinola
  */
-public class OPermission extends Permissions {
+public class OUserInfo extends UsersInfo {
 	
 }

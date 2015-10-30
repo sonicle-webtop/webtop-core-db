@@ -75,7 +75,7 @@ public class ServiceStoreEntryDAO extends BaseDAO {
 			.fetchOneInto(OServiceStoreEntry.class);
 	}
 	
-	public List<OServiceStoreEntry> selectKeyValueByLikeKey(Connection con, String domainId, String userId, String serviceId, String context, String likeKey) throws DAOException {
+	public List<OServiceStoreEntry> selectKeyValueByLikeKeyLimit(Connection con, String domainId, String userId, String serviceId, String context, String likeKey, int limit) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -93,6 +93,28 @@ public class ServiceStoreEntryDAO extends BaseDAO {
 				SERVICESTORE_ENTRIES.FREQUENCY.desc(),
 				SERVICESTORE_ENTRIES.VALUE.asc()
 			)
+			.limit(limit)
+			.fetchInto(OServiceStoreEntry.class);
+	}
+	
+	public List<OServiceStoreEntry> selectKeyValueByLimit(Connection con, String domainId, String userId, String serviceId, String context, int limit) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SERVICESTORE_ENTRIES.KEY,
+				SERVICESTORE_ENTRIES.VALUE
+			).from(SERVICESTORE_ENTRIES)
+			.where(
+				SERVICESTORE_ENTRIES.DOMAIN_ID.equal(domainId)
+				.and(SERVICESTORE_ENTRIES.USER_ID.equal(userId))
+				.and(SERVICESTORE_ENTRIES.SERVICE_ID.equal(serviceId))
+				.and(SERVICESTORE_ENTRIES.CONTEXT.equal(context))
+			)
+			.orderBy(
+				SERVICESTORE_ENTRIES.FREQUENCY.desc(),
+				SERVICESTORE_ENTRIES.VALUE.asc()
+			)
+			.limit(limit)
 			.fetchInto(OServiceStoreEntry.class);
 	}
 	

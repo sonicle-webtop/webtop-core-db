@@ -34,6 +34,7 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.ORolePermission;
+import static com.sonicle.webtop.core.jooq.Sequences.SEQ_ROLES_PERMISSIONS;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.RolesPermissionsRecord;
 import java.sql.Connection;
@@ -49,6 +50,12 @@ public class RolePermissionDAO extends BaseDAO {
 	private final static RolePermissionDAO INSTANCE = new RolePermissionDAO();
 	public static RolePermissionDAO getInstance() {
 		return INSTANCE;
+	}
+	
+	public Long getSequence(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		Long nextID = dsl.nextval(SEQ_ROLES_PERMISSIONS);
+		return nextID;
 	}
 	
 	public List<ORolePermission> selectByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
@@ -101,6 +108,21 @@ public class RolePermissionDAO extends BaseDAO {
 			.where(
 					ROLES_PERMISSIONS.DOMAIN_ID.equal(domainId)
 					.and(ROLES_PERMISSIONS.ROLE_ID.equal(roleId))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomainRoleServiceResourceActionInstance(Connection con, String domainId, String roleId, String serviceId, String resource, String action, String instance) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(ROLES_PERMISSIONS)
+			.where(
+					ROLES_PERMISSIONS.DOMAIN_ID.equal(domainId)
+					.and(ROLES_PERMISSIONS.ROLE_ID.equal(roleId))
+					.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
+					.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+					.and(ROLES_PERMISSIONS.ACTION.equal(action))
+					.and(ROLES_PERMISSIONS.INSTANCE.equal(instance))
 			)
 			.execute();
 	}
