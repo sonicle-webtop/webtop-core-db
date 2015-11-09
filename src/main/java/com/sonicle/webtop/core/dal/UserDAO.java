@@ -34,6 +34,7 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OUser;
+import com.sonicle.webtop.core.bol.UserUid;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.UsersRecord;
 import java.sql.Connection;
@@ -42,10 +43,9 @@ import org.jooq.DSLContext;
 
 /**
  *
- * @author gbulfon
+ * @author malbinola
  */
 public class UserDAO extends BaseDAO {
-	
 	private final static UserDAO INSTANCE = new UserDAO();
 	public static UserDAO getInstance() {
 		return INSTANCE;
@@ -57,18 +57,35 @@ public class UserDAO extends BaseDAO {
 			.select(
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
-				USERS.PASSWORD,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
 				USERS.PASSWORD_TYPE,
+				USERS.PASSWORD,
 				USERS.SECRET,
+				USERS.DISPLAY_NAME,
 				USERS.LANGUAGE_TAG,
-				USERS.TIMEZONE,
-				USERS.DISPLAY_NAME
-				/*
-					Do not add any userData fields (like firstName, lastName, email, etc...)
-					Get these field using userData provider!
-				*/
+				USERS.TIMEZONE
 			).from(USERS)
+			.where(
+				USERS.TYPE.equal(OUser.USER_TYPE)
+			)
 			.fetchInto(OUser.class);
+	}
+	
+	public List<UserUid> selectAllUids(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.USER_UID,
+				USERS.ROLE_UID
+			).from(USERS)
+			.where(
+				USERS.TYPE.equal(OUser.USER_TYPE)
+			)
+			.fetchInto(UserUid.class);
 	}
 	
 	public List<OUser> selectByDomain(Connection con, String domainId) throws DAOException {
@@ -77,19 +94,19 @@ public class UserDAO extends BaseDAO {
 			.select(
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
-				USERS.PASSWORD,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
 				USERS.PASSWORD_TYPE,
+				USERS.PASSWORD,
 				USERS.SECRET,
+				USERS.DISPLAY_NAME,
 				USERS.LANGUAGE_TAG,
-				USERS.TIMEZONE,
-				USERS.DISPLAY_NAME
-				/*
-					Do not add any userData fields (like firstName, lastName, email, etc...)
-					Get these field using userData provider!
-				*/
+				USERS.TIMEZONE
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.TYPE.equal(OUser.USER_TYPE))
 			)
 			.fetchInto(OUser.class);
 	}
@@ -100,26 +117,50 @@ public class UserDAO extends BaseDAO {
 			.select(
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
-				USERS.PASSWORD,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
 				USERS.PASSWORD_TYPE,
+				USERS.PASSWORD,
 				USERS.SECRET,
+				USERS.DISPLAY_NAME,
 				USERS.LANGUAGE_TAG,
-				USERS.TIMEZONE,
-				USERS.DISPLAY_NAME
-				/*
-					Do not add any userData fields (like firstName, lastName, email, etc...)
-					Get these field using userData provider!
-				*/
+				USERS.TIMEZONE
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
 				.and(USERS.USER_ID.equal(userId))
+				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+			)
+			.fetchOneInto(OUser.class);
+	}
+	
+	public OUser selectByUid(Connection con, String userUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.PASSWORD_TYPE,
+				USERS.PASSWORD,
+				USERS.SECRET,
+				USERS.DISPLAY_NAME,
+				USERS.LANGUAGE_TAG,
+				USERS.TIMEZONE
+			).from(USERS)
+			.where(
+				USERS.TYPE.equal(OUser.USER_TYPE)
+				.and(USERS.USER_UID.equal(userUid))
 			)
 			.fetchOneInto(OUser.class);
 	}
 	
 	public int insert(Connection con, OUser item) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		item.setType(OUser.USER_TYPE);
 		UsersRecord record = dsl.newRecord(USERS, item);
 		return dsl
 			.insertInto(USERS)
@@ -129,22 +170,15 @@ public class UserDAO extends BaseDAO {
 	
 	public int update(Connection con, OUser item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		UsersRecord record = dsl.newRecord(USERS, item);
 		return dsl
 			.update(USERS)
-			.set(USERS.PASSWORD, item.getPassword())
-			.set(USERS.PASSWORD_TYPE, item.getPasswordType())
-			.set(USERS.SECRET, item.getSecret())
+			.set(USERS.DISPLAY_NAME, item.getDisplayName())
 			.set(USERS.LANGUAGE_TAG, item.getLanguageTag())
 			.set(USERS.TIMEZONE, item.getTimezone())
-			.set(USERS.DISPLAY_NAME, item.getDisplayName())
-			/*
-				Do not add any userData fields (like firstName, lastName, email, etc...)
-				Update these field using userData provider!
-			*/
 			.where(
 				USERS.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS.USER_ID.equal(item.getUserId()))
+				.and(USERS.TYPE.equal(OUser.USER_TYPE))
 			)
 			.execute();
 	}
@@ -154,8 +188,21 @@ public class UserDAO extends BaseDAO {
 		return dsl
 			.update(USERS)
 			.set(USERS.SECRET, secret)
-			.where(USERS.DOMAIN_ID.equal(domainId)
+			.where(
+					USERS.DOMAIN_ID.equal(domainId)
 					.and(USERS.USER_ID.equal(userId))
+					.and(USERS.TYPE.equal(OUser.USER_TYPE))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS)
+			.where(
+					USERS.DOMAIN_ID.equal(domainId)
+					.and(USERS.TYPE.equal(OUser.USER_TYPE))
 			)
 			.execute();
 	}
@@ -164,8 +211,21 @@ public class UserDAO extends BaseDAO {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(USERS)
-			.where(USERS.DOMAIN_ID.equal(domainId)
+			.where(
+					USERS.DOMAIN_ID.equal(domainId)
 					.and(USERS.USER_ID.equal(userId))
+					.and(USERS.TYPE.equal(OUser.USER_TYPE))
+			)
+			.execute();
+	}
+	
+	public int deleteByUid(Connection con, String userUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS)
+			.where(
+					USERS.USER_UID.equal(userUid)
+					.and(USERS.TYPE.equal(OUser.USER_TYPE))
 			)
 			.execute();
 	}

@@ -1,5 +1,5 @@
 /*
- * WebTop Services is a Web Application framework developed by Sonicle S.r.l.
+ * webtop-core-db is a library developed by Sonicle S.r.l.
  * Copyright (C) 2014 Sonicle S.r.l.
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -33,12 +33,54 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.GroupsRoles;
-
 /**
  *
- * @author gbulfon
+ * @author malbinola
  */
-public class OGroupRole extends GroupsRoles {
+public class UserUid {
+	private String domainId;
+	private String userId;
+	private String userUid;
+	private String roleUid;
 	
+	public UserUid() {}
+	
+	public UserUid(String domainId, String userId, String userUid, String roleUid) {
+		this.domainId = domainId;
+		this.userId = userId;
+		this.userUid = userUid;
+		this.roleUid = roleUid;
+	}
+
+	public String getDomainId() {
+		return domainId;
+	}
+
+	public void setDomainId(String domainId) {
+		this.domainId = domainId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUserUid() {
+		return userUid;
+	}
+
+	public void setUserUid(String userUid) {
+		this.userUid = userUid;
+	}
+	
+	public String getRoleUid() {
+		return roleUid;
+	}
+
+	public void setRoleUid(String roleUid) {
+		this.roleUid = roleUid;
+	}
 }

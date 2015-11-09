@@ -34,46 +34,135 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OGroup;
+import com.sonicle.webtop.core.bol.OUser;
 import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.GroupsRecord;
+import com.sonicle.webtop.core.jooq.tables.Users;
+import com.sonicle.webtop.core.jooq.tables.records.UsersRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
 
 /**
  *
- * @author gbulfon
+ * @author malbinola
  */
 public class GroupDAO extends BaseDAO {
-	
 	private final static GroupDAO INSTANCE = new GroupDAO();
 	public static GroupDAO getInstance() {
 		return INSTANCE;
 	}
 	
-	public List<OGroup> selectAll(Connection con) throws DAOException {
+	public List<OGroup> selectByDomain(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.select()
-			.from(GROUPS)
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.DISPLAY_NAME
+			).from(USERS)
+			.where(
+				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+			)
 			.fetchInto(OGroup.class);
 	}
 	
-	public OGroup selectById(Connection con, String domainId, String groupId) throws DAOException {
+	public List<OGroup> selectByUser(Connection con, String userSid) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		Users USERS_2 = USERS.as("users2");
 		return dsl
-			.select()
-			.from(GROUPS)
-			.where(GROUPS.DOMAIN_ID.equal(domainId)
-					.and(GROUPS.GROUP_ID.equal(groupId))
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.DISPLAY_NAME
 			)
-			.fetchOneInto(OGroup.class);
+			.from(USERS_ASSOCIATIONS)
+			.join(USERS).on(USERS_ASSOCIATIONS.GROUP_UID.equal(USERS.USER_UID))
+			.where(
+				USERS_ASSOCIATIONS.USER_UID.equal(userSid)
+				.and(USERS_2.TYPE.equal(OUser.USER_TYPE))
+			)
+			.fetchInto(OGroup.class);
 	}
 	
 	public List<OGroup> selectByUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		Users USERS_2 = USERS.as("users2");
 		return dsl
-			.select(GROUPS.GROUP_ID,GROUPS.DESCRIPTION)
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.DISPLAY_NAME
+			)
+			.from(USERS_ASSOCIATIONS)
+			.join(USERS).on(USERS_ASSOCIATIONS.GROUP_UID.equal(USERS.USER_UID))
+			.join(USERS_2).on(USERS_ASSOCIATIONS.USER_UID.equal(USERS_2.USER_UID))
+			.where(
+				USERS_2.DOMAIN_ID.equal(domainId)
+				.and(USERS_2.USER_ID.equal(userId))
+				.and(USERS_2.TYPE.equal(OUser.USER_TYPE))
+			)
+			.fetchInto(OGroup.class);
+	}
+	
+	public OGroup selectByDomainGroup(Connection con, String domainId, String groupId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.DISPLAY_NAME
+			).from(USERS)
+			.where(
+				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.USER_ID.equal(groupId))
+				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+			)
+			.fetchOneInto(OGroup.class);
+	}
+	
+	public OGroup selectByUid(Connection con, String userUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.DISPLAY_NAME
+			).from(USERS)
+			.where(
+				USERS.USER_UID.equal(userUid)
+				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+			)
+			.fetchOneInto(OGroup.class);
+	}
+	
+	/*
+	public List<OGroup> selectByUser(Connection con, String domainId, String userId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.UID,
+				USERS.ROLE_UID,
+				USERS.DISPLAY_NAME
+			)
 			.from(GROUPS)
 			.where(GROUPS.DOMAIN_ID.in(domainId,"*")
 					.and(GROUPS.GROUP_ID.in(
@@ -86,34 +175,61 @@ public class GroupDAO extends BaseDAO {
 			)
 			.fetchInto(OGroup.class);
 	}
+	*/
 	
 	public int insert(Connection con, OGroup item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		GroupsRecord record = dsl.newRecord(GROUPS, item);
+		item.setType(OUser.GROUP_TYPE);
+		UsersRecord record = dsl.newRecord(USERS, item);
 		return dsl
-			.insertInto(GROUPS)
+			.insertInto(USERS)
 			.set(record)
 			.execute();
 	}
 	
 	public int update(Connection con, OGroup item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		GroupsRecord record = dsl.newRecord(GROUPS, item);
 		return dsl
-			.update(GROUPS)
-			.set(record)
-			.where(GROUPS.DOMAIN_ID.equal(item.getDomainId())
-					.and(GROUPS.GROUP_ID.equal(item.getGroupId()))
+			.update(USERS)
+			.set(USERS.DISPLAY_NAME, item.getDisplayName())
+			.where(
+				USERS.DOMAIN_ID.equal(item.getDomainId())
+				.and(USERS.USER_ID.equal(item.getUserId()))
+				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
 			)
 			.execute();
 	}
 	
-	public int deleteById(Connection con, String domainId, String groupId) throws DAOException {
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(GROUPS)
-			.where(GROUPS.DOMAIN_ID.equal(domainId)
-					.and(GROUPS.GROUP_ID.equal(groupId))
+			.delete(USERS)
+			.where(
+					USERS.DOMAIN_ID.equal(domainId)
+					.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomainGroup(Connection con, String domainId, String groupId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS)
+			.where(
+					USERS.DOMAIN_ID.equal(domainId)
+					.and(USERS.USER_ID.equal(groupId))
+					.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+			)
+			.execute();
+	}
+	
+	public int deleteByUserUid(Connection con, String userUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS)
+			.where(
+					USERS.USER_UID.equal(userUid)
+					.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
 			)
 			.execute();
 	}

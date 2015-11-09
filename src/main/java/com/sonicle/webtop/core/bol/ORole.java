@@ -40,5 +40,11 @@ import com.sonicle.webtop.core.jooq.tables.pojos.Roles;
  * @author gbulfon
  */
 public class ORole extends Roles {
-
+	public ORole() {}
+	
+	public ORole(String roleSid, String name, String description) {
+		setRoleUid(roleSid);
+		setName(name);
+		setDescription(description);
+	}
 }

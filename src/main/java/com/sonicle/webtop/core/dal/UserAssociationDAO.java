@@ -31,21 +31,60 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.bol;
+package com.sonicle.webtop.core.dal;
+
+import com.sonicle.webtop.core.bol.OUserAssociation;
+import static com.sonicle.webtop.core.jooq.Tables.USERS_ASSOCIATIONS;
+import com.sonicle.webtop.core.jooq.tables.records.UsersAssociationsRecord;
+import java.sql.Connection;
+import org.jooq.DSLContext;
 
 /**
  *
  * @author malbinola
  */
-public class UserRole extends OUserRole {
-	
-	private String roleDescription;
-
-	public String getRoleDescription() {
-		return roleDescription;
+public class UserAssociationDAO extends BaseDAO {
+	private final static UserAssociationDAO INSTANCE = new UserAssociationDAO();
+	public static UserAssociationDAO getInstance() {
+		return INSTANCE;
 	}
-
-	public void setRoleDescription(String roleDescription) {
-		this.roleDescription = roleDescription;
+	
+	public int insert(Connection con, OUserAssociation item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		UsersAssociationsRecord record = dsl.newRecord(USERS_ASSOCIATIONS, item);
+		return dsl
+			.insertInto(USERS_ASSOCIATIONS)
+			.set(record)
+			.execute();
+	}
+	
+	public int deleteById(Connection con, int id) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS_ASSOCIATIONS)
+			.where(
+					USERS_ASSOCIATIONS.USER_ASSOCIATION_ID.equal(id)
+			)
+			.execute();
+	}
+	
+	public int deleteByUser(Connection con, String userUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS_ASSOCIATIONS)
+			.where(
+					USERS_ASSOCIATIONS.USER_UID.equal(userUid)
+			)
+			.execute();
+	}
+	
+	public int deleteByGroup(Connection con, String groupUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS_ASSOCIATIONS)
+			.where(
+					USERS_ASSOCIATIONS.GROUP_UID.equal(groupUid)
+			)
+			.execute();
 	}
 }

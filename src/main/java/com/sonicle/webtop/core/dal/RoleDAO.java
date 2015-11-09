@@ -34,6 +34,7 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.ORole;
+import com.sonicle.webtop.core.bol.OUser;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.RolesRecord;
 import java.sql.Connection;
@@ -50,24 +51,79 @@ public class RoleDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<ORole> selectAll(Connection con) throws DAOException {
+	public List<ORole> selectFromGroupsByUser(Connection con, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.select()
-			.from(ROLES)
+			.selectDistinct(
+					USERS.ROLE_UID,
+					USERS.DOMAIN_ID,
+					USERS.USER_ID.as("name"),
+					USERS.DISPLAY_NAME.as("description")
+			)
+			.from(USERS_ASSOCIATIONS)
+			.join(USERS)
+			.on(
+					USERS_ASSOCIATIONS.GROUP_UID.equal(USERS.USER_UID)
+			)
+			.where(
+					USERS_ASSOCIATIONS.USER_UID.equal(userUid)
+					.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+			)
 			.fetchInto(ORole.class);
 	}
 	
-	public ORole selectByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+	public List<ORole> selectDirectByUser(Connection con, String userUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.selectDistinct(
+					ROLES.ROLE_UID,
+					ROLES.DOMAIN_ID,
+					ROLES.NAME,
+					ROLES.DESCRIPTION
+			)
+			.from(ROLES_ASSOCIATIONS)
+			.join(ROLES)
+			.on(
+					ROLES_ASSOCIATIONS.ROLE_UID.equal(ROLES.ROLE_UID)
+			)
+			.where(
+					ROLES_ASSOCIATIONS.USER_UID.equal(userUid)
+			)
+			.fetchInto(ORole.class);
+	}
+	
+	public List<ORole> selectTransitiveFromGroupsByUser(Connection con, String userUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.selectDistinct(
+					ROLES.ROLE_UID,
+					ROLES.DOMAIN_ID,
+					ROLES.NAME,
+					ROLES.DESCRIPTION
+			)
+			.from(ROLES_ASSOCIATIONS)
+			.join(USERS_ASSOCIATIONS)
+			.on(
+					ROLES_ASSOCIATIONS.USER_UID.equal(USERS_ASSOCIATIONS.GROUP_UID)
+			)
+			.join(ROLES).on(
+					ROLES_ASSOCIATIONS.ROLE_UID.equal(ROLES.ROLE_UID)
+			)
+			.where(
+					USERS_ASSOCIATIONS.USER_UID.equal(userUid)
+			)
+			.fetchInto(ORole.class);
+	}
+	
+	public List<ORole> selectExplicitByDomain(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
 			.from(ROLES)
 			.where(
 					ROLES.DOMAIN_ID.equal(domainId)
-					.and(ROLES.ROLE_ID.equal(roleId))
 			)
-			.fetchOneInto(ORole.class);
+			.fetchInto(ORole.class);
 	}
 	
 	public int insert(Connection con, ORole item) throws DAOException {
@@ -81,33 +137,32 @@ public class RoleDAO extends BaseDAO {
 	
 	public int update(Connection con, ORole item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		RolesRecord record = dsl.newRecord(ROLES, item);
 		return dsl
 			.update(ROLES)
-			.set(record)
+			.set(ROLES.NAME, item.getName())
+			.set(ROLES.DESCRIPTION, item.getDescription())
 			.where(
-					ROLES.UID.equal(item.getUid())
+					ROLES.ROLE_UID.equal(item.getRoleUid())
 			)
 			.execute();
 	}
 	
-	public int delete(Connection con, int uid) throws DAOException {
+	public int deleteByUid(Connection con, String uid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES)
 			.where(
-					ROLES.UID.equal(uid)
+					ROLES.ROLE_UID.equal(uid)
 			)
 			.execute();
 	}
 	
-	public int deleteByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES)
 			.where(
 					ROLES.DOMAIN_ID.equal(domainId)
-					.and(ROLES.ROLE_ID.equal(roleId))
 			)
 			.execute();
 	}

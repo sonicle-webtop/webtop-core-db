@@ -33,9 +33,9 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.OUserGroup;
-import static com.sonicle.webtop.core.jooq.Tables.USERS_GROUPS;
-import com.sonicle.webtop.core.jooq.tables.records.UsersGroupsRecord;
+import com.sonicle.webtop.core.bol.OShareParameter;
+import static com.sonicle.webtop.core.jooq.Tables.SHARE_PARAMETERS;
+import com.sonicle.webtop.core.jooq.tables.records.ShareParametersRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
@@ -44,60 +44,54 @@ import org.jooq.DSLContext;
  *
  * @author malbinola
  */
-public class UserGroupDAO extends BaseDAO {
-	private final static UserGroupDAO INSTANCE = new UserGroupDAO();
-	public static UserGroupDAO getInstance() {
+public class ShareParameterDAO extends BaseDAO {
+	private final static ShareDAO INSTANCE = new ShareDAO();
+	public static ShareDAO getInstance() {
 		return INSTANCE;
 	}
 	
-	public List<OUserGroup> selectByDomainUser(Connection con, String domainId, String userId) throws DAOException {
+	public List<OShareParameter> selectByShareUser(Connection con, String shareId, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.select()
-			.from(USERS_GROUPS)
-			.where(USERS_GROUPS.DOMAIN_ID.equal(domainId)
-					.and(USERS_GROUPS.USER_ID.equal(userId))
+			.select(
+				SHARE_PARAMETERS.fields()
 			)
-			.fetchInto(OUserGroup.class);
+			.from(SHARE_PARAMETERS)
+			.where(
+					SHARE_PARAMETERS.SHARE_ID.equal(shareId)
+					.and(SHARE_PARAMETERS.USER_UID.equal(userUid))
+			)
+			.fetchInto(OShareParameter.class);
 	}
 	
-	public int insert(Connection con, OUserGroup item) throws DAOException {
+	public int insert(Connection con, OShareParameter item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		UsersGroupsRecord record = dsl.newRecord(USERS_GROUPS, item);
+		ShareParametersRecord record = dsl.newRecord(SHARE_PARAMETERS, item);
 		return dsl
-			.insertInto(USERS_GROUPS)
+			.insertInto(SHARE_PARAMETERS)
 			.set(record)
 			.execute();
 	}
 	
-	public int delete(Connection con, int uid) throws DAOException {
+	public int update(Connection con, OShareParameter item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(USERS_GROUPS)
+			.update(SHARE_PARAMETERS)
+			.set(SHARE_PARAMETERS.VALUE, item.getValue())
 			.where(
-					USERS_GROUPS.UID.equal(uid)
+					SHARE_PARAMETERS.SHARE_ID.equal(item.getShareId())
+					.and(SHARE_PARAMETERS.USER_UID.equal(item.getUserUid()))
 			)
 			.execute();
 	}
 	
-	public int deleteByDomainUser(Connection con, String domainId, String userId) throws DAOException {
+	public int deleteByShareUser(Connection con, String shareId, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(USERS_GROUPS)
+			.delete(SHARE_PARAMETERS)
 			.where(
-					USERS_GROUPS.DOMAIN_ID.equal(domainId)
-					.and(USERS_GROUPS.USER_ID.equal(userId))
-			)
-			.execute();
-	}
-	
-	public int deleteByDomainGroup(Connection con, String domainId, String groupId) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.delete(USERS_GROUPS)
-			.where(
-					USERS_GROUPS.DOMAIN_ID.equal(domainId)
-					.and(USERS_GROUPS.GROUP_ID.equal(groupId))
+					SHARE_PARAMETERS.SHARE_ID.equal(shareId)
+					.and(SHARE_PARAMETERS.USER_UID.equal(userUid))
 			)
 			.execute();
 	}

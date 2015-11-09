@@ -33,22 +33,22 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.IncomingShare;
 import com.sonicle.webtop.core.bol.OShare;
 import static com.sonicle.webtop.core.jooq.Sequences.SEQ_SHARES;
+import static com.sonicle.webtop.core.jooq.Tables.ROLES_PERMISSIONS;
 import static com.sonicle.webtop.core.jooq.Tables.SHARES;
-import static com.sonicle.webtop.core.jooq.Tables.USERS;
 import com.sonicle.webtop.core.jooq.tables.records.SharesRecord;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
 /**
  *
  * @author malbinola
  */
 public class ShareDAO extends BaseDAO {
-	
 	private final static ShareDAO INSTANCE = new ShareDAO();
 	public static ShareDAO getInstance() {
 		return INSTANCE;
@@ -60,6 +60,101 @@ public class ShareDAO extends BaseDAO {
 		return nextID;
 	}
 	
+	public List<String> viewOriginByRoleServiceResource(Connection con, Collection<String> targetRoleUids, String serviceId, String resource) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SHARES.USER_UID
+			)
+			.from(SHARES)
+			.where(
+					SHARES.SHARE_ID.in(
+						DSL.selectDistinct(
+								ROLES_PERMISSIONS.INSTANCE.cast(Integer.class)
+						)
+						.from(ROLES_PERMISSIONS)
+						.where(
+								ROLES_PERMISSIONS.ROLE_UID.in(targetRoleUids)
+								.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
+								.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+						)
+					)
+					.and(SHARES.SERVICE_ID.equal(serviceId))
+					.and(SHARES.RESOURCE.equal(resource))
+			)
+			.fetchInto(String.class);
+	}
+	
+	public List<OShare> selectByRoleServiceResource(Connection con, Collection<String> targetRoleUids, String serviceId, String resource) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SHARES.fields()
+			)
+			.from(SHARES)
+			.where(
+					SHARES.SHARE_ID.in(
+						DSL.selectDistinct(
+								ROLES_PERMISSIONS.INSTANCE.cast(Integer.class)
+						)
+						.from(ROLES_PERMISSIONS)
+						.where(
+								ROLES_PERMISSIONS.ROLE_UID.in(targetRoleUids)
+								.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
+								.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+						)
+					)
+					.and(SHARES.SERVICE_ID.equal(serviceId))
+					.and(SHARES.RESOURCE.equal(resource))
+			)
+			.fetchInto(OShare.class);
+	}
+	
+	public List<OShare> selectByUserServiceResource(Connection con, String userUid, String serviceId, String resource) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SHARES.fields()
+			)
+			.from(SHARES)
+			.where(
+					SHARES.USER_UID.equal(userUid)
+					.and(SHARES.SERVICE_ID.equal(serviceId))
+					.and(SHARES.RESOURCE.equal(resource))
+			)
+			.fetchInto(OShare.class);
+	}
+	
+	public OShare selectByUserServiceResourceInstance(Connection con, String userUid, String serviceId, String resource, String instance) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SHARES.fields()
+			)
+			.from(SHARES)
+			.where(
+					SHARES.USER_UID.equal(userUid)
+					.and(SHARES.SERVICE_ID.equal(serviceId))
+					.and(SHARES.RESOURCE.equal(resource))
+					.and(SHARES.INSTANCE.equal(instance))
+			)
+			.fetchOneInto(OShare.class);
+	}
+	
+	public OShare selectById(Connection con, int shareId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				SHARES.fields()
+			)
+			.from(SHARES)
+			.where(
+					SHARES.SHARE_ID.equal(shareId)
+			)
+			.fetchOneInto(OShare.class);
+	}
+	
+	/*
 	public List<IncomingShare> viewIncomingByServiceDomainUserResource(Connection con, String serviceId, String domainId, String userId, String resource) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -159,6 +254,7 @@ public class ShareDAO extends BaseDAO {
 			)
 			.fetchOneInto(OShare.class);
 	}
+	*/
 	
 	public int insert(Connection con, OShare item) throws DAOException {
 		DSLContext dsl = getDSL(con);
@@ -166,6 +262,29 @@ public class ShareDAO extends BaseDAO {
 		return dsl
 			.insertInto(SHARES)
 			.set(record)
+			.execute();
+	}
+	
+	public int deleteById(Connection con, int shareId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(SHARES)
+			.where(
+					SHARES.SHARE_ID.equal(shareId)
+			)
+			.execute();
+	}
+	
+	public int deleteByUserServiceResourceInstance(Connection con, String userUid, String serviceId, String resource, String instance) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(SHARES)
+			.where(
+					SHARES.USER_UID.equal(userUid)
+					.and(SHARES.SERVICE_ID.equal(serviceId))
+					.and(SHARES.RESOURCE.equal(resource))
+					.and(SHARES.INSTANCE.equal(instance))
+			)
 			.execute();
 	}
 }

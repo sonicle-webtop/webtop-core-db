@@ -38,6 +38,7 @@ import static com.sonicle.webtop.core.jooq.Sequences.SEQ_ROLES_PERMISSIONS;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.RolesPermissionsRecord;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 import org.jooq.DSLContext;
 
@@ -58,14 +59,36 @@ public class RolePermissionDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<ORolePermission> selectByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+	public List<ORolePermission> selectByRole(Connection con, String roleUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
 			.from(ROLES_PERMISSIONS)
 			.where(
-					ROLES_PERMISSIONS.DOMAIN_ID.equal(domainId)
-					.and(ROLES_PERMISSIONS.ROLE_ID.equal(roleId))
+					ROLES_PERMISSIONS.ROLE_UID.equal(roleUid)
+			)
+			.orderBy(
+					ROLES_PERMISSIONS.SERVICE_ID,
+					ROLES_PERMISSIONS.RESOURCE,
+					ROLES_PERMISSIONS.ACTION,
+					ROLES_PERMISSIONS.INSTANCE
+			)
+			.fetchInto(ORolePermission.class);
+	}
+	
+	public List<ORolePermission> selectByRoleIn(Connection con, Collection<String> roleUids) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select()
+			.from(ROLES_PERMISSIONS)
+			.where(
+					ROLES_PERMISSIONS.ROLE_UID.in(roleUids)
+			)
+			.orderBy(
+					ROLES_PERMISSIONS.SERVICE_ID,
+					ROLES_PERMISSIONS.RESOURCE,
+					ROLES_PERMISSIONS.ACTION,
+					ROLES_PERMISSIONS.INSTANCE
 			)
 			.fetchInto(ORolePermission.class);
 	}
@@ -86,39 +109,37 @@ public class RolePermissionDAO extends BaseDAO {
 			.update(ROLES_PERMISSIONS)
 			.set(record)
 			.where(
-					ROLES_PERMISSIONS.UID.equal(item.getUid())
+					ROLES_PERMISSIONS.ROLE_PERMISSION_ID.equal(item.getRolePermissionId())
 			)
 			.execute();
 	}
 	
-	public int delete(Connection con, int uid) throws DAOException {
+	public int deleteById(Connection con, int id) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES_PERMISSIONS)
 			.where(
-					ROLES_PERMISSIONS.UID.equal(uid)
+					ROLES_PERMISSIONS.ROLE_PERMISSION_ID.equal(id)
 			)
 			.execute();
 	}
 	
-	public int deleteByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+	public int deleteByRole(Connection con, String roleUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES_PERMISSIONS)
 			.where(
-					ROLES_PERMISSIONS.DOMAIN_ID.equal(domainId)
-					.and(ROLES_PERMISSIONS.ROLE_ID.equal(roleId))
+					ROLES_PERMISSIONS.ROLE_UID.equal(roleUid)
 			)
 			.execute();
 	}
 	
-	public int deleteByDomainRoleServiceResourceActionInstance(Connection con, String domainId, String roleId, String serviceId, String resource, String action, String instance) throws DAOException {
+	public int deleteByRoleServiceResourceActionInstance(Connection con, String roleUid, String serviceId, String resource, String action, String instance) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES_PERMISSIONS)
 			.where(
-					ROLES_PERMISSIONS.DOMAIN_ID.equal(domainId)
-					.and(ROLES_PERMISSIONS.ROLE_ID.equal(roleId))
+					ROLES_PERMISSIONS.ROLE_UID.equal(roleUid)
 					.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
 					.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
 					.and(ROLES_PERMISSIONS.ACTION.equal(action))

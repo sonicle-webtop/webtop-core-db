@@ -33,12 +33,12 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.UsersGroups;
+import com.sonicle.webtop.core.jooq.tables.pojos.RolesAssociations;
 
 /**
  *
  * @author malbinola
  */
-public class OUserGroup extends UsersGroups {
+public class ORoleAssociation extends RolesAssociations {
 	
 }

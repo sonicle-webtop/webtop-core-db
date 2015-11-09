@@ -34,11 +34,22 @@
 package com.sonicle.webtop.core.bol;
 
 import com.sonicle.webtop.core.jooq.tables.pojos.Shares;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  *
  * @author malbinola
  */
 public class OShare extends Shares {
-	
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append(getShareId())
+				.append(getUserUid())
+				.append(getServiceId())
+				.append(getResource())
+				.append(getInstance())
+				.toString();
+	}
 }

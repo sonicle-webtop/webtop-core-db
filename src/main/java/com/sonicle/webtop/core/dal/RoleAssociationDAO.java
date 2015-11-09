@@ -33,24 +33,23 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.OUserRole;
-import com.sonicle.webtop.core.bol.UserRole;
+import com.sonicle.webtop.core.bol.ORoleAssociation;
 import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.UsersRolesRecord;
+import com.sonicle.webtop.core.jooq.tables.records.RolesAssociationsRecord;
 import java.sql.Connection;
-import java.util.List;
 import org.jooq.DSLContext;
 
 /**
  *
- * @author gbulfon
+ * @author malbinola
  */
-public class UserRoleDAO extends BaseDAO {
-	private final static UserRoleDAO INSTANCE = new UserRoleDAO();
-	public static UserRoleDAO getInstance() {
+public class RoleAssociationDAO extends BaseDAO {
+	private final static RoleAssociationDAO INSTANCE = new RoleAssociationDAO();
+	public static RoleAssociationDAO getInstance() {
 		return INSTANCE;
 	}
 	
+	/*
 	public List<UserRole> viewByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -71,43 +70,63 @@ public class UserRoleDAO extends BaseDAO {
 			.fetchInto(UserRole.class);
 	}
 	
-	public int insert(Connection con, OUserRole item) throws DAOException {
+	public List<GroupRole> viewByGroup(Connection con, String domainId, String groupId) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		UsersRolesRecord record = dsl.newRecord(USERS_ROLES, item);
 		return dsl
-			.insertInto(USERS_ROLES)
+			.select(
+					GROUPS_ROLES.fields()
+			)
+			.select(
+					ROLES.DESCRIPTION.as("role_description")
+			)
+			.from(GROUPS_ROLES)
+			.join(ROLES).on(
+					GROUPS_ROLES.DOMAIN_ID.equal(ROLES.DOMAIN_ID)
+					.and(GROUPS_ROLES.ROLE_ID.equal(ROLES.ROLE_ID))
+			)
+			.where(GROUPS_ROLES.DOMAIN_ID.equal(domainId)
+					.and(GROUPS_ROLES.GROUP_ID.equal(groupId))
+			)
+			.fetchInto(GroupRole.class);
+	}
+	
+	*/
+	
+	public int insert(Connection con, ORoleAssociation item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		RolesAssociationsRecord record = dsl.newRecord(ROLES_ASSOCIATIONS, item);
+		return dsl
+			.insertInto(ROLES_ASSOCIATIONS)
 			.set(record)
 			.execute();
 	}
 	
-	public int delete(Connection con, int uid) throws DAOException {
+	public int deleteById(Connection con, int id) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(USERS_ROLES)
+			.delete(ROLES_ASSOCIATIONS)
 			.where(
-					USERS_ROLES.UID.equal(uid)
+					ROLES_ASSOCIATIONS.ROLE_ASSOCIATION_ID.equal(id)
 			)
 			.execute();
 	}
 	
-	public int deleteByDomainUser(Connection con, String domainId, String userId) throws DAOException {
+	public int deleteByUser(Connection con, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(USERS_ROLES)
+			.delete(ROLES_ASSOCIATIONS)
 			.where(
-					USERS_ROLES.DOMAIN_ID.equal(domainId)
-					.and(USERS_ROLES.USER_ID.equal(userId))
+					ROLES_ASSOCIATIONS.USER_UID.equal(userUid)
 			)
 			.execute();
 	}
 	
-	public int deleteByDomainRole(Connection con, String domainId, String roleId) throws DAOException {
+	public int deleteByRole(Connection con, String roleUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(USERS_ROLES)
+			.delete(ROLES_ASSOCIATIONS)
 			.where(
-					USERS_ROLES.DOMAIN_ID.equal(domainId)
-					.and(USERS_ROLES.ROLE_ID.equal(roleId))
+					ROLES_ASSOCIATIONS.ROLE_UID.equal(roleUid)
 			)
 			.execute();
 	}
