@@ -41,6 +41,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author malbinola
  */
 public class OShare extends Shares {
+	private static final String INSTANCE_WILDCARD = "*";
+	
+	public boolean hasWildcard() {
+		return getInstance().equals(INSTANCE_WILDCARD);
+	}
 
 	@Override
 	public String toString() {
