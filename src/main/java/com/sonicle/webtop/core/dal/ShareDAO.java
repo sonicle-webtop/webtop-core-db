@@ -122,6 +122,7 @@ public class ShareDAO extends BaseDAO {
 					.and(SHARES.SERVICE_ID.equal(serviceId))
 					.and(SHARES.RESOURCE.equal(resource))
 			)
+			.orderBy(SHARES.INSTANCE)
 			.fetchInto(OShare.class);
 	}
 	
