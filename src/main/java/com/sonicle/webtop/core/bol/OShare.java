@@ -41,7 +41,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author malbinola
  */
 public class OShare extends Shares {
-	private static final String INSTANCE_WILDCARD = "*";
+	public static final String ROOT_SUFFIX = "_ROOT";
+	public static final String FOLDER_SUFFIX = "_FOLDER";
+	public static final String INSTANCE_WILDCARD = "*";
+	public static final String ROOT_INSTANCE = "";
 	
 	public boolean hasWildcard() {
 		return getInstance().equals(INSTANCE_WILDCARD);
@@ -56,5 +59,13 @@ public class OShare extends Shares {
 				.append(getResource())
 				.append(getInstance())
 				.toString();
+	}
+	
+	public static String buildRootResource(String name) {
+		return name + ROOT_SUFFIX;
+	}
+	
+	public static String buildFolderResource(String name) {
+		return name + FOLDER_SUFFIX;
 	}
 }
