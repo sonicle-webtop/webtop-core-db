@@ -70,6 +70,27 @@ public class GroupDAO extends BaseDAO {
 			.fetchInto(OGroup.class);
 	}
 	
+	public List<OGroup> selectActiveByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.DISPLAY_NAME
+			).from(USERS)
+			.where(
+				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+			)
+			.orderBy(
+				USERS.USER_ID
+			)
+			.fetchInto(OGroup.class);
+	}
+	
 	public List<OGroup> selectByUser(Connection con, String userSid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		Users USERS_2 = USERS.as("users2");

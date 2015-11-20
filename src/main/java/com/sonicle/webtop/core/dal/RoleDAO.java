@@ -115,13 +115,16 @@ public class RoleDAO extends BaseDAO {
 			.fetchInto(ORole.class);
 	}
 	
-	public List<ORole> selectExplicitByDomain(Connection con, String domainId) throws DAOException {
+	public List<ORole> selectByDomain(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
 			.from(ROLES)
 			.where(
 					ROLES.DOMAIN_ID.equal(domainId)
+			)
+			.orderBy(
+				ROLES.NAME
 			)
 			.fetchInto(ORole.class);
 	}

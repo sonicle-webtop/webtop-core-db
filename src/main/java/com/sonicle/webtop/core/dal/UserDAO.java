@@ -111,6 +111,32 @@ public class UserDAO extends BaseDAO {
 			.fetchInto(OUser.class);
 	}
 	
+	public List<OUser> selectActiveByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.PASSWORD_TYPE,
+				USERS.PASSWORD,
+				USERS.SECRET,
+				USERS.DISPLAY_NAME,
+				USERS.LANGUAGE_TAG,
+				USERS.TIMEZONE
+			).from(USERS)
+			.where(
+				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+			)
+			.orderBy(
+				USERS.USER_ID
+			)
+			.fetchInto(OUser.class);
+	}
+	
 	public OUser selectByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
