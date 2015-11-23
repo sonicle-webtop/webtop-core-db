@@ -60,7 +60,7 @@ public class ShareDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<String> viewOriginByRoleServiceResource(Connection con, Collection<String> targetRoleUids, String serviceId, String resource) throws DAOException {
+	public List<String> viewOriginByRoleServiceResource(Connection con, Collection<String> targetRoleUids, String serviceId, String shareResource, Collection<String> permResources) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -76,11 +76,11 @@ public class ShareDAO extends BaseDAO {
 						.where(
 								ROLES_PERMISSIONS.ROLE_UID.in(targetRoleUids)
 								.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
-								.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+								.and(ROLES_PERMISSIONS.RESOURCE.in(permResources))
 						)
 					)
 					.and(SHARES.SERVICE_ID.equal(serviceId))
-					.and(SHARES.RESOURCE.equal(resource))
+					.and(SHARES.RESOURCE.equal(shareResource))
 			)
 			.fetchInto(String.class);
 	}
