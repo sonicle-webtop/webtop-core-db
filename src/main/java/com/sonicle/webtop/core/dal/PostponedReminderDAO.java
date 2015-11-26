@@ -33,68 +33,58 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.OMessageQueue;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_MESSAGES_QUEUE;
-import static com.sonicle.webtop.core.jooq.Tables.MESSAGES_QUEUE;
-import com.sonicle.webtop.core.jooq.tables.records.MessagesQueueRecord;
+import com.sonicle.webtop.core.bol.OPostponedReminder;
+import static com.sonicle.webtop.core.jooq.Sequences.SEQ_POSTPONED_REMINDERS;
+import static com.sonicle.webtop.core.jooq.Tables.POSTPONED_REMINDERS;
+import com.sonicle.webtop.core.jooq.tables.records.PostponedRemindersRecord;
 import java.sql.Connection;
 import java.util.List;
+import org.joda.time.DateTime;
 import org.jooq.DSLContext;
 
 /**
  *
  * @author malbinola
  */
-public class MessageQueueDAO extends BaseDAO {
-	private final static MessageQueueDAO INSTANCE = new MessageQueueDAO();
-	public static MessageQueueDAO getInstance() {
+public class PostponedReminderDAO extends BaseDAO {
+	private final static PostponedReminderDAO INSTANCE = new PostponedReminderDAO();
+	public static PostponedReminderDAO getInstance() {
 		return INSTANCE;
 	}
 	
 	public Long getSequence(Connection con) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		Long nextID = dsl.nextval(SEQ_MESSAGES_QUEUE);
+		Long nextID = dsl.nextval(SEQ_POSTPONED_REMINDERS);
 		return nextID;
 	}
 	
-	public List<OMessageQueue> selectByPid(Connection con, String pid) {
+	public List<OPostponedReminder> selectExpiredForUpdateByInstant(Connection con, DateTime greaterInstant) {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
-			.from(MESSAGES_QUEUE)
+			.from(POSTPONED_REMINDERS)
 			.where(
-				MESSAGES_QUEUE.PID.equal(pid)
+					POSTPONED_REMINDERS.REMIND_ON.lessOrEqual(greaterInstant)
 			)
-			.fetchInto(OMessageQueue.class);
+			.fetchInto(OPostponedReminder.class);
 	}
 	
-	public int insert(Connection con, OMessageQueue item) throws DAOException {
+	public int insert(Connection con, OPostponedReminder item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		MessagesQueueRecord record = dsl.newRecord(MESSAGES_QUEUE, item);
+		PostponedRemindersRecord record = dsl.newRecord(POSTPONED_REMINDERS, item);
 		return dsl
-			.insertInto(MESSAGES_QUEUE)
+			.insertInto(POSTPONED_REMINDERS)
 			.set(record)
 			.execute();
 	}
 	
-	public int updatePidIfNullByDomainUser(Connection con, String domainId, String userId, String pid) throws DAOException {
+	public int delete(Connection con, int id) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.update(MESSAGES_QUEUE)
-			.set(MESSAGES_QUEUE.PID, pid)
+			.delete(POSTPONED_REMINDERS)
 			.where(
-				MESSAGES_QUEUE.PID.isNull()
-				.and(MESSAGES_QUEUE.DOMAIN_ID.equal(domainId))
-				.and(MESSAGES_QUEUE.USER_ID.equal(userId))
+				POSTPONED_REMINDERS.POSTPONED_REMINDER_ID.equal(id)
 			)
 			.execute();
-	}
-	
-	public int deleteByPid(Connection con, String pid) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-				.delete(MESSAGES_QUEUE)
-				.where(MESSAGES_QUEUE.PID.equal(pid))
-				.execute();
 	}
 }
