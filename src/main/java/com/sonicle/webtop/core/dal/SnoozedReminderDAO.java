@@ -33,10 +33,10 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.OPostponedReminder;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_POSTPONED_REMINDERS;
-import static com.sonicle.webtop.core.jooq.Tables.POSTPONED_REMINDERS;
-import com.sonicle.webtop.core.jooq.tables.records.PostponedRemindersRecord;
+import com.sonicle.webtop.core.bol.OSnoozedReminder;
+import static com.sonicle.webtop.core.jooq.Sequences.SEQ_SNOOZED_REMINDERS;
+import static com.sonicle.webtop.core.jooq.Tables.SNOOZED_REMINDERS;
+import com.sonicle.webtop.core.jooq.tables.records.SnoozedRemindersRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.joda.time.DateTime;
@@ -46,34 +46,34 @@ import org.jooq.DSLContext;
  *
  * @author malbinola
  */
-public class PostponedReminderDAO extends BaseDAO {
-	private final static PostponedReminderDAO INSTANCE = new PostponedReminderDAO();
-	public static PostponedReminderDAO getInstance() {
+public class SnoozedReminderDAO extends BaseDAO {
+	private final static SnoozedReminderDAO INSTANCE = new SnoozedReminderDAO();
+	public static SnoozedReminderDAO getInstance() {
 		return INSTANCE;
 	}
 	
 	public Long getSequence(Connection con) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		Long nextID = dsl.nextval(SEQ_POSTPONED_REMINDERS);
+		Long nextID = dsl.nextval(SEQ_SNOOZED_REMINDERS);
 		return nextID;
 	}
 	
-	public List<OPostponedReminder> selectExpiredForUpdateByInstant(Connection con, DateTime greaterInstant) {
+	public List<OSnoozedReminder> selectExpiredForUpdateByInstant(Connection con, DateTime greaterInstant) {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
-			.from(POSTPONED_REMINDERS)
+			.from(SNOOZED_REMINDERS)
 			.where(
-					POSTPONED_REMINDERS.REMIND_ON.lessOrEqual(greaterInstant)
+					SNOOZED_REMINDERS.REMIND_ON.lessOrEqual(greaterInstant)
 			)
-			.fetchInto(OPostponedReminder.class);
+			.fetchInto(OSnoozedReminder.class);
 	}
 	
-	public int insert(Connection con, OPostponedReminder item) throws DAOException {
+	public int insert(Connection con, OSnoozedReminder item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		PostponedRemindersRecord record = dsl.newRecord(POSTPONED_REMINDERS, item);
+		SnoozedRemindersRecord record = dsl.newRecord(SNOOZED_REMINDERS, item);
 		return dsl
-			.insertInto(POSTPONED_REMINDERS)
+			.insertInto(SNOOZED_REMINDERS)
 			.set(record)
 			.execute();
 	}
@@ -81,9 +81,9 @@ public class PostponedReminderDAO extends BaseDAO {
 	public int delete(Connection con, int id) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(POSTPONED_REMINDERS)
+			.delete(SNOOZED_REMINDERS)
 			.where(
-				POSTPONED_REMINDERS.POSTPONED_REMINDER_ID.equal(id)
+				SNOOZED_REMINDERS.SNOOZED_REMINDER_ID.equal(id)
 			)
 			.execute();
 	}

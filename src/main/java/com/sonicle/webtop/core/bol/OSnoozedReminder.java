@@ -33,14 +33,14 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.PostponedReminders;
+import com.sonicle.webtop.core.jooq.tables.pojos.SnoozedReminders;
 import org.joda.time.DateTimeZone;
 
 /**
  *
  * @author malbinola
  */
-public class OPostponedReminder extends PostponedReminders {
+public class OSnoozedReminder extends SnoozedReminders {
 	
 	public DateTimeZone getDateTimeZone() {
 		return DateTimeZone.forID(getTimezone());
