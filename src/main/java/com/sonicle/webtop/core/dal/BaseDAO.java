@@ -63,23 +63,25 @@ public class BaseDAO {
 		}
 	}
 	
-	public static class RevisionInfo {
-		public DateTime lastModified;
-		public String lastDevice;
-		public String lastUser;
+	public static class CrudInfo {
+		public DateTime timestamp;
+		public String device;
+		public String user;
 		
+		/*
 		public RevisionInfo() {
 			this(null, null);
 		}
+		*/
 		
-		public RevisionInfo(String lastDevice, String lastUser) {
-			this(DateTime.now(DateTimeZone.UTC), lastDevice, lastUser);
+		public CrudInfo(String device, String user) {
+			this(DateTime.now(DateTimeZone.UTC), device, user);
 		}
 		
-		public RevisionInfo(DateTime lastModified, String lastDevice, String lastUser) {
-			this.lastModified = lastModified;
-			this.lastDevice = lastDevice;
-			this.lastUser = lastUser;
+		public CrudInfo(DateTime timestamp, String device, String user) {
+			this.timestamp = timestamp;
+			this.device = device;
+			this.user = user;
 		}
 	}
 }
