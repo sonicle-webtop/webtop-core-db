@@ -34,11 +34,16 @@
 package com.sonicle.webtop.core.bol;
 
 import com.sonicle.webtop.core.jooq.tables.pojos.AuthLogs;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author malbinola
  */
-public class OAuthLog extends AuthLogs{
-	
+public class OAuthLog extends AuthLogs {
+
+	@Override
+	public void setUserAgent(String userAgent) {
+		super.setUserAgent(StringUtils.left(userAgent, 512));
+	}
 }

@@ -38,6 +38,7 @@ import static com.sonicle.webtop.core.jooq.Sequences.SEQ_AUTH_LOGS;
 import static com.sonicle.webtop.core.jooq.Tables.AUTH_LOGS;
 import com.sonicle.webtop.core.jooq.tables.records.AuthLogsRecord;
 import java.sql.Connection;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.jooq.DSLContext;
