@@ -31,19 +31,51 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.bol;
+package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.AuthLogs;
-import org.apache.commons.lang3.StringUtils;
+import com.sonicle.webtop.core.bol.OSysLog;
+import static com.sonicle.webtop.core.jooq.Sequences.SEQ_SYSLOG;
+import static com.sonicle.webtop.core.jooq.Tables.SYSLOG;
+import com.sonicle.webtop.core.jooq.tables.records.SyslogRecord;
+import java.sql.Connection;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.jooq.DSLContext;
 
 /**
  *
  * @author malbinola
  */
-public class OAuthLog extends AuthLogs {
+public class SysLogDAO extends BaseDAO {
+	private final static SysLogDAO INSTANCE = new SysLogDAO();
 
-	@Override
-	public void setUserAgent(String userAgent) {
-		super.setUserAgent(StringUtils.left(userAgent, 512));
+	public static SysLogDAO getInstance() {
+		return INSTANCE;
+	}
+
+	public Long getSequence(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		Long nextID = dsl.nextval(SEQ_SYSLOG);
+		return nextID;
+	}
+	
+	public int insert(Connection con, OSysLog item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		SyslogRecord record = dsl.newRecord(SYSLOG, item);
+		return dsl
+			.insertInto(SYSLOG)
+			.set(record)
+			.execute();
+	}
+	
+	public int deleteByAge(Connection con, int days) throws DAOException {
+		DateTime boundaryDate = DateTime.now(DateTimeZone.UTC).withTimeAtStartOfDay().minusDays(days);
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(SYSLOG)
+			.where(
+				SYSLOG.TIMESTAMP.lessThan(boundaryDate)
+			)
+			.execute();
 	}
 }

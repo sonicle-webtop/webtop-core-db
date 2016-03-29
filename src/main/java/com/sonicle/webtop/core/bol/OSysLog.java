@@ -31,52 +31,29 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.dal;
+package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.bol.OAuthLog;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_AUTH_LOGS;
-import static com.sonicle.webtop.core.jooq.Tables.AUTH_LOGS;
-import com.sonicle.webtop.core.jooq.tables.records.AuthLogsRecord;
-import java.sql.Connection;
+import com.sonicle.webtop.core.jooq.tables.pojos.Syslog;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.jooq.DSLContext;
 
 /**
  *
  * @author malbinola
  */
-public class AuthLogDAO extends BaseDAO {
-	private final static AuthLogDAO INSTANCE = new AuthLogDAO();
-
-	public static AuthLogDAO getInstance() {
-		return INSTANCE;
-	}
-
-	public Long getSequence(Connection con) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		Long nextID = dsl.nextval(SEQ_AUTH_LOGS);
-		return nextID;
+public class OSysLog extends Syslog {
+	
+	@Override
+	public void setSwName(String swName) {
+		super.setSwName(StringUtils.left(swName, 50));
 	}
 	
-	public int insert(Connection con, OAuthLog item) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		AuthLogsRecord record = dsl.newRecord(AUTH_LOGS, item);
-		return dsl
-			.insertInto(AUTH_LOGS)
-			.set(record)
-			.execute();
+	@Override
+	public void setUserAgent(String userAgent) {
+		super.setUserAgent(StringUtils.left(userAgent, 512));
 	}
 	
-	public int deleteByAge(Connection con, int days) throws DAOException {
-		DateTime boundaryDate = DateTime.now(DateTimeZone.UTC).withTimeAtStartOfDay().minusDays(days);
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.delete(AUTH_LOGS)
-			.where(
-				AUTH_LOGS.TIMESTAMP.lessThan(boundaryDate)
-			)
-			.execute();
+	@Override
+	public void setData(String data) {
+		super.setData(StringUtils.left(data, 255));
 	}
 }
