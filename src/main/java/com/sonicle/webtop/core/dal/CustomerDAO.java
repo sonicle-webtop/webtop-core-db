@@ -69,7 +69,7 @@ public class CustomerDAO extends BaseDAO {
 				.select(
 						DESCRIPTION
 				)
-				.from("customers")
+				.from("public.customers")
 				.where(
 						CUSTOMER_ID.equal(customerId)
 				)
@@ -85,7 +85,7 @@ public class CustomerDAO extends BaseDAO {
 						EXTERNAL_ID,
 						DESCRIPTION
 				)
-				.from("customers")
+				.from("public.customers")
 				.where(
 						CUSTOMER_ID.equal(customerId)
 				)
@@ -110,14 +110,13 @@ public class CustomerDAO extends BaseDAO {
 						POSTALCODE,
 						COUNTRTY
 				)
-				.from("customers")
+				.from("public.customers")
 				.where(
 						DESCRIPTION.likeIgnoreCase(likeDescription)
-						.and(TYPE.in("C", "B"))
 						.and(
-							PARENT_ID.equal("")
-							.or(PARENT_ID.isNull())
-					)
+							STATUS.notEqual("D")
+							.or(STATUS.isNull())
+						)
 				)
 				.orderBy(
 						DESCRIPTION.asc()
@@ -140,7 +139,7 @@ public class CustomerDAO extends BaseDAO {
 						POSTALCODE,
 						COUNTRTY
 				)
-				.from("customers")
+				.from("public.customers")
 				.where(
 						DESCRIPTION.likeIgnoreCase(likeDescription)
 						.and(
