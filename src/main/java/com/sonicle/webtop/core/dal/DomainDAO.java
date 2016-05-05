@@ -59,7 +59,7 @@ public class DomainDAO extends BaseDAO {
 			.fetchInto(ODomain.class);
 	}
 	
-	public List<ODomain> selectEnabled(Connection con) throws DAOException {
+	public List<ODomain> selectActive(Connection con) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
