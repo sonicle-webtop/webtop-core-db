@@ -33,9 +33,9 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.OShareParameter;
-import static com.sonicle.webtop.core.jooq.Tables.SHARE_PARAMETERS;
-import com.sonicle.webtop.core.jooq.tables.records.ShareParametersRecord;
+import com.sonicle.webtop.core.bol.OShareData;
+import static com.sonicle.webtop.core.jooq.Tables.SHARES_DATA;
+import com.sonicle.webtop.core.jooq.tables.records.SharesDataRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
@@ -44,43 +44,43 @@ import org.jooq.DSLContext;
  *
  * @author malbinola
  */
-public class ShareParameterDAO extends BaseDAO {
-	private final static ShareDAO INSTANCE = new ShareDAO();
-	public static ShareDAO getInstance() {
+public class ShareDataDAO extends BaseDAO {
+	private final static ShareDataDAO INSTANCE = new ShareDataDAO();
+	public static ShareDataDAO getInstance() {
 		return INSTANCE;
 	}
 	
-	public List<OShareParameter> selectByShareUser(Connection con, String shareId, String userUid) throws DAOException {
+	public OShareData selectByShareUser(Connection con, String shareId, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
-				SHARE_PARAMETERS.fields()
+				SHARES_DATA.fields()
 			)
-			.from(SHARE_PARAMETERS)
+			.from(SHARES_DATA)
 			.where(
-					SHARE_PARAMETERS.SHARE_ID.equal(shareId)
-					.and(SHARE_PARAMETERS.USER_UID.equal(userUid))
+					SHARES_DATA.SHARE_ID.equal(shareId)
+					.and(SHARES_DATA.USER_UID.equal(userUid))
 			)
-			.fetchInto(OShareParameter.class);
+			.fetchOneInto(OShareData.class);
 	}
 	
-	public int insert(Connection con, OShareParameter item) throws DAOException {
+	public int insert(Connection con, OShareData item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		ShareParametersRecord record = dsl.newRecord(SHARE_PARAMETERS, item);
+		SharesDataRecord record = dsl.newRecord(SHARES_DATA, item);
 		return dsl
-			.insertInto(SHARE_PARAMETERS)
+			.insertInto(SHARES_DATA)
 			.set(record)
 			.execute();
 	}
 	
-	public int update(Connection con, OShareParameter item) throws DAOException {
+	public int update(Connection con, OShareData item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.update(SHARE_PARAMETERS)
-			.set(SHARE_PARAMETERS.VALUE, item.getValue())
+			.update(SHARES_DATA)
+			.set(SHARES_DATA.VALUE, item.getValue())
 			.where(
-					SHARE_PARAMETERS.SHARE_ID.equal(item.getShareId())
-					.and(SHARE_PARAMETERS.USER_UID.equal(item.getUserUid()))
+					SHARES_DATA.SHARE_ID.equal(item.getShareId())
+					.and(SHARES_DATA.USER_UID.equal(item.getUserUid()))
 			)
 			.execute();
 	}
@@ -88,10 +88,10 @@ public class ShareParameterDAO extends BaseDAO {
 	public int deleteByShareUser(Connection con, String shareId, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.delete(SHARE_PARAMETERS)
+			.delete(SHARES_DATA)
 			.where(
-					SHARE_PARAMETERS.SHARE_ID.equal(shareId)
-					.and(SHARE_PARAMETERS.USER_UID.equal(userUid))
+					SHARES_DATA.SHARE_ID.equal(shareId)
+					.and(SHARES_DATA.USER_UID.equal(userUid))
 			)
 			.execute();
 	}

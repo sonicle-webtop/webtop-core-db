@@ -39,6 +39,6 @@ import com.sonicle.webtop.core.jooq.tables.pojos.ShareParameters;
  *
  * @author malbinola
  */
-public class OShareParameter extends ShareParameters {
+public class OShareData extends ShareParameters {
 	
 }
