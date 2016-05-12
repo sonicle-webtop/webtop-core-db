@@ -33,12 +33,12 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.ShareParameters;
+import com.sonicle.webtop.core.jooq.tables.pojos.SharesData;
 
 /**
  *
  * @author malbinola
  */
-public class OShareData extends ShareParameters {
+public class OShareData extends SharesData {
 	
 }
