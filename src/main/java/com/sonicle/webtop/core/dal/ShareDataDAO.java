@@ -37,7 +37,6 @@ import com.sonicle.webtop.core.bol.OShareData;
 import static com.sonicle.webtop.core.jooq.Tables.SHARES_DATA;
 import com.sonicle.webtop.core.jooq.tables.records.SharesDataRecord;
 import java.sql.Connection;
-import java.util.List;
 import org.jooq.DSLContext;
 
 /**
@@ -50,7 +49,7 @@ public class ShareDataDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public OShareData selectByShareUser(Connection con, String shareId, String userUid) throws DAOException {
+	public OShareData selectByShareUser(Connection con, int shareId, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -85,7 +84,7 @@ public class ShareDataDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByShareUser(Connection con, String shareId, String userUid) throws DAOException {
+	public int deleteByShareUser(Connection con, int shareId, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(SHARES_DATA)
