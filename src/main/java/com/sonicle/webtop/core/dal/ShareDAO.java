@@ -60,7 +60,7 @@ public class ShareDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<String> viewOriginByRoleServiceResource(Connection con, Collection<String> targetRoleUids, String serviceId, String shareKey, Collection<String> permResources) throws DAOException {
+	public List<String> viewOriginByRoleServiceKey(Connection con, Collection<String> targetRoleUids, String serviceId, String shareKey, Collection<String> permissionKeys) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectDistinct(
@@ -76,7 +76,7 @@ public class ShareDAO extends BaseDAO {
 						.where(
 								ROLES_PERMISSIONS.ROLE_UID.in(targetRoleUids)
 								.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
-								.and(ROLES_PERMISSIONS.RESOURCE.in(permResources))
+								.and(ROLES_PERMISSIONS.KEY.in(permissionKeys))
 						)
 					)
 					.and(SHARES.SERVICE_ID.equal(serviceId))
@@ -85,7 +85,7 @@ public class ShareDAO extends BaseDAO {
 			.fetchInto(String.class);
 	}
 	
-	public List<OShare> selectByRoleServiceKey(Connection con, Collection<String> targetRoleUids, String serviceId, String shareKey) throws DAOException {
+	public List<OShare> selectByRoleServiceKey___(Connection con, Collection<String> targetRoleUids, String serviceId, String shareKey, String permissionKey) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -101,7 +101,7 @@ public class ShareDAO extends BaseDAO {
 						.where(
 								ROLES_PERMISSIONS.ROLE_UID.in(targetRoleUids)
 								.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
-								.and(ROLES_PERMISSIONS.RESOURCE.equal(shareKey))
+								.and(ROLES_PERMISSIONS.KEY.equal(permissionKey))
 						)
 					)
 					.and(SHARES.SERVICE_ID.equal(serviceId))

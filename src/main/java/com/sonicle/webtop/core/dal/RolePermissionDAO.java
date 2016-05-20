@@ -69,7 +69,7 @@ public class RolePermissionDAO extends BaseDAO {
 			)
 			.orderBy(
 					ROLES_PERMISSIONS.SERVICE_ID,
-					ROLES_PERMISSIONS.RESOURCE,
+					ROLES_PERMISSIONS.KEY,
 					ROLES_PERMISSIONS.ACTION,
 					ROLES_PERMISSIONS.INSTANCE
 			)
@@ -86,14 +86,14 @@ public class RolePermissionDAO extends BaseDAO {
 			)
 			.orderBy(
 					ROLES_PERMISSIONS.SERVICE_ID,
-					ROLES_PERMISSIONS.RESOURCE,
+					ROLES_PERMISSIONS.KEY,
 					ROLES_PERMISSIONS.ACTION,
 					ROLES_PERMISSIONS.INSTANCE
 			)
 			.fetchInto(ORolePermission.class);
 	}
 	
-	public List<ORolePermission> selectByRoleServiceResourceInstance(Connection con, String roleUid, String serviceId, String resource, String instance) throws DAOException {
+	public List<ORolePermission> selectByRoleServiceKeyInstance(Connection con, String roleUid, String serviceId, String key, String instance) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
@@ -101,13 +101,13 @@ public class RolePermissionDAO extends BaseDAO {
 			.where(
 					ROLES_PERMISSIONS.ROLE_UID.equal(roleUid)
 					.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
-					.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+					.and(ROLES_PERMISSIONS.KEY.equal(key))
 					.and(ROLES_PERMISSIONS.INSTANCE.equal(instance))
 			)
 			.fetchInto(ORolePermission.class);
 	}
 	
-	public List<String> selectRolesByServiceResourceInstance(Connection con, String serviceId, String resource, String instance) throws DAOException {
+	public List<String> selectRolesByServiceKeyInstance(Connection con, String serviceId, String key, String instance) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectDistinct(
@@ -116,7 +116,7 @@ public class RolePermissionDAO extends BaseDAO {
 			.from(ROLES_PERMISSIONS)
 			.where(
 					ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId)
-					.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+					.and(ROLES_PERMISSIONS.KEY.equal(key))
 					.and(ROLES_PERMISSIONS.INSTANCE.equal(instance))
 			)
 			.fetchInto(String.class);
@@ -163,26 +163,26 @@ public class RolePermissionDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByServiceResourceInstance(Connection con, String serviceId, String resource, String instance) throws DAOException {
+	public int deleteByServiceKeyInstance(Connection con, String serviceId, String key, String instance) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES_PERMISSIONS)
 			.where(
 					ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId)
-					.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+					.and(ROLES_PERMISSIONS.KEY.equal(key))
 					.and(ROLES_PERMISSIONS.INSTANCE.equal(instance))
 			)
 			.execute();
 	}
 	
-	public int deleteByRoleServiceResourceActionInstance(Connection con, String roleUid, String serviceId, String resource, String action, String instance) throws DAOException {
+	public int deleteByRoleServiceKeyActionInstance(Connection con, String roleUid, String serviceId, String key, String action, String instance) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(ROLES_PERMISSIONS)
 			.where(
 					ROLES_PERMISSIONS.ROLE_UID.equal(roleUid)
 					.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
-					.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+					.and(ROLES_PERMISSIONS.KEY.equal(key))
 					.and(ROLES_PERMISSIONS.ACTION.equal(action))
 					.and(ROLES_PERMISSIONS.INSTANCE.equal(instance))
 			)
