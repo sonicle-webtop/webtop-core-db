@@ -60,10 +60,10 @@ public class ShareDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<String> viewOriginByRoleServiceResource(Connection con, Collection<String> targetRoleUids, String serviceId, String shareResource, Collection<String> permResources) throws DAOException {
+	public List<String> viewOriginByRoleServiceResource(Connection con, Collection<String> targetRoleUids, String serviceId, String shareKey, Collection<String> permResources) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.select(
+			.selectDistinct(
 				SHARES.USER_UID
 			)
 			.from(SHARES)
@@ -80,12 +80,12 @@ public class ShareDAO extends BaseDAO {
 						)
 					)
 					.and(SHARES.SERVICE_ID.equal(serviceId))
-					.and(SHARES.RESOURCE.equal(shareResource))
+					.and(SHARES.KEY.equal(shareKey))
 			)
 			.fetchInto(String.class);
 	}
 	
-	public List<OShare> selectByRoleServiceResource(Connection con, Collection<String> targetRoleUids, String serviceId, String resource) throws DAOException {
+	public List<OShare> selectByRoleServiceKey(Connection con, Collection<String> targetRoleUids, String serviceId, String shareKey) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -101,16 +101,16 @@ public class ShareDAO extends BaseDAO {
 						.where(
 								ROLES_PERMISSIONS.ROLE_UID.in(targetRoleUids)
 								.and(ROLES_PERMISSIONS.SERVICE_ID.equal(serviceId))
-								.and(ROLES_PERMISSIONS.RESOURCE.equal(resource))
+								.and(ROLES_PERMISSIONS.RESOURCE.equal(shareKey))
 						)
 					)
 					.and(SHARES.SERVICE_ID.equal(serviceId))
-					.and(SHARES.RESOURCE.equal(resource))
+					.and(SHARES.KEY.equal(shareKey))
 			)
 			.fetchInto(OShare.class);
 	}
 	
-	public List<OShare> selectByUserServiceResource(Connection con, String userUid, String serviceId, String resource) throws DAOException {
+	public List<OShare> selectByUserServiceKey(Connection con, String userUid, String serviceId, String shareKey) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -120,7 +120,7 @@ public class ShareDAO extends BaseDAO {
 			.where(
 					SHARES.USER_UID.equal(userUid)
 					.and(SHARES.SERVICE_ID.equal(serviceId))
-					.and(SHARES.RESOURCE.equal(resource))
+					.and(SHARES.KEY.equal(shareKey))
 			)
 			.orderBy(
 					SHARES.INSTANCE.asc()
@@ -128,7 +128,7 @@ public class ShareDAO extends BaseDAO {
 			.fetchInto(OShare.class);
 	}
 	
-	public OShare selectByUserServiceResourceInstance(Connection con, String userUid, String serviceId, String resource, String instance) throws DAOException {
+	public OShare selectByUserServiceKeyInstance(Connection con, String userUid, String serviceId, String shareKey, String instance) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -138,7 +138,7 @@ public class ShareDAO extends BaseDAO {
 			.where(
 					SHARES.USER_UID.equal(userUid)
 					.and(SHARES.SERVICE_ID.equal(serviceId))
-					.and(SHARES.RESOURCE.equal(resource))
+					.and(SHARES.KEY.equal(shareKey))
 					.and(SHARES.INSTANCE.equal(instance))
 			)
 			.fetchOneInto(OShare.class);
@@ -278,14 +278,14 @@ public class ShareDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByUserServiceResourceInstance(Connection con, String userUid, String serviceId, String resource, String instance) throws DAOException {
+	public int deleteByUserServiceKeyInstance(Connection con, String userUid, String serviceId, String shareKey, String instance) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(SHARES)
 			.where(
 					SHARES.USER_UID.equal(userUid)
 					.and(SHARES.SERVICE_ID.equal(serviceId))
-					.and(SHARES.RESOURCE.equal(resource))
+					.and(SHARES.KEY.equal(shareKey))
 					.and(SHARES.INSTANCE.equal(instance))
 			)
 			.execute();

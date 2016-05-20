@@ -34,6 +34,7 @@
 package com.sonicle.webtop.core.bol;
 
 import com.sonicle.webtop.core.jooq.tables.pojos.Shares;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -41,10 +42,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author malbinola
  */
 public class OShare extends Shares {
-	public static final String ROOT_SUFFIX = "_ROOT";
-	public static final String FOLDER_SUFFIX = "_FOLDER";
+	public static final String KEYSUFFIX_ROOT = "@ROOT";
+	public static final String KEYSUFFIX_FOLDER = "@FOLDER";
 	public static final String INSTANCE_WILDCARD = "*";
-	public static final String ROOT_INSTANCE = "";
+	public static final String INSTANCE_ROOT = "";
 	
 	public boolean hasWildcard() {
 		return getInstance().equals(INSTANCE_WILDCARD);
@@ -56,16 +57,29 @@ public class OShare extends Shares {
 				.append(getShareId())
 				.append(getUserUid())
 				.append(getServiceId())
-				.append(getResource())
+				.append(getKey())
 				.append(getInstance())
 				.toString();
 	}
 	
-	public static String buildRootResource(String name) {
-		return name + ROOT_SUFFIX;
+	public static boolean isRootKey(String key) {
+		return StringUtils.endsWith(key, KEYSUFFIX_ROOT);
 	}
 	
-	public static String buildFolderResource(String name) {
-		return name + FOLDER_SUFFIX;
+	public static boolean isFolderKey(String key) {
+		return StringUtils.endsWith(key, KEYSUFFIX_FOLDER);
+	}
+	
+	public static String buildRootKey(String resource) {
+		return resource + KEYSUFFIX_ROOT;
+	}
+	
+	public static String buildFolderKey(String resource) {
+		return resource + KEYSUFFIX_FOLDER;
+	}
+	
+	public static String extractResourceFromKey(String key) {
+		String s = StringUtils.removeEnd(key, KEYSUFFIX_ROOT);
+		return StringUtils.removeEnd(s, KEYSUFFIX_FOLDER);
 	}
 }
