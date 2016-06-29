@@ -57,13 +57,4 @@ public class MediaTypeDAO extends BaseDAO {
 			.from(MEDIA_TYPES)
 			.fetchInto(OMediaType.class);
 	}
-	
-	public OMediaType selectByMediaType(Connection con, String mediaType) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.select()
-			.from(MEDIA_TYPES)
-			.where(MEDIA_TYPES.MEDIA_TYPE.equal(mediaType))
-			.fetchOneInto(OMediaType.class);
-	}
 }
