@@ -70,15 +70,15 @@ public class OShare extends Shares {
 		return StringUtils.endsWith(key, KEYSUFFIX_FOLDER);
 	}
 	
-	public static String buildRootKey(String resource) {
-		return resource + KEYSUFFIX_ROOT;
+	public static String buildRootKey(String groupName) {
+		return groupName + KEYSUFFIX_ROOT;
 	}
 	
-	public static String buildFolderKey(String resource) {
-		return resource + KEYSUFFIX_FOLDER;
+	public static String buildFolderKey(String groupName) {
+		return groupName + KEYSUFFIX_FOLDER;
 	}
 	
-	public static String extractResourceFromKey(String key) {
+	public static String extractGroupNameFromKey(String key) {
 		String s = StringUtils.removeEnd(key, KEYSUFFIX_ROOT);
 		return StringUtils.removeEnd(s, KEYSUFFIX_FOLDER);
 	}
