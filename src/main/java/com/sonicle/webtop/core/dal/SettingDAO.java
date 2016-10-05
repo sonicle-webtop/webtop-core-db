@@ -51,12 +51,29 @@ public class SettingDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
+	public List<OSetting> selectAll(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select()
+			.from(SETTINGS)
+			.orderBy(
+					SETTINGS.SERVICE_ID.asc(),
+					SETTINGS.KEY.asc()
+			)
+			.fetchInto(OSetting.class);
+	}
+	
 	public List<OSetting> selectByService(Connection con, String serviceId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
 			.from(SETTINGS)
-			.where(SETTINGS.SERVICE_ID.equal(serviceId))
+			.where(
+					SETTINGS.SERVICE_ID.equal(serviceId)
+			)
+			.orderBy(
+					SETTINGS.KEY.asc()
+			)
 			.fetchInto(OSetting.class);
 	}
 	
@@ -65,8 +82,9 @@ public class SettingDAO extends BaseDAO {
 		return dsl
 			.select()
 			.from(SETTINGS)
-			.where(SETTINGS.SERVICE_ID.equal(serviceId)
-				.and(SETTINGS.KEY.equal(key))
+			.where(
+					SETTINGS.SERVICE_ID.equal(serviceId)
+					.and(SETTINGS.KEY.equal(key))
 			)
 			.fetchOneInto(OSetting.class);
 	}
