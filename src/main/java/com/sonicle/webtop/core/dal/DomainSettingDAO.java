@@ -33,10 +33,12 @@
  */
 package com.sonicle.webtop.core.dal;
 
+import com.sonicle.webtop.core.bol.DomainSettingRow;
 import com.sonicle.webtop.core.bol.ODomainSetting;
 import java.sql.Connection;
 import org.jooq.DSLContext;
 import static com.sonicle.webtop.core.jooq.Tables.DOMAIN_SETTINGS;
+import static com.sonicle.webtop.core.jooq.Tables.SETTINGS_DB;
 import com.sonicle.webtop.core.jooq.tables.records.*;
 import java.util.List;
 
@@ -49,6 +51,31 @@ public class DomainSettingDAO extends BaseDAO {
 	private final static DomainSettingDAO INSTANCE = new DomainSettingDAO();
 	public static DomainSettingDAO getInstance() {
 		return INSTANCE;
+	}
+	
+	public List<DomainSettingRow> selectAll(Connection con, boolean hidden) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+					DOMAIN_SETTINGS.SERVICE_ID,
+					DOMAIN_SETTINGS.KEY,
+					DOMAIN_SETTINGS.VALUE,
+					SETTINGS_DB.TYPE,
+					SETTINGS_DB.HELP
+			)
+			.from(DOMAIN_SETTINGS)
+			.leftOuterJoin(SETTINGS_DB)
+			.on(
+					DOMAIN_SETTINGS.SERVICE_ID.eq(SETTINGS_DB.SERVICE_ID)
+					.and(DOMAIN_SETTINGS.KEY.eq(SETTINGS_DB.KEY))
+					.and(SETTINGS_DB.IS_DOMAIN.eq(true))
+					.and(SETTINGS_DB.HIDDEN.eq(hidden))
+			)
+			.orderBy(
+					DOMAIN_SETTINGS.SERVICE_ID.asc(),
+					DOMAIN_SETTINGS.KEY.asc()
+			)
+			.fetchInto(DomainSettingRow.class);
 	}
 	
 	public List<ODomainSetting> selectByDomainService(Connection con, String domainId, String serviceId) throws DAOException {

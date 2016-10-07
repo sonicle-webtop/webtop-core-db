@@ -34,6 +34,7 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OSetting;
+import com.sonicle.webtop.core.bol.SettingRow;
 import java.sql.Connection;
 import org.jooq.DSLContext;
 import static com.sonicle.webtop.core.jooq.Tables.*;
@@ -51,16 +52,29 @@ public class SettingDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public List<OSetting> selectAll(Connection con) throws DAOException {
+	public List<SettingRow> selectAll(Connection con, boolean hidden) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-			.select()
+			.select(
+					SETTINGS.SERVICE_ID,
+					SETTINGS.KEY,
+					SETTINGS.VALUE,
+					SETTINGS_DB.TYPE,
+					SETTINGS_DB.HELP
+			)
 			.from(SETTINGS)
+			.leftOuterJoin(SETTINGS_DB)
+			.on(
+					SETTINGS.SERVICE_ID.eq(SETTINGS_DB.SERVICE_ID)
+					.and(SETTINGS.KEY.eq(SETTINGS_DB.KEY))
+					.and(SETTINGS_DB.IS_SYSTEM.eq(true))
+					.and(SETTINGS_DB.HIDDEN.eq(hidden))
+			)
 			.orderBy(
 					SETTINGS.SERVICE_ID.asc(),
 					SETTINGS.KEY.asc()
 			)
-			.fetchInto(OSetting.class);
+			.fetchInto(SettingRow.class);
 	}
 	
 	public List<OSetting> selectByService(Connection con, String serviceId) throws DAOException {
