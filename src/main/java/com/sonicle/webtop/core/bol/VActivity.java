@@ -1,5 +1,5 @@
 /*
- * WebTop Services is a Web Application framework developed by Sonicle S.r.l.
+ * webtop-core-db is a library developed by Sonicle S.r.l.
  * Copyright (C) 2014 Sonicle S.r.l.
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -33,35 +33,17 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.RolesPermissions;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  *
- * @author gbulfon
+ * @author malbinola
  */
-public class ORolePermission extends RolesPermissions {
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(getRolePermissionId())
-			.append(getRoleUid())
-			.append(getServiceId())
-			.append(getKey())
-			.append(getAction())
-			.append(getInstance())
-			.toHashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof ORolePermission == false) return false;
-		if(this == obj) return true;
-		final ORolePermission otherObject = (ORolePermission)obj;
-		return new EqualsBuilder()
-			.append(getRolePermissionId(), otherObject.getRolePermissionId())
-			.isEquals();
-	}
+public class VActivity {
+	public Integer activityId;
+	public String domainId;
+	public String domainDescription;
+	public String userId;
+	public String userDescription;
+	public String description;
+	public Boolean readOnly;
+	public String externalId;
 }

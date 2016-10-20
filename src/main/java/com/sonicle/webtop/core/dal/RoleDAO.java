@@ -51,6 +51,31 @@ public class RoleDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
+	public ORole selectByUid(Connection con, String uid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select()
+			.from(ROLES)
+			.where(
+					ROLES.ROLE_UID.equal(uid)
+			)
+			.fetchOneInto(ORole.class);
+	}
+	
+	public List<ORole> selectByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select()
+			.from(ROLES)
+			.where(
+					ROLES.DOMAIN_ID.equal(domainId)
+			)
+			.orderBy(
+				ROLES.NAME
+			)
+			.fetchInto(ORole.class);
+	}
+	
 	public List<ORole> selectFromGroupsByUser(Connection con, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -111,20 +136,6 @@ public class RoleDAO extends BaseDAO {
 			)
 			.where(
 					USERS_ASSOCIATIONS.USER_UID.equal(userUid)
-			)
-			.fetchInto(ORole.class);
-	}
-	
-	public List<ORole> selectByDomain(Connection con, String domainId) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.select()
-			.from(ROLES)
-			.where(
-					ROLES.DOMAIN_ID.equal(domainId)
-			)
-			.orderBy(
-				ROLES.NAME
 			)
 			.fetchInto(ORole.class);
 	}

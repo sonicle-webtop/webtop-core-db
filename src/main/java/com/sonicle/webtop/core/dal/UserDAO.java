@@ -130,6 +130,7 @@ public class UserDAO extends BaseDAO {
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
 				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				//TODO: aggiungere filtro attivo
 			)
 			.orderBy(
 				USERS.USER_ID

@@ -33,7 +33,7 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.ActivityGrid;
+import com.sonicle.webtop.core.bol.VActivity;
 import com.sonicle.webtop.core.bol.OActivity;
 import static com.sonicle.webtop.core.jooq.Sequences.SEQ_ACTIVITIES;
 import static com.sonicle.webtop.core.jooq.Tables.*;
@@ -60,7 +60,7 @@ public class ActivityDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<ActivityGrid> viewLiveByDomains(Connection con, Collection<String> domainIds) throws DAOException {
+	public List<VActivity> viewLiveByDomains(Connection con, Collection<String> domainIds) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 				.select(
@@ -93,7 +93,7 @@ public class ActivityDAO extends BaseDAO {
 				.orderBy(
 						ACTIVITIES.DESCRIPTION.asc()
 				)
-				.fetchInto(ActivityGrid.class);
+				.fetchInto(VActivity.class);
 	}
 	
 	public List<OActivity> selectLiveByDomainUser(Connection con, String domainId, String userId) throws DAOException {
