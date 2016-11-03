@@ -72,12 +72,34 @@ public class UserInfoDAO extends BaseDAO {
 			.execute();
 	}
 	
+	public int insert(Connection con, OUserInfo item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		UsersInfoRecord record = dsl.newRecord(USERS_INFO, item);
+		return dsl
+			.insertInto(USERS_INFO)
+			.set(record)
+			.execute();
+	}
+	
 	public int update(Connection con, OUserInfo item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		UsersInfoRecord record = dsl.newRecord(USERS_INFO, item);
 		return dsl
 			.update(USERS_INFO)
 			.set(record)
+			.where(
+				USERS_INFO.DOMAIN_ID.equal(item.getDomainId())
+				.and(USERS_INFO.USER_ID.equal(item.getUserId()))
+			)
+			.execute();
+	}
+	
+	public int updateFirstLastName(Connection con, OUserInfo item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.update(USERS_INFO)
+			.set(USERS_INFO.FIRST_NAME, item.getFirstName())
+				.set(USERS_INFO.LAST_NAME, item.getLastName())
 			.where(
 				USERS_INFO.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS_INFO.USER_ID.equal(item.getUserId()))

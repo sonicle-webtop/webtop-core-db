@@ -6,11 +6,8 @@
 
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.commons.LangUtils;
 import com.sonicle.webtop.core.jooq.tables.pojos.Users;
-import java.util.Locale;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.DateTimeZone;
 
 /**
  *
@@ -19,22 +16,6 @@ import org.joda.time.DateTimeZone;
 public class OUser extends Users {
 	public static final String USER_TYPE = "U";
 	public static final String GROUP_TYPE = "G";
-
-	public Locale getLocale() {
-		return LangUtils.languageTagToLocale(getLanguageTag());
-	}
-	
-	public void setLocale(Locale locale) {
-		setLanguageTag(locale.toString());
-	}
-	
-	public DateTimeZone getTimeZone() {
-		return DateTimeZone.forID(getTimezone());
-	}
-	
-	public void setTimeZone(DateTimeZone tz) {
-		setTimezone(tz.getID());
-	}
 	
 	@Override
 	public String toString() {

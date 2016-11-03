@@ -59,7 +59,7 @@ public class RolePermissionDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<ORolePermission> selectByRole(Connection con, String roleUid) throws DAOException {
+	public List<ORolePermission> selectByRoleUid(Connection con, String roleUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()

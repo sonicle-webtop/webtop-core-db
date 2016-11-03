@@ -59,13 +59,31 @@ public class DomainDAO extends BaseDAO {
 			.fetchInto(ODomain.class);
 	}
 	
-	public List<ODomain> selectActive(Connection con) throws DAOException {
+	public List<ODomain> selectEnabled(Connection con) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
 			.from(DOMAINS)
 			.where(
 					DOMAINS.ENABLED.isTrue()
+			)
+			.orderBy(
+					DOMAINS.DOMAIN_ID.asc()
+			)
+			.fetchInto(ODomain.class);
+	}
+	
+	public List<ODomain> selectEnabledByInternetDomain(Connection con, String internetDomain) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select()
+			.from(DOMAINS)
+			.where(
+					DOMAINS.ENABLED.isTrue()
+					.and(DOMAINS.DOMAIN_NAME.equal(internetDomain))
+			)
+			.orderBy(
+					DOMAINS.DOMAIN_ID.asc()
 			)
 			.fetchInto(ODomain.class);
 	}
@@ -75,7 +93,9 @@ public class DomainDAO extends BaseDAO {
 		return dsl
 			.select()
 			.from(DOMAINS)
-			.where(DOMAINS.DOMAIN_ID.equal(domainId))
+			.where(
+					DOMAINS.DOMAIN_ID.equal(domainId)
+			)
 			.fetchOneInto(ODomain.class);
 	}
 	

@@ -39,6 +39,7 @@ import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.UsersRecord;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 import org.jooq.DSLContext;
 
 /**
@@ -58,14 +59,13 @@ public class UserDAO extends BaseDAO {
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
 				USERS.TYPE,
+				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.ROLE_UID,
 				USERS.PASSWORD_TYPE,
 				USERS.PASSWORD,
 				USERS.SECRET,
-				USERS.DISPLAY_NAME,
-				USERS.LANGUAGE_TAG,
-				USERS.TIMEZONE
+				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.TYPE.equal(OUser.USER_TYPE)
@@ -95,14 +95,13 @@ public class UserDAO extends BaseDAO {
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
 				USERS.TYPE,
+				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.ROLE_UID,
 				USERS.PASSWORD_TYPE,
 				USERS.PASSWORD,
 				USERS.SECRET,
-				USERS.DISPLAY_NAME,
-				USERS.LANGUAGE_TAG,
-				USERS.TIMEZONE
+				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -111,26 +110,47 @@ public class UserDAO extends BaseDAO {
 			.fetchInto(OUser.class);
 	}
 	
-	public List<OUser> selectActiveByDomain(Connection con, String domainId) throws DAOException {
+	public Map<String, OUser> selectByDomain2(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
 				USERS.TYPE,
+				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.ROLE_UID,
 				USERS.PASSWORD_TYPE,
 				USERS.PASSWORD,
 				USERS.SECRET,
-				USERS.DISPLAY_NAME,
-				USERS.LANGUAGE_TAG,
-				USERS.TIMEZONE
+				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
 				.and(USERS.TYPE.equal(OUser.USER_TYPE))
-				//TODO: aggiungere filtro attivo
+			)
+			.fetchMap(USERS.USER_ID, OUser.class);
+	}
+	
+	public List<OUser> selectEnabledByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.ENABLED,
+				USERS.USER_UID,
+				USERS.ROLE_UID,
+				USERS.PASSWORD_TYPE,
+				USERS.PASSWORD,
+				USERS.SECRET,
+				USERS.DISPLAY_NAME
+			).from(USERS)
+			.where(
+				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS.ENABLED.equal(true))
 			)
 			.orderBy(
 				USERS.USER_ID
@@ -145,14 +165,13 @@ public class UserDAO extends BaseDAO {
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
 				USERS.TYPE,
+				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.ROLE_UID,
 				USERS.PASSWORD_TYPE,
 				USERS.PASSWORD,
 				USERS.SECRET,
-				USERS.DISPLAY_NAME,
-				USERS.LANGUAGE_TAG,
-				USERS.TIMEZONE
+				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -169,14 +188,13 @@ public class UserDAO extends BaseDAO {
 				USERS.DOMAIN_ID,
 				USERS.USER_ID,
 				USERS.TYPE,
+				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.ROLE_UID,
 				USERS.PASSWORD_TYPE,
 				USERS.PASSWORD,
 				USERS.SECRET,
-				USERS.DISPLAY_NAME,
-				USERS.LANGUAGE_TAG,
-				USERS.TIMEZONE
+				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.TYPE.equal(OUser.USER_TYPE)
@@ -195,17 +213,42 @@ public class UserDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int update(Connection con, OUser item) throws DAOException {
+	public int updateDisplayName(Connection con, OUser item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.update(USERS)
 			.set(USERS.DISPLAY_NAME, item.getDisplayName())
-			.set(USERS.LANGUAGE_TAG, item.getLanguageTag())
-			.set(USERS.TIMEZONE, item.getTimezone())
 			.where(
 				USERS.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS.USER_ID.equal(item.getUserId()))
 				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+			)
+			.execute();
+	}
+	
+	public int updateEnabledDisplayName(Connection con, OUser item) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.update(USERS)
+			.set(USERS.ENABLED, item.getEnabled())
+			.set(USERS.DISPLAY_NAME, item.getDisplayName())
+			.where(
+				USERS.DOMAIN_ID.equal(item.getDomainId())
+				.and(USERS.USER_ID.equal(item.getUserId()))
+				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+			)
+			.execute();
+	}
+	
+	public int updateEnabledByDomainUser(Connection con, String domainId, String userId, boolean enabled) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.update(USERS)
+			.set(USERS.ENABLED, enabled)
+			.where(
+					USERS.DOMAIN_ID.equal(domainId)
+					.and(USERS.USER_ID.equal(userId))
+					.and(USERS.TYPE.equal(OUser.USER_TYPE))
 			)
 			.execute();
 	}
