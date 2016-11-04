@@ -52,6 +52,19 @@ public class UserDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
+	public boolean existByDomainUser(Connection con, String domainId, String userId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.selectCount()
+			.from(USERS)
+			.where(
+				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.USER_ID.equal(userId))
+				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+			)
+			.fetchOne(0, Integer.class) == 1;
+	}
+	
 	public List<OUser> selectAll(Connection con) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
