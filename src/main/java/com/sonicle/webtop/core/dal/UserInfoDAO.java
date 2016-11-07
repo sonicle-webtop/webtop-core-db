@@ -99,7 +99,7 @@ public class UserInfoDAO extends BaseDAO {
 		return dsl
 			.update(USERS_INFO)
 			.set(USERS_INFO.FIRST_NAME, item.getFirstName())
-				.set(USERS_INFO.LAST_NAME, item.getLastName())
+			.set(USERS_INFO.LAST_NAME, item.getLastName())
 			.where(
 				USERS_INFO.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS_INFO.USER_ID.equal(item.getUserId()))

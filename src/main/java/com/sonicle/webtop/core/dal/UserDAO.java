@@ -279,6 +279,20 @@ public class UserDAO extends BaseDAO {
 			.execute();
 	}
 	
+	public int updatePasswordByDomainUser(Connection con, String domainId, String userId, String passwordType, String password) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+				.update(USERS)
+				.set(USERS.PASSWORD_TYPE, passwordType)
+				.set(USERS.PASSWORD, password)
+				.where(
+						USERS.DOMAIN_ID.equal(domainId)
+						.and(USERS.USER_ID.equal(userId))
+						.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				)
+				.execute();
+	}
+	
 	public int deleteByDomain(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
