@@ -33,10 +33,13 @@
  */
 package com.sonicle.webtop.core.dal;
 
+import com.sonicle.webtop.core.bol.AssignedRole;
 import com.sonicle.webtop.core.bol.ORoleAssociation;
+import static com.sonicle.webtop.core.jooq.Sequences.SEQ_ROLES_ASSOCIATIONS;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.RolesAssociationsRecord;
 import java.sql.Connection;
+import java.util.List;
 import org.jooq.DSLContext;
 
 /**
@@ -49,48 +52,32 @@ public class RoleAssociationDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	/*
-	public List<UserRole> viewByDomainUser(Connection con, String domainId, String userId) throws DAOException {
+	public Long getSequence(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		Long nextID = dsl.nextval(SEQ_ROLES_ASSOCIATIONS);
+		return nextID;
+	}
+	
+	public List<AssignedRole> viewAssignedByUser(Connection con, String userUid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
-					USERS_ROLES.fields()
+					ROLES_ASSOCIATIONS.ROLE_ASSOCIATION_ID,
+					ROLES_ASSOCIATIONS.ROLE_UID,
+					ROLES.NAME.as("role_name")
 			)
-			.select(
-					ROLES.DESCRIPTION.as("role_description")
+			.from(ROLES_ASSOCIATIONS)
+			.leftOuterJoin(ROLES).on(
+					ROLES_ASSOCIATIONS.ROLE_UID.equal(ROLES.ROLE_UID)
 			)
-			.from(USERS_ROLES)
-			.join(ROLES).on(
-					USERS_ROLES.DOMAIN_ID.equal(ROLES.DOMAIN_ID)
-					.and(USERS_ROLES.ROLE_ID.equal(ROLES.ROLE_ID))
+			.where(
+					ROLES_ASSOCIATIONS.USER_UID.equal(userUid)
 			)
-			.where(USERS_ROLES.DOMAIN_ID.equal(domainId)
-					.and(USERS_ROLES.USER_ID.equal(userId))
+			.orderBy(
+				ROLES.NAME
 			)
-			.fetchInto(UserRole.class);
+			.fetchInto(AssignedRole.class);
 	}
-	
-	public List<GroupRole> viewByGroup(Connection con, String domainId, String groupId) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.select(
-					GROUPS_ROLES.fields()
-			)
-			.select(
-					ROLES.DESCRIPTION.as("role_description")
-			)
-			.from(GROUPS_ROLES)
-			.join(ROLES).on(
-					GROUPS_ROLES.DOMAIN_ID.equal(ROLES.DOMAIN_ID)
-					.and(GROUPS_ROLES.ROLE_ID.equal(ROLES.ROLE_ID))
-			)
-			.where(GROUPS_ROLES.DOMAIN_ID.equal(domainId)
-					.and(GROUPS_ROLES.GROUP_ID.equal(groupId))
-			)
-			.fetchInto(GroupRole.class);
-	}
-	
-	*/
 	
 	public int insert(Connection con, ORoleAssociation item) throws DAOException {
 		DSLContext dsl = getDSL(con);

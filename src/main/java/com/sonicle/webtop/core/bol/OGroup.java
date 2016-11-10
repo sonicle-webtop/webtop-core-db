@@ -56,7 +56,6 @@ public class OGroup extends Users {
 				.append(getDomainId())
 				.append(getUserId())
 				.append(getUserUid())
-				.append(getRoleUid())
 				.toString();
 	}
 }

@@ -34,9 +34,12 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OUserAssociation;
-import static com.sonicle.webtop.core.jooq.Tables.USERS_ASSOCIATIONS;
+import com.sonicle.webtop.core.bol.AssignedGroup;
+import static com.sonicle.webtop.core.jooq.Sequences.SEQ_USERS_ASSOCIATIONS;
+import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.UsersAssociationsRecord;
 import java.sql.Connection;
+import java.util.List;
 import org.jooq.DSLContext;
 
 /**
@@ -47,6 +50,33 @@ public class UserAssociationDAO extends BaseDAO {
 	private final static UserAssociationDAO INSTANCE = new UserAssociationDAO();
 	public static UserAssociationDAO getInstance() {
 		return INSTANCE;
+	}
+	
+	public Long getSequence(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		Long nextID = dsl.nextval(SEQ_USERS_ASSOCIATIONS);
+		return nextID;
+	}
+	
+	public List<AssignedGroup> viewAssignedByUser(Connection con, String userUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+					USERS_ASSOCIATIONS.USER_ASSOCIATION_ID,
+					USERS_ASSOCIATIONS.GROUP_UID,
+					USERS.USER_ID.as("group_id")
+			)
+			.from(USERS_ASSOCIATIONS)
+			.leftOuterJoin(USERS).on(
+					USERS_ASSOCIATIONS.GROUP_UID.equal(USERS.USER_UID)
+			)
+			.where(
+					USERS_ASSOCIATIONS.USER_UID.equal(userUid)
+			)
+			.orderBy(
+				USERS.USER_ID
+			)
+			.fetchInto(AssignedGroup.class);
 	}
 	
 	public int insert(Connection con, OUserAssociation item) throws DAOException {

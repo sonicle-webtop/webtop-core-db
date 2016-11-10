@@ -33,6 +33,7 @@
  */
 package com.sonicle.webtop.core.dal;
 
+import com.sonicle.webtop.core.bol.GroupUid;
 import com.sonicle.webtop.core.bol.OGroup;
 import com.sonicle.webtop.core.bol.OUser;
 import static com.sonicle.webtop.core.jooq.Tables.*;
@@ -52,6 +53,20 @@ public class GroupDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
+	public List<GroupUid> viewAllUids(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.USER_UID
+			).from(USERS)
+			.where(
+				USERS.TYPE.equal(OUser.TYPE_GROUP)
+			)
+			.fetchInto(GroupUid.class);
+	}
+	
 	public List<OGroup> selectByDomain(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -60,12 +75,11 @@ public class GroupDAO extends BaseDAO {
 				USERS.USER_ID,
 				USERS.TYPE,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
-				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.fetchInto(OGroup.class);
 	}
@@ -79,14 +93,13 @@ public class GroupDAO extends BaseDAO {
 				USERS.USER_ID,
 				USERS.TYPE,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME
 			)
 			.from(USERS_ASSOCIATIONS)
 			.join(USERS).on(USERS_ASSOCIATIONS.GROUP_UID.equal(USERS.USER_UID))
 			.where(
 				USERS_ASSOCIATIONS.USER_UID.equal(userSid)
-				.and(USERS_2.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS_2.TYPE.equal(OUser.TYPE_USER))
 			)
 			.fetchInto(OGroup.class);
 	}
@@ -100,7 +113,6 @@ public class GroupDAO extends BaseDAO {
 				USERS.USER_ID,
 				USERS.TYPE,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME
 			)
 			.from(USERS_ASSOCIATIONS)
@@ -109,7 +121,7 @@ public class GroupDAO extends BaseDAO {
 			.where(
 				USERS_2.DOMAIN_ID.equal(domainId)
 				.and(USERS_2.USER_ID.equal(userId))
-				.and(USERS_2.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS_2.TYPE.equal(OUser.TYPE_USER))
 			)
 			.fetchInto(OGroup.class);
 	}
@@ -122,13 +134,12 @@ public class GroupDAO extends BaseDAO {
 				USERS.USER_ID,
 				USERS.TYPE,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
 				.and(USERS.USER_ID.equal(groupId))
-				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.fetchOneInto(OGroup.class);
 	}
@@ -141,12 +152,11 @@ public class GroupDAO extends BaseDAO {
 				USERS.USER_ID,
 				USERS.TYPE,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME
 			).from(USERS)
 			.where(
 				USERS.USER_UID.equal(userUid)
-				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.fetchOneInto(OGroup.class);
 	}
@@ -179,7 +189,7 @@ public class GroupDAO extends BaseDAO {
 	
 	public int insert(Connection con, OGroup item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		item.setType(OUser.GROUP_TYPE);
+		item.setType(OUser.TYPE_GROUP);
 		UsersRecord record = dsl.newRecord(USERS, item);
 		return dsl
 			.insertInto(USERS)
@@ -195,7 +205,7 @@ public class GroupDAO extends BaseDAO {
 			.where(
 				USERS.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS.USER_ID.equal(item.getUserId()))
-				.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.execute();
 	}
@@ -206,7 +216,7 @@ public class GroupDAO extends BaseDAO {
 			.delete(USERS)
 			.where(
 					USERS.DOMAIN_ID.equal(domainId)
-					.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+					.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.execute();
 	}
@@ -218,7 +228,7 @@ public class GroupDAO extends BaseDAO {
 			.where(
 					USERS.DOMAIN_ID.equal(domainId)
 					.and(USERS.USER_ID.equal(groupId))
-					.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+					.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.execute();
 	}
@@ -229,7 +239,7 @@ public class GroupDAO extends BaseDAO {
 			.delete(USERS)
 			.where(
 					USERS.USER_UID.equal(userUid)
-					.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+					.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.execute();
 	}

@@ -60,9 +60,23 @@ public class UserDAO extends BaseDAO {
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
 				.and(USERS.USER_ID.equal(userId))
-				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.fetchOne(0, Integer.class) == 1;
+	}
+	
+	public List<UserUid> viewAllUids(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.USER_UID
+			).from(USERS)
+			.where(
+				USERS.TYPE.equal(OUser.TYPE_USER)
+			)
+			.fetchInto(UserUid.class);
 	}
 	
 	public List<OUser> selectAll(Connection con) throws DAOException {
@@ -74,31 +88,15 @@ public class UserDAO extends BaseDAO {
 				USERS.TYPE,
 				USERS.ENABLED,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME,
 				USERS.SECRET,
 				USERS.PASSWORD_TYPE,
 				USERS.PASSWORD
 			).from(USERS)
 			.where(
-				USERS.TYPE.equal(OUser.USER_TYPE)
+				USERS.TYPE.equal(OUser.TYPE_USER)
 			)
 			.fetchInto(OUser.class);
-	}
-	
-	public List<UserUid> selectAllUids(Connection con) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.select(
-				USERS.DOMAIN_ID,
-				USERS.USER_ID,
-				USERS.USER_UID,
-				USERS.ROLE_UID
-			).from(USERS)
-			.where(
-				USERS.TYPE.equal(OUser.USER_TYPE)
-			)
-			.fetchInto(UserUid.class);
 	}
 	
 	public List<OUser> selectByDomain(Connection con, String domainId) throws DAOException {
@@ -110,7 +108,6 @@ public class UserDAO extends BaseDAO {
 				USERS.TYPE,
 				USERS.ENABLED,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME,
 				USERS.SECRET,
 				USERS.PASSWORD_TYPE,
@@ -118,7 +115,7 @@ public class UserDAO extends BaseDAO {
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
-				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.fetchInto(OUser.class);
 	}
@@ -132,7 +129,6 @@ public class UserDAO extends BaseDAO {
 				USERS.TYPE,
 				USERS.ENABLED,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME,
 				USERS.SECRET,
 				USERS.PASSWORD_TYPE,
@@ -140,7 +136,7 @@ public class UserDAO extends BaseDAO {
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
-				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.fetchMap(USERS.USER_ID, OUser.class);
 	}
@@ -154,7 +150,6 @@ public class UserDAO extends BaseDAO {
 				USERS.TYPE,
 				USERS.ENABLED,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME,
 				USERS.SECRET,
 				USERS.PASSWORD_TYPE,
@@ -162,7 +157,7 @@ public class UserDAO extends BaseDAO {
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
-				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_USER))
 				.and(USERS.ENABLED.equal(true))
 			)
 			.orderBy(
@@ -180,7 +175,6 @@ public class UserDAO extends BaseDAO {
 				USERS.TYPE,
 				USERS.ENABLED,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME,
 				USERS.SECRET,
 				USERS.PASSWORD_TYPE,
@@ -189,7 +183,7 @@ public class UserDAO extends BaseDAO {
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
 				.and(USERS.USER_ID.equal(userId))
-				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.fetchOneInto(OUser.class);
 	}
@@ -203,14 +197,13 @@ public class UserDAO extends BaseDAO {
 				USERS.TYPE,
 				USERS.ENABLED,
 				USERS.USER_UID,
-				USERS.ROLE_UID,
 				USERS.DISPLAY_NAME,
 				USERS.SECRET,
 				USERS.PASSWORD_TYPE,
 				USERS.PASSWORD
 			).from(USERS)
 			.where(
-				USERS.TYPE.equal(OUser.USER_TYPE)
+				USERS.TYPE.equal(OUser.TYPE_USER)
 				.and(USERS.USER_UID.equal(userUid))
 			)
 			.fetchOneInto(OUser.class);
@@ -218,7 +211,7 @@ public class UserDAO extends BaseDAO {
 	
 	public int insert(Connection con, OUser item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		item.setType(OUser.USER_TYPE);
+		item.setType(OUser.TYPE_USER);
 		UsersRecord record = dsl.newRecord(USERS, item);
 		return dsl
 			.insertInto(USERS)
@@ -234,7 +227,7 @@ public class UserDAO extends BaseDAO {
 			.where(
 				USERS.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS.USER_ID.equal(item.getUserId()))
-				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.execute();
 	}
@@ -248,7 +241,7 @@ public class UserDAO extends BaseDAO {
 			.where(
 				USERS.DOMAIN_ID.equal(item.getDomainId())
 				.and(USERS.USER_ID.equal(item.getUserId()))
-				.and(USERS.TYPE.equal(OUser.USER_TYPE))
+				.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.execute();
 	}
@@ -261,7 +254,7 @@ public class UserDAO extends BaseDAO {
 			.where(
 					USERS.DOMAIN_ID.equal(domainId)
 					.and(USERS.USER_ID.equal(userId))
-					.and(USERS.TYPE.equal(OUser.USER_TYPE))
+					.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.execute();
 	}
@@ -274,7 +267,7 @@ public class UserDAO extends BaseDAO {
 			.where(
 					USERS.DOMAIN_ID.equal(domainId)
 					.and(USERS.USER_ID.equal(userId))
-					.and(USERS.TYPE.equal(OUser.USER_TYPE))
+					.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.execute();
 	}
@@ -288,7 +281,7 @@ public class UserDAO extends BaseDAO {
 				.where(
 						USERS.DOMAIN_ID.equal(domainId)
 						.and(USERS.USER_ID.equal(userId))
-						.and(USERS.TYPE.equal(OUser.USER_TYPE))
+						.and(USERS.TYPE.equal(OUser.TYPE_USER))
 				)
 				.execute();
 	}
@@ -299,7 +292,7 @@ public class UserDAO extends BaseDAO {
 			.delete(USERS)
 			.where(
 					USERS.DOMAIN_ID.equal(domainId)
-					.and(USERS.TYPE.equal(OUser.USER_TYPE))
+					.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.execute();
 	}
@@ -311,7 +304,7 @@ public class UserDAO extends BaseDAO {
 			.where(
 					USERS.DOMAIN_ID.equal(domainId)
 					.and(USERS.USER_ID.equal(userId))
-					.and(USERS.TYPE.equal(OUser.USER_TYPE))
+					.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.execute();
 	}
@@ -321,8 +314,8 @@ public class UserDAO extends BaseDAO {
 		return dsl
 			.delete(USERS)
 			.where(
-					USERS.USER_UID.equal(userUid)
-					.and(USERS.TYPE.equal(OUser.USER_TYPE))
+					USERS.TYPE.equal(OUser.TYPE_USER)
+					.and(USERS.USER_UID.equal(userUid))
 			)
 			.execute();
 	}

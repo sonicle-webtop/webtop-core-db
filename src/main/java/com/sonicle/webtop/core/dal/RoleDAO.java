@@ -80,7 +80,7 @@ public class RoleDAO extends BaseDAO {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectDistinct(
-					USERS.ROLE_UID,
+					USERS.USER_UID.as("role_uid"),
 					USERS.DOMAIN_ID,
 					USERS.USER_ID.as("name"),
 					USERS.DISPLAY_NAME.as("description")
@@ -92,7 +92,7 @@ public class RoleDAO extends BaseDAO {
 			)
 			.where(
 					USERS_ASSOCIATIONS.USER_UID.equal(userUid)
-					.and(USERS.TYPE.equal(OUser.GROUP_TYPE))
+					.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.fetchInto(ORole.class);
 	}

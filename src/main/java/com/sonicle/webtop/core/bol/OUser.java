@@ -14,8 +14,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author gbulfon
  */
 public class OUser extends Users {
-	public static final String USER_TYPE = "U";
-	public static final String GROUP_TYPE = "G";
+	public static final String TYPE_USER = "U";
+	public static final String TYPE_GROUP = "G";
 	
 	@Override
 	public String toString() {
@@ -23,7 +23,6 @@ public class OUser extends Users {
 				.append(getDomainId())
 				.append(getUserId())
 				.append(getUserUid())
-				.append(getRoleUid())
 				.toString();
 	}
 }

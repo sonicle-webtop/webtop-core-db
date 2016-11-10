@@ -1,5 +1,5 @@
 /*
- * WebTop Services is a Web Application framework developed by Sonicle S.r.l.
+ * webtop-core-db is a library developed by Sonicle S.r.l.
  * Copyright (C) 2014 Sonicle S.r.l.
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -33,7 +33,6 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.RolesPermissions;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -41,27 +40,52 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author malbinola
  */
-public class ORolePermission extends RolesPermissions {
+public class AssignedRole {
+	private Integer roleAssociationId;
+	private String roleUid;
+	private String roleName;
+	
+	public AssignedRole() {}
+
+	public Integer getRoleAssociationId() {
+		return roleAssociationId;
+	}
+
+	public void setRoleAssociationId(Integer roleAssociationId) {
+		this.roleAssociationId = roleAssociationId;
+	}
+
+	public String getRoleUid() {
+		return roleUid;
+	}
+
+	public void setRoleUid(String roleUid) {
+		this.roleUid = roleUid;
+	}
+	
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 	
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-			.append(getRolePermissionId())
+			.append(getRoleAssociationId())
 			.append(getRoleUid())
-			.append(getServiceId())
-			.append(getKey())
-			.append(getAction())
-			.append(getInstance())
 			.toHashCode();
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof ORolePermission == false) return false;
+		if(obj instanceof AssignedRole == false) return false;
 		if(this == obj) return true;
-		final ORolePermission otherObject = (ORolePermission)obj;
+		final AssignedRole otherObject = (AssignedRole)obj;
 		return new EqualsBuilder()
-			.append(getRolePermissionId(), otherObject.getRolePermissionId())
+			.append(getRoleAssociationId(), otherObject.getRoleAssociationId())
 			.isEquals();
 	}
 }

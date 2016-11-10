@@ -41,15 +41,13 @@ public class UserUid {
 	private String domainId;
 	private String userId;
 	private String userUid;
-	private String roleUid;
 	
 	public UserUid() {}
 	
-	public UserUid(String domainId, String userId, String userUid, String roleUid) {
+	public UserUid(String domainId, String userId, String userUid) {
 		this.domainId = domainId;
 		this.userId = userId;
 		this.userUid = userUid;
-		this.roleUid = roleUid;
 	}
 
 	public String getDomainId() {
@@ -74,13 +72,5 @@ public class UserUid {
 
 	public void setUserUid(String userUid) {
 		this.userUid = userUid;
-	}
-	
-	public String getRoleUid() {
-		return roleUid;
-	}
-
-	public void setRoleUid(String roleUid) {
-		this.roleUid = roleUid;
 	}
 }
