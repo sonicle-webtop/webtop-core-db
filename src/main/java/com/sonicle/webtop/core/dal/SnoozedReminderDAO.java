@@ -35,7 +35,7 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OSnoozedReminder;
 import static com.sonicle.webtop.core.jooq.Sequences.SEQ_SNOOZED_REMINDERS;
-import static com.sonicle.webtop.core.jooq.Tables.SNOOZED_REMINDERS;
+import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.SnoozedRemindersRecord;
 import java.sql.Connection;
 import java.util.List;
@@ -84,6 +84,16 @@ public class SnoozedReminderDAO extends BaseDAO {
 			.delete(SNOOZED_REMINDERS)
 			.where(
 				SNOOZED_REMINDERS.SNOOZED_REMINDER_ID.equal(id)
+			)
+			.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(SNOOZED_REMINDERS)
+			.where(
+				SNOOZED_REMINDERS.DOMAIN_ID.equal(domainId)
 			)
 			.execute();
 	}

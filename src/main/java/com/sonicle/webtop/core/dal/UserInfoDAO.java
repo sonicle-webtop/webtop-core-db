@@ -107,11 +107,22 @@ public class UserInfoDAO extends BaseDAO {
 			.execute();
 	}
 	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS_INFO)
+			.where(
+					USERS_INFO.DOMAIN_ID.equal(domainId)
+			)
+			.execute();
+	}
+	
 	public int deleteByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(USERS_INFO)
-			.where(USERS_INFO.DOMAIN_ID.equal(domainId)
+			.where(
+					USERS_INFO.DOMAIN_ID.equal(domainId)
 					.and(USERS_INFO.USER_ID.equal(userId))
 			)
 			.execute();

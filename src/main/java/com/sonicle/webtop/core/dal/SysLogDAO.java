@@ -78,4 +78,14 @@ public class SysLogDAO extends BaseDAO {
 			)
 			.execute();
 	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(SYSLOG)
+			.where(
+				SYSLOG.DOMAIN_ID.equal(domainId)
+			)
+			.execute();
+	}
 }

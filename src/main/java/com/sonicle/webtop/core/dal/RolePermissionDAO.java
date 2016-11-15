@@ -41,13 +41,13 @@ import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
 /**
  *
  * @author malbinola
  */
 public class RolePermissionDAO extends BaseDAO {
-
 	private final static RolePermissionDAO INSTANCE = new RolePermissionDAO();
 	public static RolePermissionDAO getInstance() {
 		return INSTANCE;
@@ -185,6 +185,32 @@ public class RolePermissionDAO extends BaseDAO {
 					.and(ROLES_PERMISSIONS.KEY.equal(key))
 					.and(ROLES_PERMISSIONS.ACTION.equal(action))
 					.and(ROLES_PERMISSIONS.INSTANCE.equal(instance))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(ROLES_PERMISSIONS)
+			.where(
+					ROLES_PERMISSIONS.ROLE_UID.in(
+							DSL.select(
+								ROLES.ROLE_UID
+							)
+							.from(ROLES)
+							.where(
+									ROLES.DOMAIN_ID.equal(domainId)
+							)
+					).or(ROLES_PERMISSIONS.ROLE_UID.in(
+							DSL.select(
+								USERS.USER_UID
+							)
+							.from(USERS)
+							.where(
+									USERS.DOMAIN_ID.equal(domainId)
+							)
+					))
 			)
 			.execute();
 	}

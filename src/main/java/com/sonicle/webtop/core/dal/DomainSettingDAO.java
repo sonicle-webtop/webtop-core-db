@@ -37,8 +37,7 @@ import com.sonicle.webtop.core.bol.DomainSettingRow;
 import com.sonicle.webtop.core.bol.ODomainSetting;
 import java.sql.Connection;
 import org.jooq.DSLContext;
-import static com.sonicle.webtop.core.jooq.Tables.DOMAIN_SETTINGS;
-import static com.sonicle.webtop.core.jooq.Tables.SETTINGS_DB;
+import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.*;
 import java.util.List;
 
@@ -119,6 +118,16 @@ public class DomainSettingDAO extends BaseDAO {
 			.where(DOMAIN_SETTINGS.DOMAIN_ID.equal(item.getDomainId())
 				.and(DOMAIN_SETTINGS.SERVICE_ID.equal(item.getServiceId()))
 				.and(DOMAIN_SETTINGS.KEY.equal(item.getKey()))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(DOMAIN_SETTINGS)
+			.where(
+				DOMAIN_SETTINGS.DOMAIN_ID.equal(domainId)
 			)
 			.execute();
 	}

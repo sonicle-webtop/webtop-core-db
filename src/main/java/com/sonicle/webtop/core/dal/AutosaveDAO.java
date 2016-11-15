@@ -34,10 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OAutosave;
-import static com.sonicle.webtop.core.jooq.Tables.AUTOSAVE;
+import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.AutosaveRecord;
 import java.sql.Connection;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
 
@@ -97,6 +96,16 @@ public class AutosaveDAO extends BaseDAO {
 			.execute();
 	}
 	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+			)
+			.execute();
+	}
+	
 	public int delete(Connection con, String domainId, String userId, String serviceId, String context, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -110,5 +119,4 @@ public class AutosaveDAO extends BaseDAO {
 			)
 			.execute();
 	}
-	
 }

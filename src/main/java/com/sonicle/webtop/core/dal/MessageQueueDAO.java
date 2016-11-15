@@ -35,7 +35,7 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OMessageQueue;
 import static com.sonicle.webtop.core.jooq.Sequences.SEQ_MESSAGES_QUEUE;
-import static com.sonicle.webtop.core.jooq.Tables.MESSAGES_QUEUE;
+import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.MessagesQueueRecord;
 import java.sql.Connection;
 import java.util.List;
@@ -95,6 +95,14 @@ public class MessageQueueDAO extends BaseDAO {
 		return dsl
 				.delete(MESSAGES_QUEUE)
 				.where(MESSAGES_QUEUE.PID.equal(pid))
+				.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+				.delete(MESSAGES_QUEUE)
+				.where(MESSAGES_QUEUE.DOMAIN_ID.equal(domainId))
 				.execute();
 	}
 }

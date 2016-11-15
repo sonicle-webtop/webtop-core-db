@@ -41,6 +41,7 @@ import com.sonicle.webtop.core.jooq.tables.records.RolesAssociationsRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
 /**
  *
@@ -114,6 +115,24 @@ public class RoleAssociationDAO extends BaseDAO {
 			.delete(ROLES_ASSOCIATIONS)
 			.where(
 					ROLES_ASSOCIATIONS.ROLE_UID.equal(roleUid)
+			)
+			.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(ROLES_ASSOCIATIONS)
+			.where(
+					ROLES_ASSOCIATIONS.ROLE_UID.in(
+							DSL.select(
+								ROLES.ROLE_UID
+							)
+							.from(ROLES)
+							.where(
+									ROLES.DOMAIN_ID.equal(domainId)
+							)
+					)
 			)
 			.execute();
 	}

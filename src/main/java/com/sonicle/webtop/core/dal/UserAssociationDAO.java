@@ -35,12 +35,14 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OUserAssociation;
 import com.sonicle.webtop.core.bol.AssignedGroup;
+import com.sonicle.webtop.core.bol.OUser;
 import static com.sonicle.webtop.core.jooq.Sequences.SEQ_USERS_ASSOCIATIONS;
 import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.UsersAssociationsRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
 /**
  *
@@ -114,6 +116,25 @@ public class UserAssociationDAO extends BaseDAO {
 			.delete(USERS_ASSOCIATIONS)
 			.where(
 					USERS_ASSOCIATIONS.GROUP_UID.equal(groupUid)
+			)
+			.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USERS_ASSOCIATIONS)
+			.where(
+					USERS_ASSOCIATIONS.USER_UID.in(
+							DSL.select(
+								USERS.USER_UID
+							)
+							.from(USERS)
+							.where(
+									USERS.DOMAIN_ID.equal(domainId)
+									.and(USERS.TYPE.equal(OUser.TYPE_USER))
+							)
+					)
 			)
 			.execute();
 	}

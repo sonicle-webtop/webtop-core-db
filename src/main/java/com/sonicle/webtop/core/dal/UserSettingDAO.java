@@ -130,6 +130,16 @@ public class UserSettingDAO extends BaseDAO {
 			.execute();
 	}
 	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(USER_SETTINGS)
+			.where(
+				USER_SETTINGS.DOMAIN_ID.equal(domainId)
+			)
+			.execute();
+	}
+	
 	public int deleteByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl

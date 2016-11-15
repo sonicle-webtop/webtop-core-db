@@ -187,4 +187,14 @@ public class CausalDAO extends BaseDAO {
 			)
 			.execute();
 	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(CAUSALS)
+			.where(
+				CAUSALS.DOMAIN_ID.equal(domainId)
+			)
+			.execute();
+	}
 }

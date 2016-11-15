@@ -172,4 +172,14 @@ public class ActivityDAO extends BaseDAO {
 			)
 			.execute();
 	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(ACTIVITIES)
+			.where(
+				ACTIVITIES.DOMAIN_ID.equal(domainId)
+			)
+			.execute();
+	}
 }

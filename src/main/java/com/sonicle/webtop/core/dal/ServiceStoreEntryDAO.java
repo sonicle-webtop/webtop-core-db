@@ -34,7 +34,7 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OServiceStoreEntry;
-import static com.sonicle.webtop.core.jooq.Tables.SERVICESTORE_ENTRIES;
+import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.ServicestoreEntriesRecord;
 import java.sql.Connection;
 import java.util.List;
@@ -46,7 +46,6 @@ import org.jooq.DSLContext;
  * @author malbinola
  */
 public class ServiceStoreEntryDAO extends BaseDAO {
-	
 	private final static ServiceStoreEntryDAO INSTANCE = new ServiceStoreEntryDAO();
 	public static ServiceStoreEntryDAO getInstance() {
 		return INSTANCE;
@@ -177,6 +176,16 @@ public class ServiceStoreEntryDAO extends BaseDAO {
 			.where(
 				SERVICESTORE_ENTRIES.DOMAIN_ID.equal(domainId)
 				.and(SERVICESTORE_ENTRIES.USER_ID.equal(userId))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(SERVICESTORE_ENTRIES)
+			.where(
+				SERVICESTORE_ENTRIES.DOMAIN_ID.equal(domainId)
 			)
 			.execute();
 	}

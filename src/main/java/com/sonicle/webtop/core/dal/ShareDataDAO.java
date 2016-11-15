@@ -34,10 +34,11 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OShareData;
-import static com.sonicle.webtop.core.jooq.Tables.SHARES_DATA;
+import static com.sonicle.webtop.core.jooq.Tables.*;
 import com.sonicle.webtop.core.jooq.tables.records.SharesDataRecord;
 import java.sql.Connection;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
 /**
  *
@@ -91,6 +92,24 @@ public class ShareDataDAO extends BaseDAO {
 			.where(
 					SHARES_DATA.SHARE_ID.equal(shareId)
 					.and(SHARES_DATA.USER_UID.equal(userUid))
+			)
+			.execute();
+	}
+	
+	public int deleteByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(SHARES_DATA)
+			.where(
+					SHARES_DATA.USER_UID.in(
+							DSL.select(
+								USERS.USER_UID
+							)
+							.from(USERS)
+							.where(
+									USERS.DOMAIN_ID.equal(domainId)
+							)
+					)
 			)
 			.execute();
 	}
