@@ -73,14 +73,14 @@ public class DomainDAO extends BaseDAO {
 			.fetchInto(ODomain.class);
 	}
 	
-	public List<ODomain> selectEnabledByInternetDomain(Connection con, String internetDomain) throws DAOException {
+	public List<ODomain> selectEnabledByInternetName(Connection con, String internetName) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select()
 			.from(DOMAINS)
 			.where(
-					DOMAINS.ENABLED.isTrue()
-					.and(DOMAINS.DOMAIN_NAME.equal(internetDomain))
+					DOMAINS.INTERNET_NAME.equal(internetName)
+					.and(DOMAINS.ENABLED.isTrue())
 			)
 			.orderBy(
 					DOMAINS.DOMAIN_ID.asc()
