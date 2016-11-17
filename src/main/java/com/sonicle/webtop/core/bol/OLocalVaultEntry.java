@@ -33,63 +33,12 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import com.sonicle.webtop.core.jooq.tables.pojos.LocalVault;
 
 /**
  *
  * @author malbinola
  */
-public class AssignedGroup {
-	private Integer userAssociationId; // empy for inserts
-	private String groupUid; // empy for inserts
-	private String groupId;
+public class OLocalVaultEntry extends LocalVault {
 	
-	public AssignedGroup() {}
-	
-	public AssignedGroup(String groupId) {
-		this.groupId = groupId;
-	}
-	
-	public Integer getUserAssociationId() {
-		return userAssociationId;
-	}
-
-	public void setUserAssociationId(Integer userAssociationId) {
-		this.userAssociationId = userAssociationId;
-	}
-
-	public String getGroupUid() {
-		return groupUid;
-	}
-
-	public void setGroupUid(String groupUid) {
-		this.groupUid = groupUid;
-	}
-	
-	public String getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
-	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(getUserAssociationId())
-			.append(getGroupUid())
-			.toHashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof AssignedGroup == false) return false;
-		if(this == obj) return true;
-		final AssignedGroup otherObject = (AssignedGroup)obj;
-		return new EqualsBuilder()
-			.append(getUserAssociationId(), otherObject.getUserAssociationId())
-			.isEquals();
-	}
 }

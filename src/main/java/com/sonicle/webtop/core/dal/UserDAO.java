@@ -89,9 +89,7 @@ public class UserDAO extends BaseDAO {
 				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.DISPLAY_NAME,
-				USERS.SECRET,
-				USERS.PASSWORD_TYPE,
-				USERS.PASSWORD
+				USERS.SECRET
 			).from(USERS)
 			.where(
 				USERS.TYPE.equal(OUser.TYPE_USER)
@@ -109,9 +107,7 @@ public class UserDAO extends BaseDAO {
 				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.DISPLAY_NAME,
-				USERS.SECRET,
-				USERS.PASSWORD_TYPE,
-				USERS.PASSWORD
+				USERS.SECRET
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -130,9 +126,7 @@ public class UserDAO extends BaseDAO {
 				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.DISPLAY_NAME,
-				USERS.SECRET,
-				USERS.PASSWORD_TYPE,
-				USERS.PASSWORD
+				USERS.SECRET
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -151,9 +145,7 @@ public class UserDAO extends BaseDAO {
 				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.DISPLAY_NAME,
-				USERS.SECRET,
-				USERS.PASSWORD_TYPE,
-				USERS.PASSWORD
+				USERS.SECRET
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -176,9 +168,7 @@ public class UserDAO extends BaseDAO {
 				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.DISPLAY_NAME,
-				USERS.SECRET,
-				USERS.PASSWORD_TYPE,
-				USERS.PASSWORD
+				USERS.SECRET
 			).from(USERS)
 			.where(
 				USERS.DOMAIN_ID.equal(domainId)
@@ -198,9 +188,7 @@ public class UserDAO extends BaseDAO {
 				USERS.ENABLED,
 				USERS.USER_UID,
 				USERS.DISPLAY_NAME,
-				USERS.SECRET,
-				USERS.PASSWORD_TYPE,
-				USERS.PASSWORD
+				USERS.SECRET
 			).from(USERS)
 			.where(
 				USERS.TYPE.equal(OUser.TYPE_USER)
@@ -270,20 +258,6 @@ public class UserDAO extends BaseDAO {
 					.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.execute();
-	}
-	
-	public int updatePasswordByDomainUser(Connection con, String domainId, String userId, String passwordType, String password) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-				.update(USERS)
-				.set(USERS.PASSWORD_TYPE, passwordType)
-				.set(USERS.PASSWORD, password)
-				.where(
-						USERS.DOMAIN_ID.equal(domainId)
-						.and(USERS.USER_ID.equal(userId))
-						.and(USERS.TYPE.equal(OUser.TYPE_USER))
-				)
-				.execute();
 	}
 	
 	public int deleteByDomain(Connection con, String domainId) throws DAOException {
