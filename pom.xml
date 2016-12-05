@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.sonicle.webtop</groupId>
-    <artifactId>webtop-core-db</artifactId>
-    <version>1.0</version>
-    <packaging>jar</packaging>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sonicle.webtop</groupId>
+	<artifactId>webtop-core-db</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
 	<name>webtop-core-db</name>
 	
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
-    </properties>
+	<parent>
+		<groupId>com.sonicle.webtop</groupId>
+		<artifactId>webtop-superpom-core</artifactId>
+		<version>1.0</version>
+	</parent>
+	
+	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		
+		<!-- WEBTOP SERVICE CONFIGURATION -->
+		<webtop.service.package>com.sonicle.webtop.core</webtop.service.package>
+		<webtop.service.jsPackage>Sonicle.webtop.core</webtop.service.jsPackage>
+	</properties>
 	
 	<dependencies>
 		<dependency>
@@ -24,93 +33,53 @@
 			<artifactId>jooq-meta</artifactId>
 			<version>3.5.3</version>
 		</dependency>
-	 <dependency>
-	  <groupId>com.sonicle.commons</groupId>
-	  <artifactId>sonicle-commons</artifactId>
-	  <version>1.0</version>
-	 </dependency>
-	 <dependency>
-	  <groupId>joda-time</groupId>
-	  <artifactId>joda-time</artifactId>
-	  <version>2.7</version>
-	 </dependency>
+		<dependency>
+			<groupId>com.sonicle.commons</groupId>
+			<artifactId>sonicle-commons</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.7</version>
+		</dependency>
 	</dependencies>
 	
 	<build>
-		<plugins>
-			<plugin>
-				<!-- Specify the maven code generator plugin -->
-				<groupId>org.jooq</groupId>
-				<artifactId>jooq-codegen-maven</artifactId>
-				<version>3.5.3</version>
-				<!-- Manage the plugin's dependency. In this example, we'll use a PostgreSQL database -->
-				<dependencies>
-					<dependency>
-						<groupId>org.postgresql</groupId>
-						<artifactId>postgresql</artifactId>
-						<version>9.3-1102-jdbc4</version>
-					</dependency>
-				</dependencies>
-				<!-- Specify the plugin configuration.
-				The configuration format is the same as for the standalone code generator -->
-				<configuration>
-					<!-- JDBC connection parameters -->
-					<jdbc>
-						<driver>org.postgresql.Driver</driver>
-						<url>jdbc:postgresql://www.sonicle.com/webtop5</url>
-						<user>sonicle</user>
-						<password>sonicle</password>
-					</jdbc>
-					<!-- Generator parameters -->
-					<generator>
-						<name>org.jooq.util.DefaultGenerator</name>
-						<database>
-							<name>org.jooq.util.postgres.PostgresDatabase</name>
-							<includes>.*</includes>
-							<excludes></excludes>
-							<inputSchema>public</inputSchema>
-							<customTypes>
-								<customType>
-									<name>JodaLocalDate</name>
-									<type>org.joda.time.LocalDate</type>
-									<converter>com.sonicle.webtop.core.jooq.LocalDateConverter</converter>
-								</customType>
-								<customType>
-									<name>JodaDateTime</name>
-									<type>org.joda.time.DateTime</type>
-									<converter>com.sonicle.webtop.core.jooq.DateTimeConverter</converter>
-								</customType>
-							</customTypes>
-							<forcedTypes>
-								<forcedType>
-									<name>JodaLocalDate</name>
-									<expressions>.*</expressions>
-									<types>date.*</types>
-								</forcedType>
-								<forcedType>
-									<name>JodaDateTime</name>
-									<expressions>.*</expressions>
-									<types>timestamp.*</types>
-								</forcedType>
-							</forcedTypes>
-						</database>
-						<target>
-							<packageName>com.sonicle.webtop.core.jooq</packageName>
-							<directory>target/generated-sources/jooq</directory>
-						</target>
-						<generate>
-							<pojos>true</pojos>
-							<immutablePojos>false</immutablePojos>
-						</generate>
-					</generator>
-				</configuration>
-				<!-- The plugin should hook into the generate goal -->
-				<executions>
-					<execution>
-						<goals></goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
 	</build>
+	
+	<profiles>
+		<profile>
+			<id>generate-db-classes</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>properties-maven-plugin</artifactId>
+						<version>${properties-maven-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>read-properties</id>
+								<phase>validate</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.jooq</groupId>
+						<artifactId>jooq-codegen-maven</artifactId>
+						<version>${jooq-codegen-maven.version}</version>
+						<executions>
+							<execution>
+								<id>generate-db-classes</id>
+								<phase>generate-sources</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
