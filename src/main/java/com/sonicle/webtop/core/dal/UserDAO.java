@@ -207,14 +207,14 @@ public class UserDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int updateDisplayName(Connection con, OUser item) throws DAOException {
+	public int updateDisplayNameByDomainUser(Connection con, String domainId, String userId, String displayName) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.update(USERS)
-			.set(USERS.DISPLAY_NAME, item.getDisplayName())
+			.set(USERS.DISPLAY_NAME, displayName)
 			.where(
-				USERS.DOMAIN_ID.equal(item.getDomainId())
-				.and(USERS.USER_ID.equal(item.getUserId()))
+				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.USER_ID.equal(userId))
 				.and(USERS.TYPE.equal(OUser.TYPE_USER))
 			)
 			.execute();
