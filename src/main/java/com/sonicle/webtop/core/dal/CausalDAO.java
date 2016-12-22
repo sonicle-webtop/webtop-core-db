@@ -91,8 +91,8 @@ public class CausalDAO extends BaseDAO {
 						.or(CAUSALS.CUSTOMER_ID.isNull())
 				)
 				.and(
-						CAUSALS.STATUS.notEqual("D")
-						.or(CAUSALS.STATUS.isNull())
+						CAUSALS.REVISION_STATUS.notEqual("D")
+						.or(CAUSALS.REVISION_STATUS.isNull())
 				)
 				.orderBy(
 						CAUSALS.DESCRIPTION.asc()
@@ -132,8 +132,8 @@ public class CausalDAO extends BaseDAO {
 						CAUSALS.DOMAIN_ID.in(domainIds)
 				)
 				.and(
-						CAUSALS.STATUS.notEqual("D")
-						.or(CAUSALS.STATUS.isNull())
+						CAUSALS.REVISION_STATUS.notEqual("D")
+						.or(CAUSALS.REVISION_STATUS.isNull())
 				)
 				.orderBy(
 						CAUSALS.DESCRIPTION.asc()
@@ -181,7 +181,7 @@ public class CausalDAO extends BaseDAO {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.update(CAUSALS)
-			.set(CAUSALS.STATUS, "D")
+			.set(CAUSALS.REVISION_STATUS, "D")
 			.where(
 				CAUSALS.CAUSAL_ID.equal(causalId)
 			)

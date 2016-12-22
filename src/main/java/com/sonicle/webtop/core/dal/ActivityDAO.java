@@ -87,8 +87,8 @@ public class ActivityDAO extends BaseDAO {
 						ACTIVITIES.DOMAIN_ID.in(domainIds)
 				)
 				.and(
-						ACTIVITIES.STATUS.notEqual("D")
-						.or(ACTIVITIES.STATUS.isNull())
+						ACTIVITIES.REVISION_STATUS.notEqual("D")
+						.or(ACTIVITIES.REVISION_STATUS.isNull())
 				)
 				.orderBy(
 						ACTIVITIES.DESCRIPTION.asc()
@@ -118,8 +118,8 @@ public class ActivityDAO extends BaseDAO {
 						)
 				)
 				.and(
-						ACTIVITIES.STATUS.notEqual("D")
-						.or(ACTIVITIES.STATUS.isNull())
+						ACTIVITIES.REVISION_STATUS.notEqual("D")
+						.or(ACTIVITIES.REVISION_STATUS.isNull())
 				)
 				.orderBy(
 						ACTIVITIES.DESCRIPTION.asc()
@@ -166,7 +166,7 @@ public class ActivityDAO extends BaseDAO {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.update(ACTIVITIES)
-			.set(ACTIVITIES.STATUS, "D")
+			.set(ACTIVITIES.REVISION_STATUS, "D")
 			.where(
 				ACTIVITIES.ACTIVITY_ID.equal(activityId)
 			)
