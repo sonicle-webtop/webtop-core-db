@@ -82,6 +82,16 @@ public class UpgradeStatementDAO extends BaseDAO {
 			.fetchOne(0, Integer.class);
 	}
 	
+	public String selectLastTag(Connection con) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+					max(UPGRADE_STATEMENTS.TAG)
+			)
+			.from(UPGRADE_STATEMENTS)
+			.fetchOne(0, String.class);
+	}
+	
 	public List<OUpgradeStatement> selectByTag(Connection con, String tag) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -125,16 +135,6 @@ public class UpgradeStatementDAO extends BaseDAO {
 					UPGRADE_STATEMENTS.UPGRADE_STATEMENT_ID.asc()
 			)
 			.fetchInto(OUpgradeStatement.class);
-	}
-	
-	public String selectLastTag(Connection con) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.select(
-					max(UPGRADE_STATEMENTS.TAG)
-			)
-			.from(UPGRADE_STATEMENTS)
-			.fetchOne(0, String.class);
 	}
 	
 	public int update(Connection con, OUpgradeStatement item) throws DAOException {
