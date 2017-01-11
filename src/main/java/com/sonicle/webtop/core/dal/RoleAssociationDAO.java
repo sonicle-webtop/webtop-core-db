@@ -35,9 +35,9 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.AssignedRole;
 import com.sonicle.webtop.core.bol.ORoleAssociation;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_ROLES_ASSOCIATIONS;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.RolesAssociationsRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_ROLES_ASSOCIATIONS;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.RolesAssociationsRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;

@@ -34,8 +34,8 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OAutosave;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.AutosaveRecord;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.AutosaveRecord;
 import java.sql.Connection;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;

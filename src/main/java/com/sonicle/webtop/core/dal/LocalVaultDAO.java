@@ -34,8 +34,8 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OLocalVaultEntry;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.LocalVaultRecord;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.LocalVaultRecord;
 import java.sql.Connection;
 import org.jooq.DSLContext;
 

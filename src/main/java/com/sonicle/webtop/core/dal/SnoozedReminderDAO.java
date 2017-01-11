@@ -34,9 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OSnoozedReminder;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_SNOOZED_REMINDERS;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.SnoozedRemindersRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_SNOOZED_REMINDERS;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.SnoozedRemindersRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.joda.time.DateTime;

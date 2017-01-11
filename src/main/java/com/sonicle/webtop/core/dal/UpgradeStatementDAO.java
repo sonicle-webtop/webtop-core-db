@@ -34,9 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OUpgradeStatement;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_UPGRADE_STATEMENTS;
-import static com.sonicle.webtop.core.jooq.Tables.UPGRADE_STATEMENTS;
-import com.sonicle.webtop.core.jooq.tables.records.UpgradeStatementsRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_UPGRADE_STATEMENTS;
+import static com.sonicle.webtop.core.jooq.core.Tables.UPGRADE_STATEMENTS;
+import com.sonicle.webtop.core.jooq.core.tables.records.UpgradeStatementsRecord;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;

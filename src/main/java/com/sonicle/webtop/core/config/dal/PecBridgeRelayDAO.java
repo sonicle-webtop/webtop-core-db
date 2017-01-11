@@ -31,12 +31,14 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.dal;
+package com.sonicle.webtop.core.config.dal;
 
-import com.sonicle.webtop.core.bol.OPecBridgeRelay;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_PECBRIDGE_RELAYS;
-import static com.sonicle.webtop.core.jooq.Tables.PECBRIDGE_RELAYS;
-import com.sonicle.webtop.core.jooq.tables.records.PecbridgeRelaysRecord;
+import com.sonicle.webtop.core.config.bol.OPecBridgeRelay;
+import com.sonicle.webtop.core.dal.BaseDAO;
+import com.sonicle.webtop.core.dal.DAOException;
+import static com.sonicle.webtop.core.jooq.config.Sequences.SEQ_PECBRIDGE_RELAYS;
+import static com.sonicle.webtop.core.jooq.config.Tables.PECBRIDGE_RELAYS;
+import com.sonicle.webtop.core.jooq.config.tables.records.PecbridgeRelaysRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
@@ -138,7 +140,7 @@ public class PecBridgeRelayDAO extends BaseDAO {
 		return dsl
 			.update(PECBRIDGE_RELAYS)
 			.set(PECBRIDGE_RELAYS.MATCHER, item.getMatcher())
-			.set(PECBRIDGE_RELAYS.HOST, item.getMatcher())
+			.set(PECBRIDGE_RELAYS.HOST, item.getHost())
 			.set(PECBRIDGE_RELAYS.PORT, item.getPort())
 			.set(PECBRIDGE_RELAYS.PROTOCOL, item.getProtocol())
 			.set(PECBRIDGE_RELAYS.USERNAME, item.getUsername())

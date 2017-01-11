@@ -33,7 +33,7 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.RolesPermissions;
+import com.sonicle.webtop.core.jooq.core.tables.pojos.RolesPermissions;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

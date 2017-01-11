@@ -33,7 +33,7 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.SnoozedReminders;
+import com.sonicle.webtop.core.jooq.core.tables.pojos.SnoozedReminders;
 import org.joda.time.DateTimeZone;
 
 /**

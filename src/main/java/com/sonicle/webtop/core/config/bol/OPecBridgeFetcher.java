@@ -31,14 +31,14 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.bol;
+package com.sonicle.webtop.core.config.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.PecbridgeRelays;
+import com.sonicle.webtop.core.jooq.config.tables.pojos.PecbridgeFetchers;
 
 /**
  *
  * @author malbinola
  */
-public class OPecBridgeRelay extends PecbridgeRelays {
+public class OPecBridgeFetcher extends PecbridgeFetchers {
 	
 }

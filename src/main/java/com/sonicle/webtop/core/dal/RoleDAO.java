@@ -35,8 +35,8 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.ORole;
 import com.sonicle.webtop.core.bol.OUser;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.RolesRecord;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.RolesRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;

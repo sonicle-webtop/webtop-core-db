@@ -34,10 +34,10 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.ODomain;
-import static com.sonicle.webtop.core.jooq.Tables.DOMAINS;
+import static com.sonicle.webtop.core.jooq.core.Tables.DOMAINS;
 import java.sql.Connection;
 import org.jooq.DSLContext;
-import com.sonicle.webtop.core.jooq.tables.records.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.*;
 import java.util.List;
 
 /**

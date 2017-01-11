@@ -34,9 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OShare;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_SHARES;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.SharesRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_SHARES;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;

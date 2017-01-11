@@ -33,7 +33,7 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.Users;
+import com.sonicle.webtop.core.jooq.core.tables.pojos.Users;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**

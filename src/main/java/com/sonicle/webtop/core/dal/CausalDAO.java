@@ -35,9 +35,9 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.CausalGrid;
 import com.sonicle.webtop.core.bol.OCausal;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_CAUSALS;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.CausalsRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_CAUSALS;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;

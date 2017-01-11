@@ -33,7 +33,7 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.tables.pojos.UpgradeStatements;
+import com.sonicle.webtop.core.jooq.core.tables.pojos.UpgradeStatements;
 import org.apache.commons.lang3.StringUtils;
 
 /**

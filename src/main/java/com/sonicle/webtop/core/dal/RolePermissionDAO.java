@@ -34,9 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.ORolePermission;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_ROLES_PERMISSIONS;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.RolesPermissionsRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_ROLES_PERMISSIONS;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.RolesPermissionsRecord;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;

@@ -34,7 +34,7 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OFileType;
-import static com.sonicle.webtop.core.jooq.Tables.*;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;

@@ -34,9 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OMessageQueue;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_MESSAGES_QUEUE;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.MessagesQueueRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_MESSAGES_QUEUE;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.MessagesQueueRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;

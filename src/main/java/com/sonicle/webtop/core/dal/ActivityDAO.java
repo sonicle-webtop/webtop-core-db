@@ -35,9 +35,9 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.VActivity;
 import com.sonicle.webtop.core.bol.OActivity;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_ACTIVITIES;
-import static com.sonicle.webtop.core.jooq.Tables.*;
-import com.sonicle.webtop.core.jooq.tables.records.ActivitiesRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_ACTIVITIES;
+import static com.sonicle.webtop.core.jooq.core.Tables.*;
+import com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;

@@ -34,7 +34,7 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OMediaType;
-import static com.sonicle.webtop.core.jooq.Tables.MEDIA_TYPES;
+import static com.sonicle.webtop.core.jooq.core.Tables.MEDIA_TYPES;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;

@@ -31,12 +31,14 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.dal;
+package com.sonicle.webtop.core.config.dal;
 
-import com.sonicle.webtop.core.bol.OPecBridgeFetcher;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_PECBRIDGE_FETCHERS;
-import static com.sonicle.webtop.core.jooq.Tables.PECBRIDGE_FETCHERS;
-import com.sonicle.webtop.core.jooq.tables.records.PecbridgeFetchersRecord;
+import com.sonicle.webtop.core.config.bol.OPecBridgeFetcher;
+import com.sonicle.webtop.core.dal.BaseDAO;
+import com.sonicle.webtop.core.dal.DAOException;
+import static com.sonicle.webtop.core.jooq.config.Sequences.SEQ_PECBRIDGE_FETCHERS;
+import static com.sonicle.webtop.core.jooq.config.Tables.PECBRIDGE_FETCHERS;
+import com.sonicle.webtop.core.jooq.config.tables.records.PecbridgeFetchersRecord;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;

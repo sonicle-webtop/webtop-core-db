@@ -34,8 +34,8 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OUserInfo;
-import static com.sonicle.webtop.core.jooq.Tables.USERS_INFO;
-import com.sonicle.webtop.core.jooq.tables.records.UsersInfoRecord;
+import static com.sonicle.webtop.core.jooq.core.Tables.USERS_INFO;
+import com.sonicle.webtop.core.jooq.core.tables.records.UsersInfoRecord;
 import java.sql.Connection;
 import org.jooq.DSLContext;
 

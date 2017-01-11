@@ -34,9 +34,9 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OSysLog;
-import static com.sonicle.webtop.core.jooq.Sequences.SEQ_SYSLOG;
-import static com.sonicle.webtop.core.jooq.Tables.SYSLOG;
-import com.sonicle.webtop.core.jooq.tables.records.SyslogRecord;
+import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_SYSLOG;
+import static com.sonicle.webtop.core.jooq.core.Tables.SYSLOG;
+import com.sonicle.webtop.core.jooq.core.tables.records.SyslogRecord;
 import java.sql.Connection;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
