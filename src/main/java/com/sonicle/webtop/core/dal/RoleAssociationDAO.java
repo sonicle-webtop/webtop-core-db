@@ -80,6 +80,10 @@ public class RoleAssociationDAO extends BaseDAO {
 			.fetchInto(AssignedRole.class);
 	}
 	
+	public List<AssignedRole> viewAssignedByGroup(Connection con, String groupUid) throws DAOException {
+		return viewAssignedByUser(con, groupUid);
+	}
+	
 	public int insert(Connection con, ORoleAssociation item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		RolesAssociationsRecord record = dsl.newRecord(ROLES_ASSOCIATIONS, item);

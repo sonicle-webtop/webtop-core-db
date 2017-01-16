@@ -35,6 +35,7 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OUserAssociation;
 import com.sonicle.webtop.core.bol.AssignedGroup;
+import com.sonicle.webtop.core.bol.AssignedUser;
 import com.sonicle.webtop.core.bol.OUser;
 import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_USERS_ASSOCIATIONS;
 import static com.sonicle.webtop.core.jooq.core.Tables.*;
@@ -79,6 +80,27 @@ public class UserAssociationDAO extends BaseDAO {
 				USERS.USER_ID
 			)
 			.fetchInto(AssignedGroup.class);
+	}
+	
+	public List<AssignedUser> viewAssignedByGroup(Connection con, String groupUid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+					USERS_ASSOCIATIONS.USER_ASSOCIATION_ID,
+					USERS_ASSOCIATIONS.USER_UID,
+					USERS.USER_ID.as("user_id")
+			)
+			.from(USERS_ASSOCIATIONS)
+			.leftOuterJoin(USERS).on(
+					USERS_ASSOCIATIONS.USER_UID.equal(USERS.USER_UID)
+			)
+			.where(
+					USERS_ASSOCIATIONS.GROUP_UID.equal(groupUid)
+			)
+			.orderBy(
+				USERS.USER_ID
+			)
+			.fetchInto(AssignedUser.class);
 	}
 	
 	public int insert(Connection con, OUserAssociation item) throws DAOException {

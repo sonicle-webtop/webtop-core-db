@@ -1,5 +1,5 @@
 /*
- * WebTop Services is a Web Application framework developed by Sonicle S.r.l.
+ * webtop-core-db is a library developed by Sonicle S.r.l.
  * Copyright (C) 2014 Sonicle S.r.l.
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -33,37 +33,63 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.core.tables.pojos.Users;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  *
  * @author malbinola
  */
-public class OGroup extends Users {
+public class AssignedUser {
+	private Integer userAssociationId; // empy for inserts
+	private String userUid; // empy for inserts
+	private String userId;
 	
-	public String getGroupId() {
-		return getUserId();
+	public AssignedUser() {}
+	
+	public AssignedUser(String userId) {
+		this.userId = userId;
 	}
 	
-	public void setGroupId(String groupId) {
-		setUserId(groupId);
+	public Integer getUserAssociationId() {
+		return userAssociationId;
+	}
+
+	public void setUserAssociationId(Integer userAssociationId) {
+		this.userAssociationId = userAssociationId;
+	}
+
+	public String getUserUid() {
+		return userUid;
+	}
+
+	public void setGroupUid(String userUid) {
+		this.userUid = userUid;
 	}
 	
-	public String getGroupUid() {
-		return getUserUid();
+	public String getUserId() {
+		return userId;
 	}
-	
-	public void setGroupUid(String groupUid) {
-		setUserUid(groupUid);
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 	@Override
-	public String toString() {
-		return new ToStringBuilder(this)
-				.append(getDomainId())
-				.append(getUserId())
-				.append(getUserUid())
-				.toString();
+	public int hashCode() {
+		return new HashCodeBuilder()
+			.append(getUserAssociationId())
+			.append(getUserUid())
+			.toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof AssignedUser == false) return false;
+		if(this == obj) return true;
+		final AssignedUser otherObject = (AssignedUser)obj;
+		return new EqualsBuilder()
+			.append(getUserAssociationId(), otherObject.getUserAssociationId())
+			.isEquals();
 	}
 }
