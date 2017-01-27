@@ -37,6 +37,7 @@ import com.sonicle.webtop.core.bol.OAutosave;
 import static com.sonicle.webtop.core.jooq.core.Tables.*;
 import com.sonicle.webtop.core.jooq.core.tables.records.AutosaveRecord;
 import java.sql.Connection;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
 
@@ -70,6 +71,39 @@ public class AutosaveDAO extends BaseDAO {
 				.and(AUTOSAVE.KEY.equal(StringUtils.upperCase(key)))
 			)
 			.fetchOneInto(OAutosave.class);
+	}
+	
+	public List<OAutosave> selectByContext(Connection con, String domainId, String userId, String serviceId, String context) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				AUTOSAVE.DOMAIN_ID,
+				AUTOSAVE.USER_ID,
+				AUTOSAVE.SERVICE_ID,
+				AUTOSAVE.CONTEXT,
+				AUTOSAVE.KEY,
+				AUTOSAVE.VALUE
+			).from(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.SERVICE_ID.equal(serviceId))
+				.and(AUTOSAVE.CONTEXT.equal(context))
+			)
+			.fetchInto(OAutosave.class);
+	}
+	
+	public int countByUserServices(Connection con, String domainId, String userId, List<String> serviceIds) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.selectCount()
+			.from(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.SERVICE_ID.in(serviceIds))
+			)
+			.fetchOne(0, int.class);
 	}
 	
 	public int insert(Connection con, OAutosave item) throws DAOException {
