@@ -93,6 +93,25 @@ public class AutosaveDAO extends BaseDAO {
 			.fetchInto(OAutosave.class);
 	}
 	
+	public List<OAutosave> selectByUserServices(Connection con, String domainId, String userId, List<String> serviceIds) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				AUTOSAVE.DOMAIN_ID,
+				AUTOSAVE.USER_ID,
+				AUTOSAVE.SERVICE_ID,
+				AUTOSAVE.CONTEXT,
+				AUTOSAVE.KEY,
+				AUTOSAVE.VALUE
+			).from(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.SERVICE_ID.in(serviceIds))
+			)
+			.fetchInto(OAutosave.class);
+	}
+	
 	public int countByUserServices(Connection con, String domainId, String userId, List<String> serviceIds) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -140,7 +159,43 @@ public class AutosaveDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int delete(Connection con, String domainId, String userId, String serviceId, String context, String key) throws DAOException {
+	public int deleteByUser(Connection con, String domainId, String userId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+			)
+			.execute();
+	}
+	
+	public int deleteByService(Connection con, String domainId, String userId, String serviceId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.SERVICE_ID.equal(serviceId))
+			)
+			.execute();
+	}
+	
+	public int deleteByContext(Connection con, String domainId, String userId, String serviceId, String context) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.SERVICE_ID.equal(serviceId))
+				.and(AUTOSAVE.CONTEXT.equal(context))
+			)
+			.execute();
+	}
+	
+	public int deleteByKey(Connection con, String domainId, String userId, String serviceId, String context, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(AUTOSAVE)
