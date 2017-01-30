@@ -52,12 +52,13 @@ public class AutosaveDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public OAutosave select(Connection con, String domainId, String userId, String serviceId, String context, String key) throws DAOException {
+	public OAutosave select(Connection con, String domainId, String userId, String webtopClientId, String serviceId, String context, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
 				AUTOSAVE.DOMAIN_ID,
 				AUTOSAVE.USER_ID,
+				AUTOSAVE.WEBTOP_CLIENT_ID,
 				AUTOSAVE.SERVICE_ID,
 				AUTOSAVE.CONTEXT,
 				AUTOSAVE.KEY,
@@ -66,6 +67,7 @@ public class AutosaveDAO extends BaseDAO {
 			.where(
 				AUTOSAVE.DOMAIN_ID.equal(domainId)
 				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.equal(webtopClientId))
 				.and(AUTOSAVE.SERVICE_ID.equal(serviceId))
 				.and(AUTOSAVE.CONTEXT.equal(context))
 				.and(AUTOSAVE.KEY.equal(StringUtils.upperCase(key)))
@@ -142,6 +144,7 @@ public class AutosaveDAO extends BaseDAO {
 			.where(
 				AUTOSAVE.DOMAIN_ID.equal(item.getDomainId())
 				.and(AUTOSAVE.USER_ID.equal(item.getUserId()))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.equal(item.getWebtopClientId()))
 				.and(AUTOSAVE.SERVICE_ID.equal(item.getServiceId()))
 				.and(AUTOSAVE.CONTEXT.equal(item.getContext()))
 				.and(AUTOSAVE.KEY.equal(StringUtils.upperCase(item.getKey())))
@@ -170,38 +173,53 @@ public class AutosaveDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByService(Connection con, String domainId, String userId, String serviceId) throws DAOException {
+	public int deleteByWebtopClientId(Connection con, String domainId, String userId, String webtopClientId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(AUTOSAVE)
 			.where(
 				AUTOSAVE.DOMAIN_ID.equal(domainId)
 				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.equal(webtopClientId))
+			)
+			.execute();
+	}
+	
+	public int deleteByService(Connection con, String domainId, String userId, String serviceId, String webtopClientId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.equal(webtopClientId))
 				.and(AUTOSAVE.SERVICE_ID.equal(serviceId))
 			)
 			.execute();
 	}
 	
-	public int deleteByContext(Connection con, String domainId, String userId, String serviceId, String context) throws DAOException {
+	public int deleteByContext(Connection con, String domainId, String userId, String serviceId, String context, String webtopClientId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(AUTOSAVE)
 			.where(
 				AUTOSAVE.DOMAIN_ID.equal(domainId)
 				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.equal(webtopClientId))
 				.and(AUTOSAVE.SERVICE_ID.equal(serviceId))
 				.and(AUTOSAVE.CONTEXT.equal(context))
 			)
 			.execute();
 	}
 	
-	public int deleteByKey(Connection con, String domainId, String userId, String serviceId, String context, String key) throws DAOException {
+	public int deleteByKey(Connection con, String domainId, String userId, String serviceId, String context, String key, String webtopClientId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(AUTOSAVE)
 			.where(
 				AUTOSAVE.DOMAIN_ID.equal(domainId)
 				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.equal(webtopClientId))
 				.and(AUTOSAVE.SERVICE_ID.equal(serviceId))
 				.and(AUTOSAVE.CONTEXT.equal(context))
 				.and(AUTOSAVE.KEY.equal(StringUtils.upperCase(key)))
