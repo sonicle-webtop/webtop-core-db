@@ -75,12 +75,13 @@ public class AutosaveDAO extends BaseDAO {
 			.fetchOneInto(OAutosave.class);
 	}
 	
-	public List<OAutosave> selectByContext(Connection con, String domainId, String userId, String serviceId, String context) throws DAOException {
+	public List<OAutosave> selectMineByUserServices(Connection con, String domainId, String userId, String webtopClientId, List<String> serviceIds) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
 				AUTOSAVE.DOMAIN_ID,
 				AUTOSAVE.USER_ID,
+				AUTOSAVE.WEBTOP_CLIENT_ID,
 				AUTOSAVE.SERVICE_ID,
 				AUTOSAVE.CONTEXT,
 				AUTOSAVE.KEY,
@@ -89,32 +90,34 @@ public class AutosaveDAO extends BaseDAO {
 			.where(
 				AUTOSAVE.DOMAIN_ID.equal(domainId)
 				.and(AUTOSAVE.USER_ID.equal(userId))
-				.and(AUTOSAVE.SERVICE_ID.equal(serviceId))
-				.and(AUTOSAVE.CONTEXT.equal(context))
-			)
-			.fetchInto(OAutosave.class);
-	}
-	
-	public List<OAutosave> selectByUserServices(Connection con, String domainId, String userId, List<String> serviceIds) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.select(
-				AUTOSAVE.DOMAIN_ID,
-				AUTOSAVE.USER_ID,
-				AUTOSAVE.SERVICE_ID,
-				AUTOSAVE.CONTEXT,
-				AUTOSAVE.KEY,
-				AUTOSAVE.VALUE
-			).from(AUTOSAVE)
-			.where(
-				AUTOSAVE.DOMAIN_ID.equal(domainId)
-				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.equal(webtopClientId))
 				.and(AUTOSAVE.SERVICE_ID.in(serviceIds))
 			)
 			.fetchInto(OAutosave.class);
 	}
 	
-	public int countByUserServices(Connection con, String domainId, String userId, List<String> serviceIds) throws DAOException {
+	public List<OAutosave> selectOthersByUserServices(Connection con, String domainId, String userId, String notWebtopClientId, List<String> serviceIds) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				AUTOSAVE.DOMAIN_ID,
+				AUTOSAVE.USER_ID,
+				AUTOSAVE.WEBTOP_CLIENT_ID,
+				AUTOSAVE.SERVICE_ID,
+				AUTOSAVE.CONTEXT,
+				AUTOSAVE.KEY,
+				AUTOSAVE.VALUE
+			).from(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.notEqual(notWebtopClientId))
+				.and(AUTOSAVE.SERVICE_ID.in(serviceIds))
+			)
+			.fetchInto(OAutosave.class);
+	}
+	
+	public int countMineByUserServices(Connection con, String domainId, String userId, String webtopClientId, List<String> serviceIds) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectCount()
@@ -122,11 +125,25 @@ public class AutosaveDAO extends BaseDAO {
 			.where(
 				AUTOSAVE.DOMAIN_ID.equal(domainId)
 				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.equal(webtopClientId))
 				.and(AUTOSAVE.SERVICE_ID.in(serviceIds))
 			)
 			.fetchOne(0, int.class);
 	}
 	
+	public int countOthersByUserServices(Connection con, String domainId, String userId, String notWebtopClientId, List<String> serviceIds) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.selectCount()
+			.from(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.notEqual(notWebtopClientId))
+				.and(AUTOSAVE.SERVICE_ID.in(serviceIds))
+			)
+			.fetchOne(0, int.class);
+		}
 	public int insert(Connection con, OAutosave item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		AutosaveRecord record = dsl.newRecord(AUTOSAVE, item);
@@ -185,7 +202,19 @@ public class AutosaveDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByService(Connection con, String domainId, String userId, String serviceId, String webtopClientId) throws DAOException {
+	public int deleteByNotWebtopClientId(Connection con, String domainId, String userId, String notWebtopClientId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.delete(AUTOSAVE)
+			.where(
+				AUTOSAVE.DOMAIN_ID.equal(domainId)
+				.and(AUTOSAVE.USER_ID.equal(userId))
+				.and(AUTOSAVE.WEBTOP_CLIENT_ID.notEqual(notWebtopClientId))
+			)
+			.execute();
+	}
+	
+	public int deleteByService(Connection con, String domainId, String userId, String webtopClientId, String serviceId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(AUTOSAVE)
@@ -198,7 +227,7 @@ public class AutosaveDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByContext(Connection con, String domainId, String userId, String serviceId, String context, String webtopClientId) throws DAOException {
+	public int deleteByContext(Connection con, String domainId, String userId, String webtopClientId, String serviceId, String context) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(AUTOSAVE)
@@ -212,7 +241,7 @@ public class AutosaveDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int deleteByKey(Connection con, String domainId, String userId, String serviceId, String context, String key, String webtopClientId) throws DAOException {
+	public int deleteByKey(Connection con, String domainId, String userId, String webtopClientId, String serviceId, String context, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.delete(AUTOSAVE)
