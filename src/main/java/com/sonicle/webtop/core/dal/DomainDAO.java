@@ -99,6 +99,19 @@ public class DomainDAO extends BaseDAO {
 			.fetchOneInto(ODomain.class);
 	}
 	
+	public String selectDirParametersById(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+					DOMAINS.DIR_PARAMETERS
+			)
+			.from(DOMAINS)
+			.where(
+					DOMAINS.DOMAIN_ID.equal(domainId)
+			)
+			.fetchOneInto(String.class);
+	}
+	
 	public int insert(Connection con, ODomain item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		DomainsRecord record = dsl.newRecord(DOMAINS, item);
