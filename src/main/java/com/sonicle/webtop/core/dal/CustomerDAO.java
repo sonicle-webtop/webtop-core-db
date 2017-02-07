@@ -34,11 +34,10 @@
 package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OCustomer;
+import static com.sonicle.webtop.core.jooq.core.Tables.CUSTOMERS;
 import java.sql.Connection;
 import java.util.List;
 import org.jooq.DSLContext;
-import org.jooq.Field;
-import static org.jooq.impl.DSL.*;
 
 /**
  *
@@ -50,114 +49,101 @@ public class CustomerDAO extends BaseDAO {
 		return INSTANCE;
 	}
 	
-	public static Field<String> CUSTOMER_ID = field("customer_id", String.class);
-	public static Field<String> PARENT_ID = field("parent_id", String.class);
-	public static Field<String> EXTERNAL_ID = field("external_id", String.class);
-	public static Field<String> TYPE = field("type", String.class);
-	public static Field<String> STATUS = field("status", String.class);
-	public static Field<String> DOMAIN_ID = field("domain_id", String.class);
-	public static Field<String> DESCRIPTION = field("description", String.class);
-	public static Field<String> ADDRESS = field("address", String.class);
-	public static Field<String> CITY = field("city", String.class);
-	public static Field<String> STATE = field("state", String.class);
-	public static Field<String> POSTALCODE = field("postalcode", String.class);
-	public static Field<String> COUNTRTY = field("country", String.class);
-	
 	public String selectDescriptionById(Connection con, String customerId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-				.select(
-						DESCRIPTION
-				)
-				.from("public.customers")
-				.where(
-						CUSTOMER_ID.equal(customerId)
-				)
-				.fetchOne(0, String.class);
+			.select(
+				CUSTOMERS.DESCRIPTION
+			)
+			.from(CUSTOMERS)
+			.where(
+				CUSTOMERS.CUSTOMER_ID.equal(customerId)
+			)
+			.fetchOne(0, String.class);
 	}
 	
 	public OCustomer viewById(Connection con, String customerId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-				.select(
-						CUSTOMER_ID,
-						PARENT_ID,
-						EXTERNAL_ID,
-						DESCRIPTION
-				)
-				.from("public.customers")
-				.where(
-						CUSTOMER_ID.equal(customerId)
-				)
-				.orderBy(
-						DESCRIPTION.asc()
-				)
-				.fetchOneInto(OCustomer.class);
+			.select(
+				CUSTOMERS.CUSTOMER_ID,
+				CUSTOMERS.PARENT_ID,
+				CUSTOMERS.EXTERNAL_ID,
+				CUSTOMERS.DESCRIPTION
+			)
+			.from(CUSTOMERS)
+			.where(
+				CUSTOMERS.CUSTOMER_ID.equal(customerId)
+			)
+			.orderBy(
+				CUSTOMERS.DESCRIPTION.asc()
+			)
+			.fetchOneInto(OCustomer.class);
 	}
 	
 	public List<OCustomer> viewByLike(Connection con, String likeDescription) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-				.select(
-						CUSTOMER_ID,
-						PARENT_ID,
-						EXTERNAL_ID,
-						TYPE,
-						DESCRIPTION,
-						ADDRESS,
-						CITY,
-						STATE,
-						POSTALCODE,
-						COUNTRTY
+			.select(
+				CUSTOMERS.CUSTOMER_ID,
+				CUSTOMERS.PARENT_ID,
+				CUSTOMERS.EXTERNAL_ID,
+				CUSTOMERS.TYPE,
+				CUSTOMERS.DESCRIPTION,
+				CUSTOMERS.ADDRESS,
+				CUSTOMERS.CITY,
+				CUSTOMERS.STATE,
+				CUSTOMERS.POSTALCODE,
+				CUSTOMERS.COUNTRY
+			)
+			.from(CUSTOMERS)
+			.where(
+				CUSTOMERS.DESCRIPTION.likeIgnoreCase(likeDescription)
+				.and(
+					CUSTOMERS.STATUS.notEqual("D")
+					.or(CUSTOMERS.STATUS.isNull())
 				)
-				.from("public.customers")
-				.where(
-						DESCRIPTION.likeIgnoreCase(likeDescription)
-						.and(
-							STATUS.notEqual("D")
-							.or(STATUS.isNull())
-						)
-				)
-				.orderBy(
-						DESCRIPTION.asc()
-				)
-				.fetchInto(OCustomer.class);
+			)
+			.orderBy(
+				CUSTOMERS.DESCRIPTION.asc()
+			)
+			.fetchInto(OCustomer.class);
 	}
 	
 	public List<OCustomer> viewByParentDomainLike(Connection con, String parentId, String domainId, String likeDescription) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-				.select(
-						CUSTOMER_ID,
-						PARENT_ID,
-						EXTERNAL_ID,
-						TYPE,
-						DESCRIPTION,
-						ADDRESS,
-						CITY,
-						STATE,
-						POSTALCODE,
-						COUNTRTY
+			.select(
+				CUSTOMERS.CUSTOMER_ID,
+				CUSTOMERS.PARENT_ID,
+				CUSTOMERS.EXTERNAL_ID,
+				CUSTOMERS.TYPE,
+				CUSTOMERS.DESCRIPTION,
+				CUSTOMERS.ADDRESS,
+				CUSTOMERS.CITY,
+				CUSTOMERS.STATE,
+				CUSTOMERS.POSTALCODE,
+				CUSTOMERS.COUNTRY
+			)
+			.from(CUSTOMERS)
+			.where(
+				CUSTOMERS.DESCRIPTION.likeIgnoreCase(likeDescription)
+				.and(
+					CUSTOMERS.PARENT_ID.equal(parentId)
+					.or(CUSTOMERS.CUSTOMER_ID.equal(parentId))
 				)
-				.from("public.customers")
-				.where(
-						DESCRIPTION.likeIgnoreCase(likeDescription)
-						.and(
-							PARENT_ID.equal(parentId)
-							.or(CUSTOMER_ID.equal(parentId))
-						)
-						.and(
-							STATUS.notEqual("D")
-							.or(STATUS.isNull())
-						)
-						.and(
-							DOMAIN_ID.equal(domainId)
-							.or(DOMAIN_ID.isNull())
-						)
+				.and(
+					CUSTOMERS.STATUS.notEqual("D")
+					.or(CUSTOMERS.STATUS.isNull())
 				)
-				.orderBy(
-						DESCRIPTION.asc()
+				.and(
+					CUSTOMERS.DOMAIN_ID.equal(domainId)
+					.or(CUSTOMERS.DOMAIN_ID.isNull())
 				)
-				.fetchInto(OCustomer.class);
+			)
+			.orderBy(
+				CUSTOMERS.DESCRIPTION.asc()
+			)
+			.fetchInto(OCustomer.class);
 	}
 }
