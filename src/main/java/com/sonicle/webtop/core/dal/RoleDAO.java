@@ -57,7 +57,7 @@ public class RoleDAO extends BaseDAO {
 			.select()
 			.from(ROLES)
 			.where(
-					ROLES.ROLE_UID.equal(uid)
+				ROLES.ROLE_UID.equal(uid)
 			)
 			.fetchOneInto(ORole.class);
 	}
@@ -68,7 +68,7 @@ public class RoleDAO extends BaseDAO {
 			.select()
 			.from(ROLES)
 			.where(
-					ROLES.DOMAIN_ID.equal(domainId)
+				ROLES.DOMAIN_ID.equal(domainId)
 			)
 			.orderBy(
 				ROLES.NAME
@@ -80,19 +80,19 @@ public class RoleDAO extends BaseDAO {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectDistinct(
-					USERS.USER_UID.as("role_uid"),
-					USERS.DOMAIN_ID,
-					USERS.USER_ID.as("name"),
-					USERS.DISPLAY_NAME.as("description")
+				USERS.USER_UID.as("role_uid"),
+				USERS.DOMAIN_ID,
+				USERS.USER_ID.as("name"),
+				USERS.DISPLAY_NAME.as("description")
 			)
 			.from(USERS_ASSOCIATIONS)
 			.join(USERS)
 			.on(
-					USERS_ASSOCIATIONS.GROUP_UID.equal(USERS.USER_UID)
+				USERS_ASSOCIATIONS.GROUP_UID.equal(USERS.USER_UID)
 			)
 			.where(
-					USERS_ASSOCIATIONS.USER_UID.equal(userUid)
-					.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
+				USERS_ASSOCIATIONS.USER_UID.equal(userUid)
+				.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
 			)
 			.fetchInto(ORole.class);
 	}
@@ -101,18 +101,18 @@ public class RoleDAO extends BaseDAO {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectDistinct(
-					ROLES.ROLE_UID,
-					ROLES.DOMAIN_ID,
-					ROLES.NAME,
-					ROLES.DESCRIPTION
+				ROLES.ROLE_UID,
+				ROLES.DOMAIN_ID,
+				ROLES.NAME,
+				ROLES.DESCRIPTION
 			)
 			.from(ROLES_ASSOCIATIONS)
 			.join(ROLES)
 			.on(
-					ROLES_ASSOCIATIONS.ROLE_UID.equal(ROLES.ROLE_UID)
+				ROLES_ASSOCIATIONS.ROLE_UID.equal(ROLES.ROLE_UID)
 			)
 			.where(
-					ROLES_ASSOCIATIONS.USER_UID.equal(userUid)
+				ROLES_ASSOCIATIONS.USER_UID.equal(userUid)
 			)
 			.fetchInto(ORole.class);
 	}
@@ -121,21 +121,22 @@ public class RoleDAO extends BaseDAO {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectDistinct(
-					ROLES.ROLE_UID,
-					ROLES.DOMAIN_ID,
-					ROLES.NAME,
-					ROLES.DESCRIPTION
+				ROLES.ROLE_UID,
+				ROLES.DOMAIN_ID,
+				ROLES.NAME,
+				ROLES.DESCRIPTION
 			)
 			.from(ROLES_ASSOCIATIONS)
 			.join(USERS_ASSOCIATIONS)
 			.on(
-					ROLES_ASSOCIATIONS.USER_UID.equal(USERS_ASSOCIATIONS.GROUP_UID)
+				ROLES_ASSOCIATIONS.USER_UID.equal(USERS_ASSOCIATIONS.GROUP_UID)
 			)
-			.join(ROLES).on(
-					ROLES_ASSOCIATIONS.ROLE_UID.equal(ROLES.ROLE_UID)
+			.join(ROLES)
+			.on(
+				ROLES_ASSOCIATIONS.ROLE_UID.equal(ROLES.ROLE_UID)
 			)
 			.where(
-					USERS_ASSOCIATIONS.USER_UID.equal(userUid)
+				USERS_ASSOCIATIONS.USER_UID.equal(userUid)
 			)
 			.fetchInto(ORole.class);
 	}
@@ -156,7 +157,7 @@ public class RoleDAO extends BaseDAO {
 			.set(ROLES.NAME, item.getName())
 			.set(ROLES.DESCRIPTION, item.getDescription())
 			.where(
-					ROLES.ROLE_UID.equal(item.getRoleUid())
+				ROLES.ROLE_UID.equal(item.getRoleUid())
 			)
 			.execute();
 	}
@@ -166,7 +167,7 @@ public class RoleDAO extends BaseDAO {
 		return dsl
 			.delete(ROLES)
 			.where(
-					ROLES.ROLE_UID.equal(uid)
+				ROLES.ROLE_UID.equal(uid)
 			)
 			.execute();
 	}
@@ -176,7 +177,7 @@ public class RoleDAO extends BaseDAO {
 		return dsl
 			.delete(ROLES)
 			.where(
-					ROLES.DOMAIN_ID.equal(domainId)
+				ROLES.DOMAIN_ID.equal(domainId)
 			)
 			.execute();
 	}
