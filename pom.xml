@@ -3,23 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sonicle.webtop</groupId>
 	<artifactId>webtop-core-db</artifactId>
-	<version>1.0</version>
+	<version>5.0.0</version>
 	<packaging>jar</packaging>
 	<name>webtop-core-db</name>
 	
 	<parent>
 		<groupId>com.sonicle.webtop</groupId>
 		<artifactId>webtop-superpom-core</artifactId>
-		<version>1.0</version>
+		<version>1</version>
 	</parent>
 	
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
-		
-		<!-- WEBTOP SERVICE CONFIGURATION -->
-		<webtop.service.package>com.sonicle.webtop.core</webtop.service.package>
-		<webtop.service.jsPackage>Sonicle.webtop.core</webtop.service.jsPackage>
 	</properties>
 	
 	<dependencies>
@@ -80,6 +74,20 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		
+		<profile>
+			<id>profile-development</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+		
+		<profile>
+			<id>profile-production</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
 		</profile>
 	</profiles>
 </project>
