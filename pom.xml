@@ -18,6 +18,11 @@
 	
 	<dependencies>
 		<dependency>
+			<groupId>com.sonicle.libraries</groupId>
+			<artifactId>sonicle-commons</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<dependency>
 			<groupId>org.jooq</groupId>
 			<artifactId>jooq</artifactId>
 			<version>3.5.3</version>
@@ -26,11 +31,6 @@
 			<groupId>org.jooq</groupId>
 			<artifactId>jooq-meta</artifactId>
 			<version>3.5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sonicle.commons</groupId>
-			<artifactId>sonicle-commons</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
