@@ -9,9 +9,5 @@
                 <goal>clean</goal>
                 <goal>install</goal>
             </goals>
-            <activatedProfiles>
-                <activatedProfile>generate-db-classes</activatedProfile>
-                
-            </activatedProfiles>
         </action>
     </actions>
