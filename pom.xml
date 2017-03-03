@@ -56,7 +56,7 @@
 						<version>${properties-maven-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>read-properties</id>
+								<id>read-artifact-properties</id>
 								<phase>validate</phase>
 							</execution>
 						</executions>
