@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MessagesQueue extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.MessagesQueueRecord> {
 
-	private static final long serialVersionUID = -922022513;
+	private static final long serialVersionUID = 1279497633;
 
 	/**
 	 * The reference instance of <code>core.messages_queue</code>
@@ -34,7 +34,7 @@ public class MessagesQueue extends org.jooq.impl.TableImpl<com.sonicle.webtop.co
 	/**
 	 * The column <code>core.messages_queue.queue_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MessagesQueueRecord, java.lang.Integer> QUEUE_ID = createField("queue_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MessagesQueueRecord, java.lang.Integer> QUEUE_ID = createField("queue_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>core.messages_queue.domain_id</code>.
@@ -86,6 +86,14 @@ public class MessagesQueue extends org.jooq.impl.TableImpl<com.sonicle.webtop.co
 
 	private MessagesQueue(java.lang.String alias, org.jooq.Table<com.sonicle.webtop.core.jooq.core.tables.records.MessagesQueueRecord> aliased, org.jooq.Field<?>[] parameters) {
 		super(alias, com.sonicle.webtop.core.jooq.core.Core.CORE, aliased, parameters, "");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public org.jooq.Identity<com.sonicle.webtop.core.jooq.core.tables.records.MessagesQueueRecord, java.lang.Integer> getIdentity() {
+		return com.sonicle.webtop.core.jooq.core.Keys.IDENTITY_MESSAGES_QUEUE;
 	}
 
 	/**

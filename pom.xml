@@ -18,6 +18,11 @@
 	
 	<dependencies>
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>webtop-core-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.sonicle.libraries</groupId>
 			<artifactId>sonicle-commons</artifactId>
 			<version>LATEST</version>

@@ -33,12 +33,12 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.core.tables.pojos.Activities;
+import com.sonicle.webtop.core.jooq.core.tables.pojos.MasterData;
 
 /**
  *
  * @author malbinola
  */
-public class OActivity extends Activities {
-
+public class OMasterData extends MasterData {
+	
 }

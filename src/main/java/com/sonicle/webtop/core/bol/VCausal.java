@@ -33,12 +33,18 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.core.tables.pojos.Activities;
-
 /**
  *
  * @author malbinola
  */
-public class OActivity extends Activities {
+public class VCausal extends OCausal {
+	public String masterDataDescription;
 
+	public String getMasterDataDescription() {
+		return masterDataDescription;
+	}
+
+	public void setMasterDataDescription(String masterDataDescription) {
+		this.masterDataDescription = masterDataDescription;
+	}
 }

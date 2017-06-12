@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class SnoozedReminders extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.SnoozedRemindersRecord> {
 
-	private static final long serialVersionUID = -839496565;
+	private static final long serialVersionUID = 1748142749;
 
 	/**
 	 * The reference instance of <code>core.snoozed_reminders</code>
@@ -34,7 +34,7 @@ public class SnoozedReminders extends org.jooq.impl.TableImpl<com.sonicle.webtop
 	/**
 	 * The column <code>core.snoozed_reminders.snoozed_reminder_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SnoozedRemindersRecord, java.lang.Integer> SNOOZED_REMINDER_ID = createField("snoozed_reminder_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SnoozedRemindersRecord, java.lang.Integer> SNOOZED_REMINDER_ID = createField("snoozed_reminder_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>core.snoozed_reminders.domain_id</code>.
@@ -101,6 +101,14 @@ public class SnoozedReminders extends org.jooq.impl.TableImpl<com.sonicle.webtop
 
 	private SnoozedReminders(java.lang.String alias, org.jooq.Table<com.sonicle.webtop.core.jooq.core.tables.records.SnoozedRemindersRecord> aliased, org.jooq.Field<?>[] parameters) {
 		super(alias, com.sonicle.webtop.core.jooq.core.Core.CORE, aliased, parameters, "");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public org.jooq.Identity<com.sonicle.webtop.core.jooq.core.tables.records.SnoozedRemindersRecord, java.lang.Integer> getIdentity() {
+		return com.sonicle.webtop.core.jooq.core.Keys.IDENTITY_SNOOZED_REMINDERS;
 	}
 
 	/**

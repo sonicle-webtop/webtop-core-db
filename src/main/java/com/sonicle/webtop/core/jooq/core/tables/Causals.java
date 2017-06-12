@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Causals extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord> {
 
-	private static final long serialVersionUID = 911140536;
+	private static final long serialVersionUID = -1522157744;
 
 	/**
 	 * The reference instance of <code>core.causals</code>
@@ -34,7 +34,7 @@ public class Causals extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.joo
 	/**
 	 * The column <code>core.causals.causal_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.Integer> CAUSAL_ID = createField("causal_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.Integer> CAUSAL_ID = createField("causal_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>core.causals.domain_id</code>.
@@ -47,14 +47,14 @@ public class Causals extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.joo
 	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.String> USER_ID = createField("user_id", org.jooq.impl.SQLDataType.VARCHAR.length(100).nullable(false), this, "");
 
 	/**
-	 * The column <code>core.causals.customer_id</code>.
+	 * The column <code>core.causals.master_data_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.String> CUSTOMER_ID = createField("customer_id", org.jooq.impl.SQLDataType.VARCHAR.length(100), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.String> MASTER_DATA_ID = createField("master_data_id", org.jooq.impl.SQLDataType.VARCHAR.length(36), this, "");
 
 	/**
 	 * The column <code>core.causals.revision_status</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.String> REVISION_STATUS = createField("revision_status", org.jooq.impl.SQLDataType.VARCHAR.length(1), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.String> REVISION_STATUS = createField("revision_status", org.jooq.impl.SQLDataType.VARCHAR.length(1).nullable(false), this, "");
 
 	/**
 	 * The column <code>core.causals.description</code>.
@@ -64,7 +64,7 @@ public class Causals extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.joo
 	/**
 	 * The column <code>core.causals.read_only</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.Boolean> READ_ONLY = createField("read_only", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.Boolean> READ_ONLY = createField("read_only", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>core.causals.external_id</code>.
@@ -91,6 +91,14 @@ public class Causals extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.joo
 
 	private Causals(java.lang.String alias, org.jooq.Table<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord> aliased, org.jooq.Field<?>[] parameters) {
 		super(alias, com.sonicle.webtop.core.jooq.core.Core.CORE, aliased, parameters, "");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public org.jooq.Identity<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord, java.lang.Integer> getIdentity() {
+		return com.sonicle.webtop.core.jooq.core.Keys.IDENTITY_CAUSALS;
 	}
 
 	/**

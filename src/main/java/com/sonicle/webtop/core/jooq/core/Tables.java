@@ -37,9 +37,9 @@ public class Tables {
 	public static final com.sonicle.webtop.core.jooq.core.tables.Causals CAUSALS = com.sonicle.webtop.core.jooq.core.tables.Causals.CAUSALS;
 
 	/**
-	 * The table core.customers
+	 * The table core.customers_deprecated
 	 */
-	public static final com.sonicle.webtop.core.jooq.core.tables.Customers CUSTOMERS = com.sonicle.webtop.core.jooq.core.tables.Customers.CUSTOMERS;
+	public static final com.sonicle.webtop.core.jooq.core.tables.CustomersDeprecated CUSTOMERS_DEPRECATED = com.sonicle.webtop.core.jooq.core.tables.CustomersDeprecated.CUSTOMERS_DEPRECATED;
 
 	/**
 	 * The table core.domain_settings
@@ -125,11 +125,6 @@ public class Tables {
 	 * The table core.syslog
 	 */
 	public static final com.sonicle.webtop.core.jooq.core.tables.Syslog SYSLOG = com.sonicle.webtop.core.jooq.core.tables.Syslog.SYSLOG;
-
-	/**
-	 * The table core.test
-	 */
-	public static final com.sonicle.webtop.core.jooq.core.tables.Test TEST = com.sonicle.webtop.core.jooq.core.tables.Test.TEST;
 
 	/**
 	 * The table core.upgrade_statements

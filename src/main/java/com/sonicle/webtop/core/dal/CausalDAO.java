@@ -33,15 +33,17 @@
  */
 package com.sonicle.webtop.core.dal;
 
-import com.sonicle.webtop.core.bol.CausalGrid;
+import com.sonicle.commons.EnumUtils;
+import com.sonicle.webtop.core.bol.VCausal;
 import com.sonicle.webtop.core.bol.OCausal;
 import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_CAUSALS;
 import static com.sonicle.webtop.core.jooq.core.Tables.CAUSALS;
-import static com.sonicle.webtop.core.jooq.core.Tables.CUSTOMERS;
+import static com.sonicle.webtop.core.jooq.core.Tables.MASTER_DATA;
 import static com.sonicle.webtop.core.jooq.core.Tables.DOMAINS;
 import static com.sonicle.webtop.core.jooq.core.Tables.USERS;
 
 import com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord;
+import com.sonicle.webtop.core.model.Causal;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
@@ -63,7 +65,40 @@ public class CausalDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<OCausal> selectLiveByDomainUserCustomer(Connection con, String domainId, String userId, String customerId) throws DAOException {
+	public List<VCausal> viewLiveByDomain(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				CAUSALS.CAUSAL_ID,
+				CAUSALS.DOMAIN_ID,
+				CAUSALS.USER_ID,
+				CAUSALS.MASTER_DATA_ID,
+				CAUSALS.REVISION_STATUS,
+				CAUSALS.DESCRIPTION,
+				CAUSALS.READ_ONLY,
+				CAUSALS.EXTERNAL_ID
+			)
+			.select(
+				MASTER_DATA.DESCRIPTION.as("master_data_description")
+			)
+			.from(CAUSALS)
+			.leftOuterJoin(MASTER_DATA).on(
+				CAUSALS.MASTER_DATA_ID.equal(MASTER_DATA.MASTER_DATA_ID)
+			)
+			.where(
+				CAUSALS.DOMAIN_ID.equal(domainId)
+			)
+			.and(
+				CAUSALS.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(Causal.RevisionStatus.DELETED))
+				.or(CAUSALS.REVISION_STATUS.isNull())
+			)
+			.orderBy(
+				CAUSALS.DESCRIPTION.asc()
+			)
+			.fetchInto(VCausal.class);
+	}
+	
+	public List<OCausal> selectLiveByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		
 		return dsl
@@ -71,26 +106,14 @@ public class CausalDAO extends BaseDAO {
 			.from(CAUSALS)
 			.where(
 				CAUSALS.DOMAIN_ID.equal(domainId)
-				.and(CAUSALS.USER_ID.equal(userId))
+				.and(CAUSALS.USER_ID.equal("*"))
 				.or(
 					CAUSALS.DOMAIN_ID.equal(domainId)
-					.and(CAUSALS.USER_ID.equal("*"))
-				)
-				.or(
-					CAUSALS.DOMAIN_ID.equal("*")
 					.and(CAUSALS.USER_ID.equal(userId))
 				)
-				.or(
-					CAUSALS.DOMAIN_ID.equal("*")
-					.and(CAUSALS.USER_ID.equal("*"))
-				)
 			)
 			.and(
-				CAUSALS.CUSTOMER_ID.equal(customerId)
-				.or(CAUSALS.CUSTOMER_ID.isNull())
-			)
-			.and(
-				CAUSALS.REVISION_STATUS.notEqual("D")
+				CAUSALS.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(Causal.RevisionStatus.DELETED))
 				.or(CAUSALS.REVISION_STATUS.isNull())
 			)
 			.orderBy(
@@ -99,45 +122,32 @@ public class CausalDAO extends BaseDAO {
 			.fetchInto(OCausal.class);
 	}
 	
-	public List<CausalGrid> viewLiveByDomains(Connection con, Collection<String> domainIds) throws DAOException {
+	public List<OCausal> selectLiveByDomainUserMasterData(Connection con, String domainId, String userId, String masterDataId) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		
 		return dsl
-			.select(
-				CAUSALS.CAUSAL_ID,
-				CAUSALS.DOMAIN_ID,
-				CAUSALS.USER_ID,
-				CAUSALS.CUSTOMER_ID,
-				CAUSALS.DESCRIPTION,
-				CAUSALS.READ_ONLY,
-				CAUSALS.EXTERNAL_ID
-			)
-			.select(
-				USERS.DISPLAY_NAME.as("user_description"),
-				DOMAINS.DESCRIPTION.as("domain_description"),
-				CUSTOMERS.DESCRIPTION.as("customer_description")
-			)
+			.select()
 			.from(CAUSALS)
-			.leftOuterJoin(USERS).on(
-				CAUSALS.DOMAIN_ID.equal(USERS.DOMAIN_ID)
-				.and(CAUSALS.USER_ID.equal(USERS.USER_ID))
-			)
-			.leftOuterJoin(DOMAINS).on(
-				CAUSALS.DOMAIN_ID.equal(DOMAINS.DOMAIN_ID)
-			)
-			.leftOuterJoin(CUSTOMERS).on(
-				CAUSALS.CUSTOMER_ID.equal(CUSTOMERS.CUSTOMER_ID)
-			)
 			.where(
-				CAUSALS.DOMAIN_ID.in(domainIds)
+				CAUSALS.DOMAIN_ID.equal(domainId)
+				.and(CAUSALS.USER_ID.equal("*"))
+				.or(
+					CAUSALS.DOMAIN_ID.equal(domainId)
+					.and(CAUSALS.USER_ID.equal(userId))
+				)
 			)
 			.and(
-				CAUSALS.REVISION_STATUS.notEqual("D")
+				CAUSALS.MASTER_DATA_ID.equal(masterDataId)
+				.or(CAUSALS.MASTER_DATA_ID.isNull())
+			)
+			.and(
+				CAUSALS.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(Causal.RevisionStatus.DELETED))
 				.or(CAUSALS.REVISION_STATUS.isNull())
 			)
 			.orderBy(
 				CAUSALS.DESCRIPTION.asc()
 			)
-			.fetchInto(CausalGrid.class);
+			.fetchInto(OCausal.class);
 	}
 	
 	public OCausal select(Connection con, Integer causalId) throws DAOException {
@@ -166,7 +176,7 @@ public class CausalDAO extends BaseDAO {
 			.update(CAUSALS)
 			.set(CAUSALS.DOMAIN_ID, item.getDomainId())
 			.set(CAUSALS.USER_ID, item.getUserId())
-			.set(CAUSALS.CUSTOMER_ID, item.getCustomerId())
+			.set(CAUSALS.MASTER_DATA_ID, item.getMasterDataId())
 			.set(CAUSALS.DESCRIPTION, item.getDescription())
 			.set(CAUSALS.READ_ONLY, item.getReadOnly())
 			.set(CAUSALS.EXTERNAL_ID, item.getExternalId())
@@ -176,11 +186,11 @@ public class CausalDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int delete(Connection con, Integer causalId) throws DAOException {
+	public int logicDelete(Connection con, Integer causalId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.update(CAUSALS)
-			.set(CAUSALS.REVISION_STATUS, "D")
+			.set(CAUSALS.REVISION_STATUS, EnumUtils.toSerializedName(Causal.RevisionStatus.DELETED))
 			.where(
 				CAUSALS.CAUSAL_ID.equal(causalId)
 			)

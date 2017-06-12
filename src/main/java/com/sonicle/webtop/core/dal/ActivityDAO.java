@@ -33,11 +33,13 @@
  */
 package com.sonicle.webtop.core.dal;
 
+import com.sonicle.commons.EnumUtils;
 import com.sonicle.webtop.core.bol.VActivity;
 import com.sonicle.webtop.core.bol.OActivity;
 import static com.sonicle.webtop.core.jooq.core.Sequences.SEQ_ACTIVITIES;
 import static com.sonicle.webtop.core.jooq.core.Tables.*;
 import com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord;
+import com.sonicle.webtop.core.model.Activity;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
@@ -60,71 +62,46 @@ public class ActivityDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<VActivity> viewLiveByDomains(Connection con, Collection<String> domainIds) throws DAOException {
+	public List<OActivity> selectLiveByDomain(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
-				.select(
-						ACTIVITIES.ACTIVITY_ID,
-						ACTIVITIES.DOMAIN_ID,
-						ACTIVITIES.USER_ID,
-						ACTIVITIES.DESCRIPTION,
-						ACTIVITIES.READ_ONLY,
-						ACTIVITIES.EXTERNAL_ID
-				)
-				.select(
-						USERS.DISPLAY_NAME.as("user_description"),
-						DOMAINS.DESCRIPTION.as("domain_description")
-				)
-				.from(ACTIVITIES)
-				.leftOuterJoin(USERS).on(
-						ACTIVITIES.DOMAIN_ID.equal(USERS.DOMAIN_ID)
-						.and(ACTIVITIES.USER_ID.equal(USERS.USER_ID))
-				)
-				.leftOuterJoin(DOMAINS).on(
-						ACTIVITIES.DOMAIN_ID.equal(DOMAINS.DOMAIN_ID)
-				)
-				.where(
-						ACTIVITIES.DOMAIN_ID.in(domainIds)
-				)
-				.and(
-						ACTIVITIES.REVISION_STATUS.notEqual("D")
-						.or(ACTIVITIES.REVISION_STATUS.isNull())
-				)
-				.orderBy(
-						ACTIVITIES.DESCRIPTION.asc()
-				)
-				.fetchInto(VActivity.class);
+			.select()
+			.from(ACTIVITIES)
+			.where(
+				ACTIVITIES.DOMAIN_ID.equal(domainId)
+			)
+			.and(
+				ACTIVITIES.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(Activity.RevisionStatus.DELETED))
+				.or(ACTIVITIES.REVISION_STATUS.isNull())
+			)
+			.orderBy(
+				ACTIVITIES.DESCRIPTION.asc()
+			)
+			.fetchInto(OActivity.class);
 	}
 	
 	public List<OActivity> selectLiveByDomainUser(Connection con, String domainId, String userId) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		
 		return dsl
-				.select()
-				.from(ACTIVITIES)
-				.where(
-						ACTIVITIES.DOMAIN_ID.equal(domainId)
-						.and(ACTIVITIES.USER_ID.equal(userId))
-						.or(
-								ACTIVITIES.DOMAIN_ID.equal(domainId)
-								.and(ACTIVITIES.USER_ID.equal("*"))
-						)
-						.or(
-								ACTIVITIES.DOMAIN_ID.equal("*")
-								.and(ACTIVITIES.USER_ID.equal(userId))
-						)
-						.or(
-								ACTIVITIES.DOMAIN_ID.equal("*")
-								.and(ACTIVITIES.USER_ID.equal("*"))
-						)
+			.select()
+			.from(ACTIVITIES)
+			.where(
+				ACTIVITIES.DOMAIN_ID.equal(domainId)
+				.and(ACTIVITIES.USER_ID.equal("*"))
+				.or(
+					ACTIVITIES.DOMAIN_ID.equal(domainId)
+					.and(ACTIVITIES.USER_ID.equal(userId))
 				)
-				.and(
-						ACTIVITIES.REVISION_STATUS.notEqual("D")
-						.or(ACTIVITIES.REVISION_STATUS.isNull())
-				)
-				.orderBy(
-						ACTIVITIES.DESCRIPTION.asc()
-				)
-				.fetchInto(OActivity.class);
+			)
+			.and(
+				ACTIVITIES.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(Activity.RevisionStatus.DELETED))
+				.or(ACTIVITIES.REVISION_STATUS.isNull())
+			)
+			.orderBy(
+				ACTIVITIES.DESCRIPTION.asc()
+			)
+			.fetchInto(OActivity.class);
 	}
 	
 	public OActivity select(Connection con, Integer activityId) throws DAOException {
@@ -162,11 +139,11 @@ public class ActivityDAO extends BaseDAO {
 			.execute();
 	}
 	
-	public int delete(Connection con, Integer activityId) throws DAOException {
+	public int logicDelete(Connection con, Integer activityId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.update(ACTIVITIES)
-			.set(ACTIVITIES.REVISION_STATUS, "D")
+			.set(ACTIVITIES.REVISION_STATUS, EnumUtils.toSerializedName(Activity.RevisionStatus.DELETED))
 			.where(
 				ACTIVITIES.ACTIVITY_ID.equal(activityId)
 			)

@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables.pojos;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MasterData implements java.io.Serializable {
 
-	private static final long serialVersionUID = 723220150;
+	private static final long serialVersionUID = -720765684;
 
 	private java.lang.String       domainId;
 	private java.lang.String       masterDataId;
@@ -26,12 +26,18 @@ public class MasterData implements java.io.Serializable {
 	private java.lang.String       revisionStatus;
 	private org.joda.time.DateTime revisionTimestamp;
 	private java.lang.Integer      revisionSequence;
+	private java.lang.String       lockStatus;
 	private java.lang.String       description;
 	private java.lang.String       address;
 	private java.lang.String       city;
 	private java.lang.String       postalCode;
 	private java.lang.String       state;
 	private java.lang.String       country;
+	private java.lang.String       telephone;
+	private java.lang.String       fax;
+	private java.lang.String       mobile;
+	private java.lang.String       email;
+	private java.lang.String       notes;
 
 	public MasterData() {}
 
@@ -44,12 +50,18 @@ public class MasterData implements java.io.Serializable {
 		java.lang.String       revisionStatus,
 		org.joda.time.DateTime revisionTimestamp,
 		java.lang.Integer      revisionSequence,
+		java.lang.String       lockStatus,
 		java.lang.String       description,
 		java.lang.String       address,
 		java.lang.String       city,
 		java.lang.String       postalCode,
 		java.lang.String       state,
-		java.lang.String       country
+		java.lang.String       country,
+		java.lang.String       telephone,
+		java.lang.String       fax,
+		java.lang.String       mobile,
+		java.lang.String       email,
+		java.lang.String       notes
 	) {
 		this.domainId = domainId;
 		this.masterDataId = masterDataId;
@@ -59,12 +71,18 @@ public class MasterData implements java.io.Serializable {
 		this.revisionStatus = revisionStatus;
 		this.revisionTimestamp = revisionTimestamp;
 		this.revisionSequence = revisionSequence;
+		this.lockStatus = lockStatus;
 		this.description = description;
 		this.address = address;
 		this.city = city;
 		this.postalCode = postalCode;
 		this.state = state;
 		this.country = country;
+		this.telephone = telephone;
+		this.fax = fax;
+		this.mobile = mobile;
+		this.email = email;
+		this.notes = notes;
 	}
 
 	public java.lang.String getDomainId() {
@@ -131,6 +149,14 @@ public class MasterData implements java.io.Serializable {
 		this.revisionSequence = revisionSequence;
 	}
 
+	public java.lang.String getLockStatus() {
+		return this.lockStatus;
+	}
+
+	public void setLockStatus(java.lang.String lockStatus) {
+		this.lockStatus = lockStatus;
+	}
+
 	public java.lang.String getDescription() {
 		return this.description;
 	}
@@ -177,5 +203,45 @@ public class MasterData implements java.io.Serializable {
 
 	public void setCountry(java.lang.String country) {
 		this.country = country;
+	}
+
+	public java.lang.String getTelephone() {
+		return this.telephone;
+	}
+
+	public void setTelephone(java.lang.String telephone) {
+		this.telephone = telephone;
+	}
+
+	public java.lang.String getFax() {
+		return this.fax;
+	}
+
+	public void setFax(java.lang.String fax) {
+		this.fax = fax;
+	}
+
+	public java.lang.String getMobile() {
+		return this.mobile;
+	}
+
+	public void setMobile(java.lang.String mobile) {
+		this.mobile = mobile;
+	}
+
+	public java.lang.String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(java.lang.String email) {
+		this.email = email;
+	}
+
+	public java.lang.String getNotes() {
+		return this.notes;
+	}
+
+	public void setNotes(java.lang.String notes) {
+		this.notes = notes;
 	}
 }

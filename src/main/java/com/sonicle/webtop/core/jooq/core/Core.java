@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Core extends org.jooq.impl.SchemaImpl {
 
-	private static final long serialVersionUID = 707942829;
+	private static final long serialVersionUID = 432954664;
 
 	/**
 	 * The reference instance of <code>core</code>
@@ -64,7 +64,7 @@ public class Core extends org.jooq.impl.SchemaImpl {
 			com.sonicle.webtop.core.jooq.core.tables.Activities.ACTIVITIES,
 			com.sonicle.webtop.core.jooq.core.tables.Autosave.AUTOSAVE,
 			com.sonicle.webtop.core.jooq.core.tables.Causals.CAUSALS,
-			com.sonicle.webtop.core.jooq.core.tables.Customers.CUSTOMERS,
+			com.sonicle.webtop.core.jooq.core.tables.CustomersDeprecated.CUSTOMERS_DEPRECATED,
 			com.sonicle.webtop.core.jooq.core.tables.DomainSettings.DOMAIN_SETTINGS,
 			com.sonicle.webtop.core.jooq.core.tables.Domains.DOMAINS,
 			com.sonicle.webtop.core.jooq.core.tables.FileTypes.FILE_TYPES,
@@ -82,7 +82,6 @@ public class Core extends org.jooq.impl.SchemaImpl {
 			com.sonicle.webtop.core.jooq.core.tables.SharesData.SHARES_DATA,
 			com.sonicle.webtop.core.jooq.core.tables.SnoozedReminders.SNOOZED_REMINDERS,
 			com.sonicle.webtop.core.jooq.core.tables.Syslog.SYSLOG,
-			com.sonicle.webtop.core.jooq.core.tables.Test.TEST,
 			com.sonicle.webtop.core.jooq.core.tables.UpgradeStatements.UPGRADE_STATEMENTS,
 			com.sonicle.webtop.core.jooq.core.tables.UserSettings.USER_SETTINGS,
 			com.sonicle.webtop.core.jooq.core.tables.Users.USERS,

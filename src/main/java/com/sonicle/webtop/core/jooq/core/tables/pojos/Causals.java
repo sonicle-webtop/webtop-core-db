@@ -16,12 +16,12 @@ package com.sonicle.webtop.core.jooq.core.tables.pojos;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Causals implements java.io.Serializable {
 
-	private static final long serialVersionUID = -1800841630;
+	private static final long serialVersionUID = -614567610;
 
 	private java.lang.Integer causalId;
 	private java.lang.String  domainId;
 	private java.lang.String  userId;
-	private java.lang.String  customerId;
+	private java.lang.String  masterDataId;
 	private java.lang.String  revisionStatus;
 	private java.lang.String  description;
 	private java.lang.Boolean readOnly;
@@ -33,7 +33,7 @@ public class Causals implements java.io.Serializable {
 		java.lang.Integer causalId,
 		java.lang.String  domainId,
 		java.lang.String  userId,
-		java.lang.String  customerId,
+		java.lang.String  masterDataId,
 		java.lang.String  revisionStatus,
 		java.lang.String  description,
 		java.lang.Boolean readOnly,
@@ -42,7 +42,7 @@ public class Causals implements java.io.Serializable {
 		this.causalId = causalId;
 		this.domainId = domainId;
 		this.userId = userId;
-		this.customerId = customerId;
+		this.masterDataId = masterDataId;
 		this.revisionStatus = revisionStatus;
 		this.description = description;
 		this.readOnly = readOnly;
@@ -73,12 +73,12 @@ public class Causals implements java.io.Serializable {
 		this.userId = userId;
 	}
 
-	public java.lang.String getCustomerId() {
-		return this.customerId;
+	public java.lang.String getMasterDataId() {
+		return this.masterDataId;
 	}
 
-	public void setCustomerId(java.lang.String customerId) {
-		this.customerId = customerId;
+	public void setMasterDataId(java.lang.String masterDataId) {
+		this.masterDataId = masterDataId;
 	}
 
 	public java.lang.String getRevisionStatus() {

@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Shares extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord> {
 
-	private static final long serialVersionUID = 231299051;
+	private static final long serialVersionUID = 1487777963;
 
 	/**
 	 * The reference instance of <code>core.shares</code>
@@ -39,22 +39,22 @@ public class Shares extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq
 	/**
 	 * The column <code>core.shares.user_uid</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord, java.lang.String> USER_UID = createField("user_uid", org.jooq.impl.SQLDataType.VARCHAR.length(36), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord, java.lang.String> USER_UID = createField("user_uid", org.jooq.impl.SQLDataType.VARCHAR.length(36).nullable(false), this, "");
 
 	/**
 	 * The column <code>core.shares.service_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord, java.lang.String> SERVICE_ID = createField("service_id", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord, java.lang.String> SERVICE_ID = createField("service_id", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>core.shares.key</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord, java.lang.String> KEY = createField("key", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord, java.lang.String> KEY = createField("key", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>core.shares.instance</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord, java.lang.String> INSTANCE = createField("instance", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SharesRecord, java.lang.String> INSTANCE = createField("instance", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * Create a <code>core.shares</code> table reference

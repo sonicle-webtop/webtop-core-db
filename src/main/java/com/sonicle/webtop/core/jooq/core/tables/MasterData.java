@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MasterData extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord> {
 
-	private static final long serialVersionUID = -2114920871;
+	private static final long serialVersionUID = 2004586834;
 
 	/**
 	 * The reference instance of <code>core.master_data</code>
@@ -39,37 +39,42 @@ public class MasterData extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	/**
 	 * The column <code>core.master_data.master_data_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> MASTER_DATA_ID = createField("master_data_id", org.jooq.impl.SQLDataType.VARCHAR.length(15).nullable(false), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> MASTER_DATA_ID = createField("master_data_id", org.jooq.impl.SQLDataType.VARCHAR.length(36).nullable(false), this, "");
 
 	/**
 	 * The column <code>core.master_data.parent_master_data_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> PARENT_MASTER_DATA_ID = createField("parent_master_data_id", org.jooq.impl.SQLDataType.VARCHAR.length(15), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> PARENT_MASTER_DATA_ID = createField("parent_master_data_id", org.jooq.impl.SQLDataType.VARCHAR.length(36), this, "");
 
 	/**
 	 * The column <code>core.master_data.external_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> EXTERNAL_ID = createField("external_id", org.jooq.impl.SQLDataType.VARCHAR.length(15), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> EXTERNAL_ID = createField("external_id", org.jooq.impl.SQLDataType.VARCHAR.length(36), this, "");
 
 	/**
 	 * The column <code>core.master_data.type</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> TYPE = createField("type", org.jooq.impl.SQLDataType.VARCHAR.length(3), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> TYPE = createField("type", org.jooq.impl.SQLDataType.VARCHAR.length(3).nullable(false), this, "");
 
 	/**
 	 * The column <code>core.master_data.revision_status</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> REVISION_STATUS = createField("revision_status", org.jooq.impl.SQLDataType.VARCHAR.length(1), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> REVISION_STATUS = createField("revision_status", org.jooq.impl.SQLDataType.VARCHAR.length(1).nullable(false), this, "");
 
 	/**
 	 * The column <code>core.master_data.revision_timestamp</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, org.joda.time.DateTime> REVISION_TIMESTAMP = createField("revision_timestamp", org.jooq.impl.SQLDataType.TIMESTAMP, this, "", new com.sonicle.webtop.core.jooq.DateTimeConverter());
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, org.joda.time.DateTime> REVISION_TIMESTAMP = createField("revision_timestamp", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "", new com.sonicle.webtop.core.jooq.DateTimeConverter());
 
 	/**
 	 * The column <code>core.master_data.revision_sequence</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.Integer> REVISION_SEQUENCE = createField("revision_sequence", org.jooq.impl.SQLDataType.INTEGER, this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.Integer> REVISION_SEQUENCE = createField("revision_sequence", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>core.master_data.lock_status</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> LOCK_STATUS = createField("lock_status", org.jooq.impl.SQLDataType.VARCHAR.length(1).nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>core.master_data.description</code>.
@@ -99,7 +104,32 @@ public class MasterData extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	/**
 	 * The column <code>core.master_data.country</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(30), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
+
+	/**
+	 * The column <code>core.master_data.telephone</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> TELEPHONE = createField("telephone", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
+
+	/**
+	 * The column <code>core.master_data.fax</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> FAX = createField("fax", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
+
+	/**
+	 * The column <code>core.master_data.mobile</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> MOBILE = createField("mobile", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
+
+	/**
+	 * The column <code>core.master_data.email</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR.length(320), this, "");
+
+	/**
+	 * The column <code>core.master_data.notes</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> NOTES = createField("notes", org.jooq.impl.SQLDataType.VARCHAR.length(2000), this, "");
 
 	/**
 	 * Create a <code>core.master_data</code> table reference

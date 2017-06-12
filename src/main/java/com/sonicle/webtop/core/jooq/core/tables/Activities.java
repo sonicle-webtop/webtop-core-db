@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Activities extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord> {
 
-	private static final long serialVersionUID = -1994266881;
+	private static final long serialVersionUID = 1223238634;
 
 	/**
 	 * The reference instance of <code>core.activities</code>
@@ -34,7 +34,7 @@ public class Activities extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	/**
 	 * The column <code>core.activities.activity_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord, java.lang.Integer> ACTIVITY_ID = createField("activity_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord, java.lang.Integer> ACTIVITY_ID = createField("activity_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>core.activities.domain_id</code>.
@@ -49,7 +49,7 @@ public class Activities extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	/**
 	 * The column <code>core.activities.revision_status</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord, java.lang.String> REVISION_STATUS = createField("revision_status", org.jooq.impl.SQLDataType.VARCHAR.length(1), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord, java.lang.String> REVISION_STATUS = createField("revision_status", org.jooq.impl.SQLDataType.VARCHAR.length(1).nullable(false), this, "");
 
 	/**
 	 * The column <code>core.activities.description</code>.
@@ -59,7 +59,7 @@ public class Activities extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	/**
 	 * The column <code>core.activities.read_only</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord, java.lang.Boolean> READ_ONLY = createField("read_only", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord, java.lang.Boolean> READ_ONLY = createField("read_only", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>core.activities.external_id</code>.
@@ -86,6 +86,14 @@ public class Activities extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 
 	private Activities(java.lang.String alias, org.jooq.Table<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord> aliased, org.jooq.Field<?>[] parameters) {
 		super(alias, com.sonicle.webtop.core.jooq.core.Core.CORE, aliased, parameters, "");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public org.jooq.Identity<com.sonicle.webtop.core.jooq.core.tables.records.ActivitiesRecord, java.lang.Integer> getIdentity() {
+		return com.sonicle.webtop.core.jooq.core.Keys.IDENTITY_ACTIVITIES;
 	}
 
 	/**

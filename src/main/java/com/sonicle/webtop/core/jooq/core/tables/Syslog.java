@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Syslog extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.SyslogRecord> {
 
-	private static final long serialVersionUID = -565313687;
+	private static final long serialVersionUID = -287315186;
 
 	/**
 	 * The reference instance of <code>core.syslog</code>
@@ -34,7 +34,7 @@ public class Syslog extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq
 	/**
 	 * The column <code>core.syslog.syslog_id</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SyslogRecord, java.lang.Long> SYSLOG_ID = createField("syslog_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.SyslogRecord, java.lang.Long> SYSLOG_ID = createField("syslog_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>core.syslog.timestamp</code>.
@@ -106,6 +106,14 @@ public class Syslog extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq
 
 	private Syslog(java.lang.String alias, org.jooq.Table<com.sonicle.webtop.core.jooq.core.tables.records.SyslogRecord> aliased, org.jooq.Field<?>[] parameters) {
 		super(alias, com.sonicle.webtop.core.jooq.core.Core.CORE, aliased, parameters, "");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public org.jooq.Identity<com.sonicle.webtop.core.jooq.core.tables.records.SyslogRecord, java.lang.Long> getIdentity() {
+		return com.sonicle.webtop.core.jooq.core.Keys.IDENTITY_SYSLOG;
 	}
 
 	/**

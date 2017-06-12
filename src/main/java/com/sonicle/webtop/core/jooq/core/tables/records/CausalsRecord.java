@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CausalsRecord extends org.jooq.impl.UpdatableRecordImpl<com.sonicle.webtop.core.jooq.core.tables.records.CausalsRecord> implements org.jooq.Record8<java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Boolean, java.lang.String> {
 
-	private static final long serialVersionUID = -1891778351;
+	private static final long serialVersionUID = -1086599018;
 
 	/**
 	 * Setter for <code>core.causals.causal_id</code>.
@@ -61,16 +61,16 @@ public class CausalsRecord extends org.jooq.impl.UpdatableRecordImpl<com.sonicle
 	}
 
 	/**
-	 * Setter for <code>core.causals.customer_id</code>.
+	 * Setter for <code>core.causals.master_data_id</code>.
 	 */
-	public void setCustomerId(java.lang.String value) {
+	public void setMasterDataId(java.lang.String value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>core.causals.customer_id</code>.
+	 * Getter for <code>core.causals.master_data_id</code>.
 	 */
-	public java.lang.String getCustomerId() {
+	public java.lang.String getMasterDataId() {
 		return (java.lang.String) getValue(3);
 	}
 
@@ -191,7 +191,7 @@ public class CausalsRecord extends org.jooq.impl.UpdatableRecordImpl<com.sonicle
 	 */
 	@Override
 	public org.jooq.Field<java.lang.String> field4() {
-		return com.sonicle.webtop.core.jooq.core.tables.Causals.CAUSALS.CUSTOMER_ID;
+		return com.sonicle.webtop.core.jooq.core.tables.Causals.CAUSALS.MASTER_DATA_ID;
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class CausalsRecord extends org.jooq.impl.UpdatableRecordImpl<com.sonicle
 	 */
 	@Override
 	public java.lang.String value4() {
-		return getCustomerId();
+		return getMasterDataId();
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class CausalsRecord extends org.jooq.impl.UpdatableRecordImpl<com.sonicle
 	 */
 	@Override
 	public CausalsRecord value4(java.lang.String value) {
-		setCustomerId(value);
+		setMasterDataId(value);
 		return this;
 	}
 
@@ -384,13 +384,13 @@ public class CausalsRecord extends org.jooq.impl.UpdatableRecordImpl<com.sonicle
 	/**
 	 * Create a detached, initialised CausalsRecord
 	 */
-	public CausalsRecord(java.lang.Integer causalId, java.lang.String domainId, java.lang.String userId, java.lang.String customerId, java.lang.String revisionStatus, java.lang.String description, java.lang.Boolean readOnly, java.lang.String externalId) {
+	public CausalsRecord(java.lang.Integer causalId, java.lang.String domainId, java.lang.String userId, java.lang.String masterDataId, java.lang.String revisionStatus, java.lang.String description, java.lang.Boolean readOnly, java.lang.String externalId) {
 		super(com.sonicle.webtop.core.jooq.core.tables.Causals.CAUSALS);
 
 		setValue(0, causalId);
 		setValue(1, domainId);
 		setValue(2, userId);
-		setValue(3, customerId);
+		setValue(3, masterDataId);
 		setValue(4, revisionStatus);
 		setValue(5, description);
 		setValue(6, readOnly);
