@@ -42,6 +42,6 @@ public class GroupUid extends UserUid {
 	public GroupUid() {}
 	
 	public GroupUid(String domainId, String userId, String userUid) {
-		super(domainId, userId, userId);
+		super(domainId, userId, userUid);
 	}
 }
