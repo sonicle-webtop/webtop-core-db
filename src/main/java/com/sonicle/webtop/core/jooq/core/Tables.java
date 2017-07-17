@@ -57,6 +57,16 @@ public class Tables {
 	public static final com.sonicle.webtop.core.jooq.core.tables.FileTypes FILE_TYPES = com.sonicle.webtop.core.jooq.core.tables.FileTypes.FILE_TYPES;
 
 	/**
+	 * The table core.im_history_chats
+	 */
+	public static final com.sonicle.webtop.core.jooq.core.tables.ImHistoryChats IM_HISTORY_CHATS = com.sonicle.webtop.core.jooq.core.tables.ImHistoryChats.IM_HISTORY_CHATS;
+
+	/**
+	 * The table core.im_history_messages
+	 */
+	public static final com.sonicle.webtop.core.jooq.core.tables.ImHistoryMessages IM_HISTORY_MESSAGES = com.sonicle.webtop.core.jooq.core.tables.ImHistoryMessages.IM_HISTORY_MESSAGES;
+
+	/**
 	 * The table core.local_vault
 	 */
 	public static final com.sonicle.webtop.core.jooq.core.tables.LocalVault LOCAL_VAULT = com.sonicle.webtop.core.jooq.core.tables.LocalVault.LOCAL_VAULT;

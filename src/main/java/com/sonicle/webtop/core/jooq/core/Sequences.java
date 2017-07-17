@@ -27,6 +27,16 @@ public class Sequences {
 	public static final org.jooq.Sequence<java.lang.Long> SEQ_CAUSALS = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_causals", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
 	/**
+	 * The sequence <code>core.seq_im_history_chats</code>
+	 */
+	public static final org.jooq.Sequence<java.lang.Long> SEQ_IM_HISTORY_CHATS = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_im_history_chats", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
+
+	/**
+	 * The sequence <code>core.seq_im_history_messages</code>
+	 */
+	public static final org.jooq.Sequence<java.lang.Long> SEQ_IM_HISTORY_MESSAGES = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_im_history_messages", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
+
+	/**
 	 * The sequence <code>core.seq_messages_queue</code>
 	 */
 	public static final org.jooq.Sequence<java.lang.Long> SEQ_MESSAGES_QUEUE = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_messages_queue", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
@@ -55,6 +65,11 @@ public class Sequences {
 	 * The sequence <code>core.seq_syslog</code>
 	 */
 	public static final org.jooq.Sequence<java.lang.Long> SEQ_SYSLOG = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_syslog", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
+
+	/**
+	 * The sequence <code>core.seq_test</code>
+	 */
+	public static final org.jooq.Sequence<java.lang.Long> SEQ_TEST = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_test", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
 	/**
 	 * The sequence <code>core.seq_upgrade_statements</code>

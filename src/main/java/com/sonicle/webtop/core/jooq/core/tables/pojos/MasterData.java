@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables.pojos;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MasterData implements java.io.Serializable {
 
-	private static final long serialVersionUID = -720765684;
+	private static final long serialVersionUID = -285279426;
 
 	private java.lang.String       domainId;
 	private java.lang.String       masterDataId;
@@ -38,6 +38,7 @@ public class MasterData implements java.io.Serializable {
 	private java.lang.String       mobile;
 	private java.lang.String       email;
 	private java.lang.String       notes;
+	private java.lang.Integer      distance;
 
 	public MasterData() {}
 
@@ -61,7 +62,8 @@ public class MasterData implements java.io.Serializable {
 		java.lang.String       fax,
 		java.lang.String       mobile,
 		java.lang.String       email,
-		java.lang.String       notes
+		java.lang.String       notes,
+		java.lang.Integer      distance
 	) {
 		this.domainId = domainId;
 		this.masterDataId = masterDataId;
@@ -83,6 +85,7 @@ public class MasterData implements java.io.Serializable {
 		this.mobile = mobile;
 		this.email = email;
 		this.notes = notes;
+		this.distance = distance;
 	}
 
 	public java.lang.String getDomainId() {
@@ -243,5 +246,13 @@ public class MasterData implements java.io.Serializable {
 
 	public void setNotes(java.lang.String notes) {
 		this.notes = notes;
+	}
+
+	public java.lang.Integer getDistance() {
+		return this.distance;
+	}
+
+	public void setDistance(java.lang.Integer distance) {
+		this.distance = distance;
 	}
 }

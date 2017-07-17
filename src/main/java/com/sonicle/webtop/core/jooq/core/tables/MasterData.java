@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MasterData extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord> {
 
-	private static final long serialVersionUID = 2004586834;
+	private static final long serialVersionUID = -935709305;
 
 	/**
 	 * The reference instance of <code>core.master_data</code>
@@ -130,6 +130,11 @@ public class MasterData extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	 * The column <code>core.master_data.notes</code>.
 	 */
 	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> NOTES = createField("notes", org.jooq.impl.SQLDataType.VARCHAR.length(2000), this, "");
+
+	/**
+	 * The column <code>core.master_data.distance</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.Integer> DISTANCE = createField("distance", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
 	/**
 	 * Create a <code>core.master_data</code> table reference
