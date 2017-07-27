@@ -33,14 +33,20 @@
  */
 package com.sonicle.webtop.core.dal;
 
+import com.sonicle.commons.db.DbUtils;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.ExecuteContext;
 import org.jooq.Field;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
+import org.jooq.impl.DefaultExecuteListener;
 
 /**
  *
@@ -53,7 +59,10 @@ public class BaseDAO {
 	}
 	
 	public DSLContext getDSL(Connection con) {
-		return DSL.using(con, getDialect(con));
+		Configuration configuration = new DefaultConfiguration()
+				.set(con)
+				.set(getDialect(con));
+		return DSL.using(configuration);
 	}
 	
 	public static class FieldsMap extends HashMap<Field<?>, Object> {
@@ -82,6 +91,20 @@ public class BaseDAO {
 			this.timestamp = timestamp;
 			this.device = device;
 			this.user = user;
+		}
+	}
+	
+	public static class DAOExecuteListener extends DefaultExecuteListener {
+
+		@Override
+		public void exception(ExecuteContext ctx) {
+			final SQLException sqlEx = ctx.sqlException();
+			if ((sqlEx != null) && DbUtils.isIntegrityConstraintViolation(sqlEx)) {
+				//SQLStateClass sqlState = SQLStateClass.fromCode(ctx.sqlException().getSQLState());
+				ctx.exception(new DAOIntegrityViolationException("JOOQ", ctx.exception()));
+			} else {
+				ctx.exception(new DAOException("JOOQ", ctx.exception()));
+			}
 		}
 	}
 }

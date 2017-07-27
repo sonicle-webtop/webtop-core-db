@@ -27,14 +27,14 @@ public class Sequences {
 	public static final org.jooq.Sequence<java.lang.Long> SEQ_CAUSALS = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_causals", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
 	/**
-	 * The sequence <code>core.seq_im_history_chats</code>
+	 * The sequence <code>core.seq_im_chats</code>
 	 */
-	public static final org.jooq.Sequence<java.lang.Long> SEQ_IM_HISTORY_CHATS = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_im_history_chats", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
+	public static final org.jooq.Sequence<java.lang.Long> SEQ_IM_CHATS = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_im_chats", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
 	/**
-	 * The sequence <code>core.seq_im_history_messages</code>
+	 * The sequence <code>core.seq_im_messages</code>
 	 */
-	public static final org.jooq.Sequence<java.lang.Long> SEQ_IM_HISTORY_MESSAGES = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_im_history_messages", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
+	public static final org.jooq.Sequence<java.lang.Long> SEQ_IM_MESSAGES = new org.jooq.impl.SequenceImpl<java.lang.Long>("seq_im_messages", com.sonicle.webtop.core.jooq.core.Core.CORE, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
 	/**
 	 * The sequence <code>core.seq_messages_queue</code>

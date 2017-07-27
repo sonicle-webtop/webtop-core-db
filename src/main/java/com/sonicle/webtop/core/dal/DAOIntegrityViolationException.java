@@ -31,14 +31,19 @@
  * reasonably feasible for technical reasons, the Appropriate Legal Notices must
  * display the words "Copyright (C) 2014 Sonicle S.r.l.".
  */
-package com.sonicle.webtop.core.bol;
-
-import com.sonicle.webtop.core.jooq.core.tables.pojos.ImHistoryChats;
+package com.sonicle.webtop.core.dal;
 
 /**
  *
  * @author malbinola
  */
-public class OIMHistoryChat extends ImHistoryChats {
+public class DAOIntegrityViolationException extends DAOException {
 	
+	public DAOIntegrityViolationException(String message) {
+		super(message);
+	}
+	
+	public DAOIntegrityViolationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

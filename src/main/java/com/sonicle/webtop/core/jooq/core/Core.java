@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Core extends org.jooq.impl.SchemaImpl {
 
-	private static final long serialVersionUID = -273752388;
+	private static final long serialVersionUID = -832586392;
 
 	/**
 	 * The reference instance of <code>core</code>
@@ -41,8 +41,8 @@ public class Core extends org.jooq.impl.SchemaImpl {
 		return java.util.Arrays.<org.jooq.Sequence<?>>asList(
 			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_ACTIVITIES,
 			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_CAUSALS,
-			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_IM_HISTORY_CHATS,
-			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_IM_HISTORY_MESSAGES,
+			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_IM_CHATS,
+			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_IM_MESSAGES,
 			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_MESSAGES_QUEUE,
 			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_ROLES_ASSOCIATIONS,
 			com.sonicle.webtop.core.jooq.core.Sequences.SEQ_ROLES_PERMISSIONS,
@@ -71,8 +71,8 @@ public class Core extends org.jooq.impl.SchemaImpl {
 			com.sonicle.webtop.core.jooq.core.tables.DomainSettings.DOMAIN_SETTINGS,
 			com.sonicle.webtop.core.jooq.core.tables.Domains.DOMAINS,
 			com.sonicle.webtop.core.jooq.core.tables.FileTypes.FILE_TYPES,
-			com.sonicle.webtop.core.jooq.core.tables.ImHistoryChats.IM_HISTORY_CHATS,
-			com.sonicle.webtop.core.jooq.core.tables.ImHistoryMessages.IM_HISTORY_MESSAGES,
+			com.sonicle.webtop.core.jooq.core.tables.ImChats.IM_CHATS,
+			com.sonicle.webtop.core.jooq.core.tables.ImMessages.IM_MESSAGES,
 			com.sonicle.webtop.core.jooq.core.tables.LocalVault.LOCAL_VAULT,
 			com.sonicle.webtop.core.jooq.core.tables.MasterData.MASTER_DATA,
 			com.sonicle.webtop.core.jooq.core.tables.MediaTypes.MEDIA_TYPES,

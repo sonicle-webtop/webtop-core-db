@@ -33,12 +33,12 @@
  */
 package com.sonicle.webtop.core.bol;
 
-import com.sonicle.webtop.core.jooq.core.tables.pojos.ImHistoryMessages;
+import com.sonicle.webtop.core.jooq.core.tables.pojos.ImMessages;
 
 /**
  *
  * @author malbinola
  */
-public class OIMHistoryMessage extends ImHistoryMessages {
+public class OIMMessage extends ImMessages {
 	
 }
