@@ -101,7 +101,8 @@ public class IMMessageDAO extends BaseDAO {
 				.and(IM_MESSAGES.DATE.equal(date))
 			)
 			.orderBy(
-				IM_MESSAGES.TIMESTAMP.asc()
+				IM_MESSAGES.TIMESTAMP.asc(),
+				IM_MESSAGES.ID.asc()
 			)
 			.fetchInto(OIMMessage.class);
 	}

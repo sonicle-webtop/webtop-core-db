@@ -41,6 +41,7 @@ import com.sonicle.webtop.core.jooq.core.tables.records.ImChatsRecord;
 import com.sonicle.webtop.core.model.IMChat;
 import com.sonicle.webtop.core.sdk.UserProfileId;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 import org.joda.time.DateTime;
 import org.jooq.DSLContext;
@@ -61,7 +62,32 @@ public class IMChatDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public List<OIMChat> selectAliveByProfile(Connection con, UserProfileId profile) throws DAOException {
+	public OIMChat selectByProfileChat(Connection con, UserProfileId profile, String chatJid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				IM_CHATS.ID,
+				IM_CHATS.DOMAIN_ID,
+				IM_CHATS.USER_ID,
+				IM_CHATS.REVISION_STATUS,
+				IM_CHATS.REVISION_TIMESTAMP,
+				IM_CHATS.CHAT_JID,
+				IM_CHATS.IS_GROUP_CHAT,
+				IM_CHATS.OWNER_JID,
+				IM_CHATS.NAME,
+				IM_CHATS.LAST_SEEN_ACTIVITY,
+				IM_CHATS.WITH_JID
+			)
+			.from(IM_CHATS)
+			.where(
+				IM_CHATS.DOMAIN_ID.equal(profile.getDomainId())
+				.and(IM_CHATS.USER_ID.equal(profile.getUserId()))
+				.and(IM_CHATS.CHAT_JID.equal(chatJid))
+			)
+			.fetchOneInto(OIMChat.class);
+	}
+	
+	public List<OIMChat> selectByProfileRevStatus(Connection con, UserProfileId profile, Collection<String> revStatuses) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -82,8 +108,7 @@ public class IMChatDAO extends BaseDAO {
 				IM_CHATS.DOMAIN_ID.equal(profile.getDomainId())
 				.and(IM_CHATS.USER_ID.equal(profile.getUserId()))
 				.and(
-					IM_CHATS.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(IMChat.RevisionStatus.DELETED))
-						.or(IM_CHATS.REVISION_STATUS.isNull())
+					IM_CHATS.REVISION_STATUS.in(revStatuses)
 				)
 			)
 			.fetchInto(OIMChat.class);
@@ -120,6 +145,20 @@ public class IMChatDAO extends BaseDAO {
 			.update(IM_CHATS)
 			.set(IM_CHATS.REVISION_TIMESTAMP, revisionTimestamp)
 			.set(IM_CHATS.LAST_SEEN_ACTIVITY, lastActivity)
+			.where(
+				IM_CHATS.DOMAIN_ID.equal(profile.getDomainId())
+					.and(IM_CHATS.USER_ID.equal(profile.getUserId()))
+				.and(IM_CHATS.CHAT_JID.equal(chatJid))
+			)
+			.execute();
+	}
+	
+	public int updateRevisionStatusByProfileChat(Connection con, UserProfileId profile, String chatJid, DateTime revisionTimestamp, IMChat.RevisionStatus revisionStatus) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.update(IM_CHATS)
+			.set(IM_CHATS.REVISION_STATUS, EnumUtils.toSerializedName(revisionStatus))
+			.set(IM_CHATS.REVISION_TIMESTAMP, revisionTimestamp)
 			.where(
 				IM_CHATS.DOMAIN_ID.equal(profile.getDomainId())
 					.and(IM_CHATS.USER_ID.equal(profile.getUserId()))
