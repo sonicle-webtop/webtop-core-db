@@ -62,7 +62,7 @@ public class IMChatDAO extends BaseDAO {
 		return nextID;
 	}
 	
-	public OIMChat selectByProfileChat(Connection con, UserProfileId profile, String chatJid) throws DAOException {
+	public OIMChat selectAliveByProfileChat(Connection con, UserProfileId profile, String chatJid) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -82,6 +82,9 @@ public class IMChatDAO extends BaseDAO {
 			.where(
 				IM_CHATS.DOMAIN_ID.equal(profile.getDomainId())
 				.and(IM_CHATS.USER_ID.equal(profile.getUserId()))
+				.and(
+					IM_CHATS.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(IMChat.RevisionStatus.DELETED))
+				)
 				.and(IM_CHATS.CHAT_JID.equal(chatJid))
 			)
 			.fetchOneInto(OIMChat.class);
