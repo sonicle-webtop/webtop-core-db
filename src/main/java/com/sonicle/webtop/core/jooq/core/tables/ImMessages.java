@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ImMessages extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord> {
 
-	private static final long serialVersionUID = 1584200625;
+	private static final long serialVersionUID = 1117142874;
 
 	/**
 	 * The reference instance of <code>core.im_messages</code>
@@ -90,6 +90,11 @@ public class ImMessages extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	 * The column <code>core.im_messages.stanza_id</code>.
 	 */
 	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord, java.lang.String> STANZA_ID = createField("stanza_id", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+
+	/**
+	 * The column <code>core.im_messages.data</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord, java.lang.String> DATA = createField("data", org.jooq.impl.SQLDataType.CLOB, this, "");
 
 	/**
 	 * Create a <code>core.im_messages</code> table reference

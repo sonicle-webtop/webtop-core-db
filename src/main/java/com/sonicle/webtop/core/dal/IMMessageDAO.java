@@ -39,7 +39,6 @@ import static com.sonicle.webtop.core.jooq.core.Tables.IM_MESSAGES;
 import com.sonicle.webtop.core.sdk.UserProfileId;
 import java.sql.Connection;
 import java.util.List;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.jooq.DSLContext;
 
@@ -57,6 +56,69 @@ public class IMMessageDAO extends BaseDAO {
 		DSLContext dsl = getDSL(con);
 		Long nextID = dsl.nextval(SEQ_IM_MESSAGES);
 		return nextID;
+	}
+	
+	public List<OIMMessage> findByProfileChat(Connection con, UserProfileId profile, String chatJid) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				IM_MESSAGES.ID,
+				IM_MESSAGES.DOMAIN_ID,
+				IM_MESSAGES.CHAT_JID,
+				IM_MESSAGES.SENDER_JID,
+				IM_MESSAGES.SENDER_RESOURCE,
+				IM_MESSAGES.DATE,
+				IM_MESSAGES.TIMESTAMP,
+				IM_MESSAGES.ACTION,
+				IM_MESSAGES.TEXT,
+				IM_MESSAGES.DATA,
+				IM_MESSAGES.MESSAGE_UID,
+				IM_MESSAGES.STANZA_ID
+			)
+			.from(IM_MESSAGES)
+			.where(
+				IM_MESSAGES.DOMAIN_ID.equal(profile.getDomainId())
+					.and(IM_MESSAGES.USER_ID.equal(profile.getUserId()))
+				.and(IM_MESSAGES.CHAT_JID.equal(chatJid))
+			)
+			.orderBy(
+				IM_MESSAGES.DATE.desc(),
+				IM_MESSAGES.TIMESTAMP.asc(),
+				IM_MESSAGES.ID.asc()
+			)
+			.fetchInto(OIMMessage.class);
+	}
+	
+	public List<OIMMessage> findByProfileChatLike(Connection con, UserProfileId profile, String chatJid, String likeText) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				IM_MESSAGES.ID,
+				IM_MESSAGES.DOMAIN_ID,
+				IM_MESSAGES.CHAT_JID,
+				IM_MESSAGES.SENDER_JID,
+				IM_MESSAGES.SENDER_RESOURCE,
+				IM_MESSAGES.DATE,
+				IM_MESSAGES.TIMESTAMP,
+				IM_MESSAGES.ACTION,
+				IM_MESSAGES.TEXT,
+				IM_MESSAGES.DATA,
+				IM_MESSAGES.MESSAGE_UID,
+				IM_MESSAGES.STANZA_ID
+			)
+			.from(IM_MESSAGES)
+			.where(
+				IM_MESSAGES.DOMAIN_ID.equal(profile.getDomainId())
+					.and(IM_MESSAGES.USER_ID.equal(profile.getUserId()))
+				.and(IM_MESSAGES.CHAT_JID.equal(chatJid))
+				.and(IM_MESSAGES.TEXT.likeIgnoreCase(likeText))
+			)
+			.orderBy(
+				IM_MESSAGES.DATE.desc(),
+				IM_MESSAGES.TIMESTAMP.asc(),
+				IM_MESSAGES.ID.asc()
+			)
+			.fetchInto(OIMMessage.class);
 	}
 	
 	public List<String> selectStanzaIDsByProfileChat(Connection con, UserProfileId profile, String chatJid) throws DAOException {
@@ -90,6 +152,7 @@ public class IMMessageDAO extends BaseDAO {
 				IM_MESSAGES.TIMESTAMP,
 				IM_MESSAGES.ACTION,
 				IM_MESSAGES.TEXT,
+				IM_MESSAGES.DATA,
 				IM_MESSAGES.MESSAGE_UID,
 				IM_MESSAGES.STANZA_ID
 			)
@@ -107,38 +170,6 @@ public class IMMessageDAO extends BaseDAO {
 			.fetchInto(OIMMessage.class);
 	}
 	
-	/*
-	public List<OIMHistoryMessage> selectByProfileChatDates(Connection con, UserProfileId profile, String chatJid, DateTime fromDate, DateTime toDate) throws DAOException {
-		DSLContext dsl = getDSL(con);
-		return dsl
-			.select(
-				IM_MESSAGES.ID,
-				IM_MESSAGES.DOMAIN_ID,
-				IM_MESSAGES.CHAT_JID,
-				IM_MESSAGES.SENDER_JID,
-				IM_MESSAGES.SENDER_RESOURCE,
-				IM_MESSAGES.DATE,
-				IM_MESSAGES.TIMESTAMP,
-				IM_MESSAGES.ACTION,
-				IM_MESSAGES.TEXT,
-				IM_MESSAGES.MESSAGE_UID,
-				IM_MESSAGES.STANZA_ID
-			)
-			.from(IM_MESSAGES)
-			.where(
-				IM_MESSAGES.DOMAIN_ID.equal(profile.getDomainId())
-					.and(IM_MESSAGES.USER_ID.equal(profile.getUserId()))
-				.and(IM_MESSAGES.CHAT_JID.equal(chatJid))
-				.and(IM_MESSAGES.TIMESTAMP.greaterOrEqual(fromDate)
-					.and(IM_MESSAGES.TIMESTAMP.lessThan(toDate)))
-			)
-			.orderBy(
-				IM_MESSAGES.TIMESTAMP.asc()
-			)
-			.fetchInto(OIMHistoryMessage.class);
-	}
-	*/
-	
 	public int insert(Connection con, OIMMessage item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -152,6 +183,7 @@ public class IMMessageDAO extends BaseDAO {
 			.set(IM_MESSAGES.TIMESTAMP, item.getTimestamp())
 			.set(IM_MESSAGES.ACTION, item.getAction())
 			.set(IM_MESSAGES.TEXT, item.getText())
+			.set(IM_MESSAGES.DATA, item.getData())
 			.set(IM_MESSAGES.MESSAGE_UID, item.getMessageUid())
 			.set(IM_MESSAGES.STANZA_ID, item.getStanzaId())
 			.execute();

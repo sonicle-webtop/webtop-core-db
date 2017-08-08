@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables.pojos;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ImMessages implements java.io.Serializable {
 
-	private static final long serialVersionUID = -1593169002;
+	private static final long serialVersionUID = -161546648;
 
 	private java.lang.Integer       id;
 	private java.lang.String        domainId;
@@ -30,6 +30,7 @@ public class ImMessages implements java.io.Serializable {
 	private java.lang.String        text;
 	private java.lang.String        messageUid;
 	private java.lang.String        stanzaId;
+	private java.lang.String        data;
 
 	public ImMessages() {}
 
@@ -45,7 +46,8 @@ public class ImMessages implements java.io.Serializable {
 		java.lang.String        action,
 		java.lang.String        text,
 		java.lang.String        messageUid,
-		java.lang.String        stanzaId
+		java.lang.String        stanzaId,
+		java.lang.String        data
 	) {
 		this.id = id;
 		this.domainId = domainId;
@@ -59,6 +61,7 @@ public class ImMessages implements java.io.Serializable {
 		this.text = text;
 		this.messageUid = messageUid;
 		this.stanzaId = stanzaId;
+		this.data = data;
 	}
 
 	public java.lang.Integer getId() {
@@ -155,5 +158,13 @@ public class ImMessages implements java.io.Serializable {
 
 	public void setStanzaId(java.lang.String stanzaId) {
 		this.stanzaId = stanzaId;
+	}
+
+	public java.lang.String getData() {
+		return this.data;
+	}
+
+	public void setData(java.lang.String data) {
+		this.data = data;
 	}
 }
