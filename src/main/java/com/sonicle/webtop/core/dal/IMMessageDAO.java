@@ -139,6 +139,27 @@ public class IMMessageDAO extends BaseDAO {
 			.fetchInto(String.class);
 	}
 	
+	public List<LocalDate> selectDatesByProfileChatYear(Connection con, UserProfileId profile, String chatJid, int year) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.selectDistinct(
+				IM_MESSAGES.DATE
+			)
+			.from(IM_MESSAGES)
+			.where(
+				IM_MESSAGES.DOMAIN_ID.equal(profile.getDomainId())
+					.and(IM_MESSAGES.USER_ID.equal(profile.getUserId()))
+				.and(IM_MESSAGES.CHAT_JID.equal(chatJid))
+				.and(
+					IM_MESSAGES.DATE.between(new LocalDate(year, 1, 1), new LocalDate(year, 12, 31))
+				)
+			)
+			.orderBy(
+				IM_MESSAGES.DATE.asc()
+			)
+			.fetchInto(LocalDate.class);
+	}
+	
 	public List<OIMMessage> selectByProfileChatDate(Connection con, UserProfileId profile, String chatJid, LocalDate date) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
