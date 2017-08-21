@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ImMessages extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord> {
 
-	private static final long serialVersionUID = 1117142874;
+	private static final long serialVersionUID = 543275961;
 
 	/**
 	 * The reference instance of <code>core.im_messages</code>
@@ -62,14 +62,14 @@ public class ImMessages extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord, java.lang.String> SENDER_RESOURCE = createField("sender_resource", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
-	 * The column <code>core.im_messages.date</code>.
-	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord, org.joda.time.LocalDate> DATE = createField("date", org.jooq.impl.SQLDataType.DATE, this, "", new com.sonicle.webtop.core.jooq.LocalDateConverter());
-
-	/**
 	 * The column <code>core.im_messages.timestamp</code>.
 	 */
 	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord, org.joda.time.DateTime> TIMESTAMP = createField("timestamp", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "", new com.sonicle.webtop.core.jooq.DateTimeConverter());
+
+	/**
+	 * The column <code>core.im_messages.delivery_timestamp</code>.
+	 */
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord, org.joda.time.DateTime> DELIVERY_TIMESTAMP = createField("delivery_timestamp", org.jooq.impl.SQLDataType.TIMESTAMP, this, "", new com.sonicle.webtop.core.jooq.DateTimeConverter());
 
 	/**
 	 * The column <code>core.im_messages.action</code>.

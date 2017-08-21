@@ -16,38 +16,38 @@ package com.sonicle.webtop.core.jooq.core.tables.pojos;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ImMessages implements java.io.Serializable {
 
-	private static final long serialVersionUID = -161546648;
+	private static final long serialVersionUID = 183166574;
 
-	private java.lang.Integer       id;
-	private java.lang.String        domainId;
-	private java.lang.String        userId;
-	private java.lang.String        chatJid;
-	private java.lang.String        senderJid;
-	private java.lang.String        senderResource;
-	private org.joda.time.LocalDate date;
-	private org.joda.time.DateTime  timestamp;
-	private java.lang.String        action;
-	private java.lang.String        text;
-	private java.lang.String        messageUid;
-	private java.lang.String        stanzaId;
-	private java.lang.String        data;
+	private java.lang.Integer      id;
+	private java.lang.String       domainId;
+	private java.lang.String       userId;
+	private java.lang.String       chatJid;
+	private java.lang.String       senderJid;
+	private java.lang.String       senderResource;
+	private org.joda.time.DateTime timestamp;
+	private org.joda.time.DateTime deliveryTimestamp;
+	private java.lang.String       action;
+	private java.lang.String       text;
+	private java.lang.String       messageUid;
+	private java.lang.String       stanzaId;
+	private java.lang.String       data;
 
 	public ImMessages() {}
 
 	public ImMessages(
-		java.lang.Integer       id,
-		java.lang.String        domainId,
-		java.lang.String        userId,
-		java.lang.String        chatJid,
-		java.lang.String        senderJid,
-		java.lang.String        senderResource,
-		org.joda.time.LocalDate date,
-		org.joda.time.DateTime  timestamp,
-		java.lang.String        action,
-		java.lang.String        text,
-		java.lang.String        messageUid,
-		java.lang.String        stanzaId,
-		java.lang.String        data
+		java.lang.Integer      id,
+		java.lang.String       domainId,
+		java.lang.String       userId,
+		java.lang.String       chatJid,
+		java.lang.String       senderJid,
+		java.lang.String       senderResource,
+		org.joda.time.DateTime timestamp,
+		org.joda.time.DateTime deliveryTimestamp,
+		java.lang.String       action,
+		java.lang.String       text,
+		java.lang.String       messageUid,
+		java.lang.String       stanzaId,
+		java.lang.String       data
 	) {
 		this.id = id;
 		this.domainId = domainId;
@@ -55,8 +55,8 @@ public class ImMessages implements java.io.Serializable {
 		this.chatJid = chatJid;
 		this.senderJid = senderJid;
 		this.senderResource = senderResource;
-		this.date = date;
 		this.timestamp = timestamp;
+		this.deliveryTimestamp = deliveryTimestamp;
 		this.action = action;
 		this.text = text;
 		this.messageUid = messageUid;
@@ -112,20 +112,20 @@ public class ImMessages implements java.io.Serializable {
 		this.senderResource = senderResource;
 	}
 
-	public org.joda.time.LocalDate getDate() {
-		return this.date;
-	}
-
-	public void setDate(org.joda.time.LocalDate date) {
-		this.date = date;
-	}
-
 	public org.joda.time.DateTime getTimestamp() {
 		return this.timestamp;
 	}
 
 	public void setTimestamp(org.joda.time.DateTime timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public org.joda.time.DateTime getDeliveryTimestamp() {
+		return this.deliveryTimestamp;
+	}
+
+	public void setDeliveryTimestamp(org.joda.time.DateTime deliveryTimestamp) {
+		this.deliveryTimestamp = deliveryTimestamp;
 	}
 
 	public java.lang.String getAction() {

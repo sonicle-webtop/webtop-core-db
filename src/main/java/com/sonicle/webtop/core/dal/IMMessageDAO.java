@@ -39,8 +39,14 @@ import static com.sonicle.webtop.core.jooq.core.Tables.IM_MESSAGES;
 import com.sonicle.webtop.core.sdk.UserProfileId;
 import java.sql.Connection;
 import java.util.List;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.impl.DSL;
 
 /**
  *
@@ -60,6 +66,7 @@ public class IMMessageDAO extends BaseDAO {
 	
 	public List<OIMMessage> findByProfileChat(Connection con, UserProfileId profile, String chatJid) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		final Field<LocalDate> DATE = DSL.field("{0} AT TIME ZONE 'UTC'", LocalDate.class, IM_MESSAGES.TIMESTAMP).as("date");
 		return dsl
 			.select(
 				IM_MESSAGES.ID,
@@ -67,8 +74,8 @@ public class IMMessageDAO extends BaseDAO {
 				IM_MESSAGES.CHAT_JID,
 				IM_MESSAGES.SENDER_JID,
 				IM_MESSAGES.SENDER_RESOURCE,
-				IM_MESSAGES.DATE,
 				IM_MESSAGES.TIMESTAMP,
+				IM_MESSAGES.DELIVERY_TIMESTAMP,
 				IM_MESSAGES.ACTION,
 				IM_MESSAGES.TEXT,
 				IM_MESSAGES.DATA,
@@ -82,7 +89,7 @@ public class IMMessageDAO extends BaseDAO {
 				.and(IM_MESSAGES.CHAT_JID.equal(chatJid))
 			)
 			.orderBy(
-				IM_MESSAGES.DATE.desc(),
+				DATE.desc(),
 				IM_MESSAGES.TIMESTAMP.asc(),
 				IM_MESSAGES.ID.asc()
 			)
@@ -91,6 +98,7 @@ public class IMMessageDAO extends BaseDAO {
 	
 	public List<OIMMessage> findByProfileChatLike(Connection con, UserProfileId profile, String chatJid, String likeText) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		final Field<LocalDate> DATE = DSL.field("{0} AT TIME ZONE 'UTC'", LocalDate.class, IM_MESSAGES.TIMESTAMP).as("date");
 		return dsl
 			.select(
 				IM_MESSAGES.ID,
@@ -98,8 +106,8 @@ public class IMMessageDAO extends BaseDAO {
 				IM_MESSAGES.CHAT_JID,
 				IM_MESSAGES.SENDER_JID,
 				IM_MESSAGES.SENDER_RESOURCE,
-				IM_MESSAGES.DATE,
 				IM_MESSAGES.TIMESTAMP,
+				IM_MESSAGES.DELIVERY_TIMESTAMP,
 				IM_MESSAGES.ACTION,
 				IM_MESSAGES.TEXT,
 				IM_MESSAGES.DATA,
@@ -114,7 +122,7 @@ public class IMMessageDAO extends BaseDAO {
 				.and(IM_MESSAGES.TEXT.likeIgnoreCase(likeText))
 			)
 			.orderBy(
-				IM_MESSAGES.DATE.desc(),
+				DATE.desc(),
 				IM_MESSAGES.TIMESTAMP.asc(),
 				IM_MESSAGES.ID.asc()
 			)
@@ -139,29 +147,42 @@ public class IMMessageDAO extends BaseDAO {
 			.fetchInto(String.class);
 	}
 	
-	public List<LocalDate> selectDatesByProfileChatYear(Connection con, UserProfileId profile, String chatJid, int year) throws DAOException {
+	public List<DateTime> selectDatesByProfileChatYear(Connection con, UserProfileId profile, String chatJid, int year, DateTimeZone timezone) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		final DateTime ts1 = new DateTime(year, 1, 1, 0, 0, 0, timezone);
+		final DateTime ts2 = ts1.plusYears(1);
 		return dsl
 			.selectDistinct(
-				IM_MESSAGES.DATE
+				IM_MESSAGES.TIMESTAMP
 			)
 			.from(IM_MESSAGES)
 			.where(
 				IM_MESSAGES.DOMAIN_ID.equal(profile.getDomainId())
 					.and(IM_MESSAGES.USER_ID.equal(profile.getUserId()))
 				.and(IM_MESSAGES.CHAT_JID.equal(chatJid))
-				.and(
-					IM_MESSAGES.DATE.between(new LocalDate(year, 1, 1), new LocalDate(year, 12, 31))
-				)
+				.and(timestampCondition(false, ts1, ts2))
 			)
 			.orderBy(
-				IM_MESSAGES.DATE.asc()
+				IM_MESSAGES.TIMESTAMP.asc()
 			)
-			.fetchInto(LocalDate.class);
+			.fetchInto(DateTime.class);
 	}
 	
-	public List<OIMMessage> selectByProfileChatDate(Connection con, UserProfileId profile, String chatJid, LocalDate date) throws DAOException {
+	private Condition timestampCondition(boolean byDelivery, DateTime greaterOrEqual, DateTime lessThan) {
+		if (byDelivery) {
+			return IM_MESSAGES.DELIVERY_TIMESTAMP.greaterOrEqual(greaterOrEqual)
+				.and(IM_MESSAGES.DELIVERY_TIMESTAMP.lessThan(lessThan));
+		} else {
+			return IM_MESSAGES.TIMESTAMP.greaterOrEqual(greaterOrEqual)
+				.and(IM_MESSAGES.TIMESTAMP.lessThan(lessThan));
+		}
+	}
+	
+	public List<OIMMessage> selectByProfileChatDate(Connection con, UserProfileId profile, String chatJid, LocalDate date, DateTimeZone timezone, boolean byDelivery) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		final DateTime ts1 = date.toDateTime(LocalTime.MIDNIGHT, timezone);
+		final DateTime ts2 = ts1.plusDays(1);
+		
 		return dsl
 			.select(
 				IM_MESSAGES.ID,
@@ -169,8 +190,8 @@ public class IMMessageDAO extends BaseDAO {
 				IM_MESSAGES.CHAT_JID,
 				IM_MESSAGES.SENDER_JID,
 				IM_MESSAGES.SENDER_RESOURCE,
-				IM_MESSAGES.DATE,
 				IM_MESSAGES.TIMESTAMP,
+				IM_MESSAGES.DELIVERY_TIMESTAMP,
 				IM_MESSAGES.ACTION,
 				IM_MESSAGES.TEXT,
 				IM_MESSAGES.DATA,
@@ -182,7 +203,7 @@ public class IMMessageDAO extends BaseDAO {
 				IM_MESSAGES.DOMAIN_ID.equal(profile.getDomainId())
 					.and(IM_MESSAGES.USER_ID.equal(profile.getUserId()))
 				.and(IM_MESSAGES.CHAT_JID.equal(chatJid))
-				.and(IM_MESSAGES.DATE.equal(date))
+				.and(timestampCondition(byDelivery, ts1, ts2))
 			)
 			.orderBy(
 				IM_MESSAGES.TIMESTAMP.asc(),
@@ -200,8 +221,8 @@ public class IMMessageDAO extends BaseDAO {
 			.set(IM_MESSAGES.CHAT_JID, item.getChatJid())
 			.set(IM_MESSAGES.SENDER_JID, item.getSenderJid())
 			.set(IM_MESSAGES.SENDER_RESOURCE, item.getSenderResource())
-			.set(IM_MESSAGES.DATE, item.getDate())
 			.set(IM_MESSAGES.TIMESTAMP, item.getTimestamp())
+			.set(IM_MESSAGES.DELIVERY_TIMESTAMP, item.getDeliveryTimestamp())
 			.set(IM_MESSAGES.ACTION, item.getAction())
 			.set(IM_MESSAGES.TEXT, item.getText())
 			.set(IM_MESSAGES.DATA, item.getData())
