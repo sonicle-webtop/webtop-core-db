@@ -84,6 +84,38 @@ public class MasterDataDAO extends BaseDAO {
 			.fetchOneInto(OMasterData.class);
 	}
 	
+	public List<OMasterData> viewByIdsDomain(Connection con, Collection<String> masterDataIds, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				MASTER_DATA.DOMAIN_ID,
+				MASTER_DATA.MASTER_DATA_ID,
+				MASTER_DATA.PARENT_MASTER_DATA_ID,
+				MASTER_DATA.EXTERNAL_ID,
+				MASTER_DATA.TYPE,
+				MASTER_DATA.REVISION_STATUS,
+				MASTER_DATA.REVISION_TIMESTAMP,
+				MASTER_DATA.LOCK_STATUS,
+				MASTER_DATA.DESCRIPTION,
+				MASTER_DATA.ADDRESS,
+				MASTER_DATA.CITY,
+				MASTER_DATA.POSTAL_CODE,
+				MASTER_DATA.STATE,
+				MASTER_DATA.COUNTRY
+			)
+			.from(MASTER_DATA)
+			.where(
+				MASTER_DATA.MASTER_DATA_ID.in(masterDataIds)
+				.and(MASTER_DATA.DOMAIN_ID.equal(domainId))
+				.and(MASTER_DATA.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(MasterData.RevisionStatus.DELETED)))
+			)
+			.orderBy(
+				MASTER_DATA.TYPE.asc(),
+				MASTER_DATA.DESCRIPTION.asc()
+			)
+			.fetchInto(OMasterData.class);
+	}
+	
 	public List<OMasterData> viewByDomainTypeLike(Connection con, String domainId, String[] types, String likeDescription) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
