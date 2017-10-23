@@ -40,7 +40,10 @@ import com.sonicle.webtop.core.model.MasterData;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
 /**
  *
@@ -116,8 +119,18 @@ public class MasterDataDAO extends BaseDAO {
 			.fetchInto(OMasterData.class);
 	}
 	
-	public List<OMasterData> viewByDomainTypeLike(Connection con, String domainId, String[] types, String likeDescription) throws DAOException {
+	public List<OMasterData> viewByDomainTypePattern(Connection con, String domainId, Collection<String> types) throws DAOException {
+		return viewByDomainTypePattern(con, domainId, types, null);
+	}
+	
+	public List<OMasterData> viewByDomainTypePattern(Connection con, String domainId, Collection<String> types, String patternDescription) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		
+		Condition patternCndt = DSL.trueCondition();
+		if (!StringUtils.isBlank(patternDescription)) {
+			patternCndt = MASTER_DATA.DESCRIPTION.likeIgnoreCase(patternDescription);
+		}
+		
 		return dsl
 			.select(
 				MASTER_DATA.DOMAIN_ID,
@@ -141,7 +154,7 @@ public class MasterDataDAO extends BaseDAO {
 				.and(MASTER_DATA.PARENT_MASTER_DATA_ID.isNull())
 				.and(MASTER_DATA.TYPE.in(types))
 				.and(MASTER_DATA.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(MasterData.RevisionStatus.DELETED))
-				.and(MASTER_DATA.DESCRIPTION.likeIgnoreCase(likeDescription)))
+				.and(patternCndt))
 			)
 			.orderBy(
 				MASTER_DATA.TYPE.asc(),
@@ -150,8 +163,18 @@ public class MasterDataDAO extends BaseDAO {
 			.fetchInto(OMasterData.class);
 	}
 	
-	public List<OMasterData> viewStatisticByDomainParentTypeLike(Connection con, String domainId, String parentMasterDataId, String[] types, String likeDescription) throws DAOException {
+	public List<OMasterData> viewStatisticByDomainParentTypePattern(Connection con, String domainId, String parentMasterDataId, Collection<String> types) throws DAOException {
+		return viewStatisticByDomainParentTypePattern(con, domainId, parentMasterDataId, types, null);
+	}
+	
+	public List<OMasterData> viewStatisticByDomainParentTypePattern(Connection con, String domainId, String parentMasterDataId, Collection<String> types, String patternDescription) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		
+		Condition patternCndt = DSL.trueCondition();
+		if (!StringUtils.isBlank(patternDescription)) {
+			patternCndt = MASTER_DATA.DESCRIPTION.likeIgnoreCase(patternDescription);
+		}
+		
 		return dsl
 			.select(
 				MASTER_DATA.DOMAIN_ID,
@@ -178,7 +201,7 @@ public class MasterDataDAO extends BaseDAO {
 				)
 				.and(MASTER_DATA.TYPE.in(types))
 				.and(MASTER_DATA.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(MasterData.RevisionStatus.DELETED))
-				.and(MASTER_DATA.DESCRIPTION.likeIgnoreCase(likeDescription)))
+				.and(patternCndt))
 			)
 			.orderBy(
 				MASTER_DATA.TYPE.asc(),
