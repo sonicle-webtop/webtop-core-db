@@ -119,11 +119,11 @@ public class MasterDataDAO extends BaseDAO {
 			.fetchInto(OMasterData.class);
 	}
 	
-	public List<OMasterData> viewByDomainTypePattern(Connection con, String domainId, Collection<String> types) throws DAOException {
-		return viewByDomainTypePattern(con, domainId, types, null);
+	public List<OMasterData> viewParentsByDomainTypePattern(Connection con, String domainId, Collection<String> types) throws DAOException {
+		return viewParentsByDomainTypePattern(con, domainId, types, null);
 	}
 	
-	public List<OMasterData> viewByDomainTypePattern(Connection con, String domainId, Collection<String> types, String patternDescription) throws DAOException {
+	public List<OMasterData> viewParentsByDomainTypePattern(Connection con, String domainId, Collection<String> types, String patternDescription) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		
 		Condition patternCndt = DSL.trueCondition();
@@ -163,11 +163,45 @@ public class MasterDataDAO extends BaseDAO {
 			.fetchInto(OMasterData.class);
 	}
 	
-	public List<OMasterData> viewStatisticByDomainParentTypePattern(Connection con, String domainId, String parentMasterDataId, Collection<String> types) throws DAOException {
-		return viewStatisticByDomainParentTypePattern(con, domainId, parentMasterDataId, types, null);
+	public List<OMasterData> viewChildrenByDomainType(Connection con, String domainId, Collection<String> types) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		
+		return dsl
+			.select(
+				MASTER_DATA.DOMAIN_ID,
+				MASTER_DATA.MASTER_DATA_ID,
+				MASTER_DATA.PARENT_MASTER_DATA_ID,
+				MASTER_DATA.EXTERNAL_ID,
+				MASTER_DATA.TYPE,
+				MASTER_DATA.REVISION_STATUS,
+				MASTER_DATA.REVISION_TIMESTAMP,
+				MASTER_DATA.LOCK_STATUS,
+				MASTER_DATA.DESCRIPTION,
+				MASTER_DATA.ADDRESS,
+				MASTER_DATA.CITY,
+				MASTER_DATA.POSTAL_CODE,
+				MASTER_DATA.STATE,
+				MASTER_DATA.COUNTRY
+			)
+			.from(MASTER_DATA)
+			.where(
+				MASTER_DATA.DOMAIN_ID.equal(domainId)
+				.and(MASTER_DATA.PARENT_MASTER_DATA_ID.isNotNull())
+				.and(MASTER_DATA.TYPE.in(types))
+				.and(MASTER_DATA.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(MasterData.RevisionStatus.DELETED)))
+			)
+			.orderBy(
+				MASTER_DATA.TYPE.asc(),
+				MASTER_DATA.DESCRIPTION.asc()
+			)
+			.fetchInto(OMasterData.class);
 	}
 	
-	public List<OMasterData> viewStatisticByDomainParentTypePattern(Connection con, String domainId, String parentMasterDataId, Collection<String> types, String patternDescription) throws DAOException {
+	public List<OMasterData> viewChildrenByDomainParentTypePattern(Connection con, String domainId, String parentMasterDataId, Collection<String> types) throws DAOException {
+		return viewChildrenByDomainParentTypePattern(con, domainId, parentMasterDataId, types, null);
+	}
+	
+	public List<OMasterData> viewChildrenByDomainParentTypePattern(Connection con, String domainId, String parentMasterDataId, Collection<String> types, String patternDescription) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		
 		Condition patternCndt = DSL.trueCondition();
