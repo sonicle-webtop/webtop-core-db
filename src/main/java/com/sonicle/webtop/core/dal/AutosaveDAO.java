@@ -37,6 +37,7 @@ import com.sonicle.webtop.core.bol.OAutosave;
 import static com.sonicle.webtop.core.jooq.core.Tables.*;
 import com.sonicle.webtop.core.jooq.core.tables.records.AutosaveRecord;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
@@ -75,7 +76,7 @@ public class AutosaveDAO extends BaseDAO {
 			.fetchOneInto(OAutosave.class);
 	}
 	
-	public List<OAutosave> selectMineByUserServices(Connection con, String domainId, String userId, String webtopClientId, List<String> serviceIds) throws DAOException {
+	public List<OAutosave> selectMineByUserServices(Connection con, String domainId, String userId, String webtopClientId, Collection<String> serviceIds) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -96,7 +97,7 @@ public class AutosaveDAO extends BaseDAO {
 			.fetchInto(OAutosave.class);
 	}
 	
-	public List<OAutosave> selectOthersByUserServices(Connection con, String domainId, String userId, String notWebtopClientId, List<String> serviceIds) throws DAOException {
+	public List<OAutosave> selectOthersByUserServices(Connection con, String domainId, String userId, String notWebtopClientId, Collection<String> serviceIds) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
@@ -117,7 +118,7 @@ public class AutosaveDAO extends BaseDAO {
 			.fetchInto(OAutosave.class);
 	}
 	
-	public int countMineByUserServices(Connection con, String domainId, String userId, String webtopClientId, List<String> serviceIds) throws DAOException {
+	public int countMineByUserServices(Connection con, String domainId, String userId, String webtopClientId, Collection<String> serviceIds) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectCount()
@@ -131,7 +132,7 @@ public class AutosaveDAO extends BaseDAO {
 			.fetchOne(0, int.class);
 	}
 	
-	public int countOthersByUserServices(Connection con, String domainId, String userId, String notWebtopClientId, List<String> serviceIds) throws DAOException {
+	public int countOthersByUserServices(Connection con, String domainId, String userId, String notWebtopClientId, Collection<String> serviceIds) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.selectCount()
