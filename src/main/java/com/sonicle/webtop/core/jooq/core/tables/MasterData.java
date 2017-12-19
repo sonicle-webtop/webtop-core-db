@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MasterData extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord> {
 
-	private static final long serialVersionUID = -935709305;
+	private static final long serialVersionUID = 653556491;
 
 	/**
 	 * The reference instance of <code>core.master_data</code>
@@ -74,7 +74,7 @@ public class MasterData extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	/**
 	 * The column <code>core.master_data.lock_status</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> LOCK_STATUS = createField("lock_status", org.jooq.impl.SQLDataType.VARCHAR.length(1).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.MasterDataRecord, java.lang.String> LOCK_STATUS = createField("lock_status", org.jooq.impl.SQLDataType.VARCHAR.length(1), this, "");
 
 	/**
 	 * The column <code>core.master_data.description</code>.

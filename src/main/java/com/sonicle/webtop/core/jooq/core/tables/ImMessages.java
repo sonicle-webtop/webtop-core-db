@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ImMessages extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord> {
 
-	private static final long serialVersionUID = 543275961;
+	private static final long serialVersionUID = -1914898799;
 
 	/**
 	 * The reference instance of <code>core.im_messages</code>
@@ -79,7 +79,7 @@ public class ImMessages extends org.jooq.impl.TableImpl<com.sonicle.webtop.core.
 	/**
 	 * The column <code>core.im_messages.text</code>.
 	 */
-	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord, java.lang.String> TEXT = createField("text", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+	public final org.jooq.TableField<com.sonicle.webtop.core.jooq.core.tables.records.ImMessagesRecord, java.lang.String> TEXT = createField("text", org.jooq.impl.SQLDataType.CLOB, this, "");
 
 	/**
 	 * The column <code>core.im_messages.message_uid</code>.
