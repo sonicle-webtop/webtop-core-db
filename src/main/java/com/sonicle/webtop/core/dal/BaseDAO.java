@@ -47,6 +47,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultExecuteListener;
+import org.jooq.impl.DefaultExecuteListenerProvider;
 
 /**
  *
@@ -61,7 +62,8 @@ public class BaseDAO {
 	public DSLContext getDSL(Connection con) {
 		Configuration configuration = new DefaultConfiguration()
 				.set(con)
-				.set(getDialect(con));
+				.set(getDialect(con))
+				.set(new DefaultExecuteListenerProvider(new DAOExecuteListener()));
 		return DSL.using(configuration);
 	}
 	
