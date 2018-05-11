@@ -43,6 +43,7 @@ import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.ExecuteContext;
 import org.jooq.Field;
+import org.jooq.RecordMapperProvider;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
@@ -65,6 +66,19 @@ public class BaseDAO {
 				.set(getDialect(con))
 				.set(new DefaultExecuteListenerProvider(new DAOExecuteListener()));
 		return DSL.using(configuration);
+	}
+	
+	public DSLContext getDSL(Connection con, RecordMapperProvider rmp) {
+		Configuration configuration = new DefaultConfiguration()
+				.set(con)
+				.set(getDialect(con))
+				.set(rmp)
+				.set(new DefaultExecuteListenerProvider(new DAOExecuteListener()));
+		return DSL.using(configuration);
+	}
+	
+	public static DateTime createRevisionTimestamp() {
+		return DateTime.now(DateTimeZone.UTC);
 	}
 	
 	public static class FieldsMap extends HashMap<Field<?>, Object> {
