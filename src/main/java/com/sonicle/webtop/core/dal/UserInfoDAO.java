@@ -38,8 +38,10 @@ import com.sonicle.webtop.core.bol.UserId;
 import static com.sonicle.webtop.core.jooq.core.Tables.USERS_INFO;
 import com.sonicle.webtop.core.jooq.core.tables.records.UsersInfoRecord;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
 /**
  *
@@ -109,6 +111,18 @@ public class UserInfoDAO extends BaseDAO {
 			.execute();
 	}
 	
+	public int updateEmailDomainByProfiles(Connection con, String domainId, Collection<String> userIds, String domainSuffix) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.update(USERS_INFO)
+			.set(USERS_INFO.EMAIL, DSL.concat(DSL.substring(USERS_INFO.EMAIL, DSL.val(0), DSL.position(USERS_INFO.EMAIL, "@")), domainSuffix))
+			.where(
+				USERS_INFO.DOMAIN_ID.equal(domainId)
+				.and(USERS_INFO.USER_ID.in(userIds))
+			)
+			.execute();
+	}
+	
 	public int updateFirstLastName(Connection con, OUserInfo item) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
@@ -137,8 +151,8 @@ public class UserInfoDAO extends BaseDAO {
 		return dsl
 			.delete(USERS_INFO)
 			.where(
-					USERS_INFO.DOMAIN_ID.equal(domainId)
-					.and(USERS_INFO.USER_ID.equal(userId))
+				USERS_INFO.DOMAIN_ID.equal(domainId)
+				.and(USERS_INFO.USER_ID.equal(userId))
 			)
 			.execute();
 	}
