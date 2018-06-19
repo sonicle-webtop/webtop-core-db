@@ -99,6 +99,19 @@ public class DomainDAO extends BaseDAO {
 			.fetchOneInto(ODomain.class);
 	}
 	
+	public Boolean selectDirPasswordPolicyById(Connection con, String domainId) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				DOMAINS.DIR_PASSWORD_POLICY
+			)
+			.from(DOMAINS)
+			.where(
+					DOMAINS.DOMAIN_ID.equal(domainId)
+			)
+			.fetchOneInto(Boolean.class);
+	}
+	
 	public String selectDirParametersById(Connection con, String domainId) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
