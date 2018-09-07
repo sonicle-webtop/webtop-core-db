@@ -34,11 +34,19 @@
 package com.sonicle.webtop.core.bol;
 
 import com.sonicle.webtop.core.jooq.core.tables.pojos.ServicestoreEntries;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author malbinola
  */
 public class OServiceStoreEntry extends ServicestoreEntries {
+
+	public String getSanitizedKey() {
+		return sanitizeKey(this.getKey());
+	}
 	
+	public static String sanitizeKey(String key) {
+		return StringUtils.upperCase(StringUtils.trim(key));
+	}
 }

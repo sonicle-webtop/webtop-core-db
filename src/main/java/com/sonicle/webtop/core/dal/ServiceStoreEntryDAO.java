@@ -35,10 +35,8 @@ package com.sonicle.webtop.core.dal;
 
 import com.sonicle.webtop.core.bol.OServiceStoreEntry;
 import static com.sonicle.webtop.core.jooq.core.Tables.*;
-import com.sonicle.webtop.core.jooq.core.tables.records.ServicestoreEntriesRecord;
 import java.sql.Connection;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
 
 /**
@@ -63,30 +61,31 @@ public class ServiceStoreEntryDAO extends BaseDAO {
 				SERVICESTORE_ENTRIES.VALUE,
 				SERVICESTORE_ENTRIES.FREQUENCY,
 				SERVICESTORE_ENTRIES.LAST_UPDATE
-			).from(SERVICESTORE_ENTRIES)
+			)
+			.from(SERVICESTORE_ENTRIES)
 			.where(
 				SERVICESTORE_ENTRIES.DOMAIN_ID.equal(domainId)
 				.and(SERVICESTORE_ENTRIES.USER_ID.equal(userId))
 				.and(SERVICESTORE_ENTRIES.SERVICE_ID.equal(serviceId))
 				.and(SERVICESTORE_ENTRIES.CONTEXT.equal(context))
-				.and(SERVICESTORE_ENTRIES.KEY.equal(StringUtils.upperCase(key)))
+				.and(SERVICESTORE_ENTRIES.KEY.equal(OServiceStoreEntry.sanitizeKey(key))) // Targets always the trimmed key: " ABC" or "ABC" are the same!
 			)
 			.fetchOneInto(OServiceStoreEntry.class);
 	}
 	
-	public List<OServiceStoreEntry> selectKeyValueByLikeKeyLimit(Connection con, String domainId, String userId, String serviceId, String context, String likeKey, int limit) throws DAOException {
+	public List<OServiceStoreEntry> selectKeyValueByLimit(Connection con, String domainId, String userId, String serviceId, String context, int limit) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
 				SERVICESTORE_ENTRIES.KEY,
 				SERVICESTORE_ENTRIES.VALUE
-			).from(SERVICESTORE_ENTRIES)
+			)
+			.from(SERVICESTORE_ENTRIES)
 			.where(
 				SERVICESTORE_ENTRIES.DOMAIN_ID.equal(domainId)
 				.and(SERVICESTORE_ENTRIES.USER_ID.equal(userId))
 				.and(SERVICESTORE_ENTRIES.SERVICE_ID.equal(serviceId))
 				.and(SERVICESTORE_ENTRIES.CONTEXT.equal(context))
-				.and(SERVICESTORE_ENTRIES.KEY.like(StringUtils.upperCase(likeKey)))
 			)
 			.orderBy(
 				SERVICESTORE_ENTRIES.FREQUENCY.desc(),
@@ -96,18 +95,20 @@ public class ServiceStoreEntryDAO extends BaseDAO {
 			.fetchInto(OServiceStoreEntry.class);
 	}
 	
-	public List<OServiceStoreEntry> selectKeyValueByLimit(Connection con, String domainId, String userId, String serviceId, String context, int limit) throws DAOException {
+	public List<OServiceStoreEntry> selectKeyValueByLikeKeyLimit(Connection con, String domainId, String userId, String serviceId, String context, String likeKey, int limit) throws DAOException {
 		DSLContext dsl = getDSL(con);
 		return dsl
 			.select(
 				SERVICESTORE_ENTRIES.KEY,
 				SERVICESTORE_ENTRIES.VALUE
-			).from(SERVICESTORE_ENTRIES)
+			)
+			.from(SERVICESTORE_ENTRIES)
 			.where(
 				SERVICESTORE_ENTRIES.DOMAIN_ID.equal(domainId)
 				.and(SERVICESTORE_ENTRIES.USER_ID.equal(userId))
 				.and(SERVICESTORE_ENTRIES.SERVICE_ID.equal(serviceId))
 				.and(SERVICESTORE_ENTRIES.CONTEXT.equal(context))
+				.and(SERVICESTORE_ENTRIES.KEY.like(likeKey))
 			)
 			.orderBy(
 				SERVICESTORE_ENTRIES.FREQUENCY.desc(),
@@ -119,15 +120,62 @@ public class ServiceStoreEntryDAO extends BaseDAO {
 	
 	public int insert(Connection con, OServiceStoreEntry item) throws DAOException {
 		DSLContext dsl = getDSL(con);
-		ServicestoreEntriesRecord record = dsl.newRecord(SERVICESTORE_ENTRIES, item);
+		item.setLastUpdate(createRevisionTimestamp());
+		//ServicestoreEntriesRecord record = dsl.newRecord(SERVICESTORE_ENTRIES, item);
 		return dsl
 			.insertInto(SERVICESTORE_ENTRIES)
-			.set(record)
+			.set(SERVICESTORE_ENTRIES.DOMAIN_ID, item.getDomainId())
+			.set(SERVICESTORE_ENTRIES.USER_ID, item.getUserId())
+			.set(SERVICESTORE_ENTRIES.SERVICE_ID, item.getServiceId())
+			.set(SERVICESTORE_ENTRIES.CONTEXT, item.getContext())
+			.set(SERVICESTORE_ENTRIES.KEY, item.getSanitizedKey())
+			.set(SERVICESTORE_ENTRIES.VALUE, item.getValue())
+			.set(SERVICESTORE_ENTRIES.FREQUENCY, item.getFrequency())
+			.set(SERVICESTORE_ENTRIES.LAST_UPDATE, item.getLastUpdate())
 			.execute();
 	}
 	
+	public int update(Connection con, String domainId, String userId, String serviceId, String context, String key) throws DAOException {
+		return update(con, domainId, userId, serviceId, context, key, null);
+	}
+	
+	public int update(Connection con, String domainId, String userId, String serviceId, String context, String key, String value) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		
+		if (value != null) {
+			return dsl
+				.update(SERVICESTORE_ENTRIES)
+				.set(SERVICESTORE_ENTRIES.VALUE, value)
+				.set(SERVICESTORE_ENTRIES.FREQUENCY, SERVICESTORE_ENTRIES.FREQUENCY.add(1))
+				.set(SERVICESTORE_ENTRIES.LAST_UPDATE, createRevisionTimestamp())
+				.where(
+					SERVICESTORE_ENTRIES.DOMAIN_ID.equal(domainId)
+					.and(SERVICESTORE_ENTRIES.USER_ID.equal(userId))
+					.and(SERVICESTORE_ENTRIES.SERVICE_ID.equal(serviceId))
+					.and(SERVICESTORE_ENTRIES.CONTEXT.equal(context))
+					.and(SERVICESTORE_ENTRIES.KEY.equal(OServiceStoreEntry.sanitizeKey(key)))
+				)
+				.execute();
+		} else {
+			return dsl
+				.update(SERVICESTORE_ENTRIES)
+				.set(SERVICESTORE_ENTRIES.FREQUENCY, SERVICESTORE_ENTRIES.FREQUENCY.add(1))
+				.set(SERVICESTORE_ENTRIES.LAST_UPDATE, createRevisionTimestamp())
+				.where(
+					SERVICESTORE_ENTRIES.DOMAIN_ID.equal(domainId)
+					.and(SERVICESTORE_ENTRIES.USER_ID.equal(userId))
+					.and(SERVICESTORE_ENTRIES.SERVICE_ID.equal(serviceId))
+					.and(SERVICESTORE_ENTRIES.CONTEXT.equal(context))
+					.and(SERVICESTORE_ENTRIES.KEY.equal(OServiceStoreEntry.sanitizeKey(key)))
+				)
+				.execute();
+		}
+	}
+	
+	/*
 	public int update(Connection con, OServiceStoreEntry item) throws DAOException {
 		DSLContext dsl = getDSL(con);
+		item.setLastUpdate(createRevisionTimestamp());
 		return dsl
 			.update(SERVICESTORE_ENTRIES)
 			.set(SERVICESTORE_ENTRIES.VALUE, item.getValue())
@@ -138,10 +186,11 @@ public class ServiceStoreEntryDAO extends BaseDAO {
 				.and(SERVICESTORE_ENTRIES.USER_ID.equal(item.getUserId()))
 				.and(SERVICESTORE_ENTRIES.SERVICE_ID.equal(item.getServiceId()))
 				.and(SERVICESTORE_ENTRIES.CONTEXT.equal(item.getContext()))
-				.and(SERVICESTORE_ENTRIES.KEY.equal(StringUtils.upperCase(item.getKey())))
+				.and(SERVICESTORE_ENTRIES.KEY.equal(item.getSanitizedKey()))
 			)
 			.execute();
 	}
+	*/
 	
 	public int delete(Connection con, String domainId, String userId, String serviceId, String context, String key) throws DAOException {
 		DSLContext dsl = getDSL(con);
@@ -152,7 +201,7 @@ public class ServiceStoreEntryDAO extends BaseDAO {
 				.and(SERVICESTORE_ENTRIES.USER_ID.equal(userId))
 				.and(SERVICESTORE_ENTRIES.SERVICE_ID.equal(serviceId))
 				.and(SERVICESTORE_ENTRIES.CONTEXT.equal(context))
-				.and(SERVICESTORE_ENTRIES.KEY.equal(StringUtils.upperCase(key)))
+				.and(SERVICESTORE_ENTRIES.KEY.trim().equal(OServiceStoreEntry.sanitizeKey(key))) // Targets trimmed (and not) keys: " ABC" or "ABC" are the same! Note timmming on field!
 			)
 			.execute();
 	}
