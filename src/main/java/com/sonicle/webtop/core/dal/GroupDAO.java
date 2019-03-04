@@ -40,7 +40,9 @@ import static com.sonicle.webtop.core.jooq.core.Tables.*;
 import com.sonicle.webtop.core.jooq.core.tables.Users;
 import com.sonicle.webtop.core.jooq.core.tables.records.UsersRecord;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import org.jooq.DSLContext;
 
 /**
@@ -65,6 +67,24 @@ public class GroupDAO extends BaseDAO {
 				USERS.TYPE.equal(OUser.TYPE_GROUP)
 			)
 			.fetchInto(GroupUid.class);
+	}
+	
+	public Map<String, OGroup> selectByDomainIn(Connection con, String domainId, Collection<String> userIds) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				USERS.DOMAIN_ID,
+				USERS.USER_ID,
+				USERS.TYPE,
+				USERS.USER_UID,
+				USERS.DISPLAY_NAME
+			).from(USERS)
+			.where(
+				USERS.DOMAIN_ID.equal(domainId)
+				.and(USERS.TYPE.equal(OUser.TYPE_GROUP))
+				.and(USERS.USER_ID.in(userIds))
+			)
+			.fetchMap(USERS.USER_ID, OGroup.class);
 	}
 	
 	public List<OGroup> selectByDomain(Connection con, String domainId) throws DAOException {
