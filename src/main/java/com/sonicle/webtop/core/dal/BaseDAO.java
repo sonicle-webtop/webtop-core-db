@@ -39,6 +39,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.jooq.Condition;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.ExecuteContext;
@@ -79,6 +80,10 @@ public class BaseDAO {
 	
 	public static DateTime createRevisionTimestamp() {
 		return DateTime.now(DateTimeZone.UTC);
+	}
+	
+	public static Condition createCondition(com.github.rutledgepaulv.qbuilders.conditions.Condition<?> conditionPredicate, com.github.rutledgepaulv.qbuilders.visitors.ContextualNodeVisitor<? extends Condition, Void> visitor) {
+		return (conditionPredicate != null) ? conditionPredicate.query(visitor) : DSL.trueCondition();
 	}
 	
 	public static class FieldsMap extends HashMap<Field<?>, Object> {
