@@ -37,8 +37,10 @@ import com.github.rutledgepaulv.qbuilders.nodes.ComparisonNode;
 import com.github.rutledgepaulv.qbuilders.nodes.OrNode;
 import com.github.rutledgepaulv.qbuilders.operators.ComparisonOperator;
 import com.github.rutledgepaulv.qbuilders.visitors.AbstractVoidContextNodeVisitor;
+import com.sonicle.commons.time.DateTimeUtils;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.Condition;
@@ -50,13 +52,23 @@ import org.jooq.impl.DSL;
  * @author malbinola
  */
 public abstract class BaseJOOQVisitor extends AbstractVoidContextNodeVisitor<Condition> {
+	protected final Function<Object, Object> normalizer;
 	protected final boolean ignoreCase;
 	
 	public BaseJOOQVisitor() {
-		this(false);
+		this(new DefaultNormalizer(), false);
+	}
+	
+	public BaseJOOQVisitor(Function<Object, Object> normalizer) {
+		this(normalizer, false);
 	}
 	
 	public BaseJOOQVisitor(boolean ignoreCase) {
+		this(new DefaultNormalizer(), ignoreCase);
+	}
+	
+	public BaseJOOQVisitor(Function<Object, Object> normalizer, boolean ignoreCase) {
+		this.normalizer = normalizer;
 		this.ignoreCase = ignoreCase;
 	}
 	
@@ -90,7 +102,7 @@ public abstract class BaseJOOQVisitor extends AbstractVoidContextNodeVisitor<Con
 	protected Condition visit(ComparisonNode node) {
 		String fieldName = node.getField().asKey();
 		ComparisonOperator operator = node.getOperator();
-		Collection<?> values = node.getValues().stream().collect(Collectors.toList());
+		Collection<?> values = node.getValues().stream().map(normalizer).collect(Collectors.toList());
 		return toCondition(fieldName, operator, values, node);
 	}
 	
@@ -177,16 +189,14 @@ public abstract class BaseJOOQVisitor extends AbstractVoidContextNodeVisitor<Con
 		return value;
 	}
 	
-	/*
 	protected static class DefaultNormalizer implements Function<Object, Object> {
 
 		@Override
-		public Object apply(Object t) {
-			if (o instanceof Instant) {
-				
+		public Object apply(Object o) {
+			if (o instanceof java.time.Instant) {
+				return DateTimeUtils.toDateTime(DateTimeUtils.toZonedDateTime((java.time.Instant)o, java.time.ZoneOffset.UTC));
 			}
 			return o;
 		}
 	}
-	*/
 }
