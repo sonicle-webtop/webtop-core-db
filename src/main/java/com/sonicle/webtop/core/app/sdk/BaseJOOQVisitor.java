@@ -115,6 +115,10 @@ public abstract class BaseJOOQVisitor extends AbstractVoidContextNodeVisitor<Con
 				} else if (ignoreCase) {
 					return field.equalIgnoreCase(value);
 				}
+				
+			} else if (hasBooleanType(field)) {
+				String value = (String)single(values);
+				return Boolean.parseBoolean(value) ? field.isTrue() : field.isFalse();	
 			}
 			return field.equal(field.getDataType().convert(single(values)));
 
@@ -126,6 +130,10 @@ public abstract class BaseJOOQVisitor extends AbstractVoidContextNodeVisitor<Con
 				} else if (ignoreCase) {
 					return field.notEqualIgnoreCase(value);
 				}
+				
+			} else if (hasBooleanType(field)) {
+				String value = (String)single(values);
+				return Boolean.parseBoolean(value) ? field.isFalse() : field.isTrue();
 			}
 			return field.notEqual(field.getDataType().convert(single(values)));
 			
@@ -163,6 +171,10 @@ public abstract class BaseJOOQVisitor extends AbstractVoidContextNodeVisitor<Con
 	
 	protected boolean hasStringType(Field<?> field) {
 		return field.getType().equals(java.lang.String.class);
+	}
+	
+	protected boolean hasBooleanType(Field<?> field) {
+		return field.getType().equals(java.lang.Boolean.class);
 	}
 	
 	protected String singleAsString(Collection<?> values) {
