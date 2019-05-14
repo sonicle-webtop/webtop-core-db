@@ -40,6 +40,7 @@ import com.sonicle.webtop.core.model.MasterData;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -85,6 +86,33 @@ public class MasterDataDAO extends BaseDAO {
 				.and(MASTER_DATA.MASTER_DATA_ID.equal(masterDataId))
 			)
 			.fetchOneInto(OMasterData.class);
+	}
+	
+	public List<OMasterData> viewByDomainIn(Connection con, String domainId, Collection<String> masterDataIds) throws DAOException {
+		DSLContext dsl = getDSL(con);
+		return dsl
+			.select(
+				MASTER_DATA.DOMAIN_ID,
+				MASTER_DATA.MASTER_DATA_ID,
+				MASTER_DATA.PARENT_MASTER_DATA_ID,
+				MASTER_DATA.EXTERNAL_ID,
+				MASTER_DATA.TYPE,
+				MASTER_DATA.REVISION_STATUS,
+				MASTER_DATA.REVISION_TIMESTAMP,
+				MASTER_DATA.LOCK_STATUS,
+				MASTER_DATA.DESCRIPTION
+			)
+			.from(MASTER_DATA)
+			.where(
+				MASTER_DATA.MASTER_DATA_ID.in(masterDataIds)
+				.and(MASTER_DATA.DOMAIN_ID.equal(domainId))
+				.and(MASTER_DATA.REVISION_STATUS.notEqual(EnumUtils.toSerializedName(MasterData.RevisionStatus.DELETED)))
+			)
+			.orderBy(
+				MASTER_DATA.TYPE.asc(),
+				MASTER_DATA.DESCRIPTION.asc()
+			)
+			.fetchInto(OMasterData.class);
 	}
 	
 	public List<OMasterData> viewByIdsDomain(Connection con, Collection<String> masterDataIds, String domainId) throws DAOException {
