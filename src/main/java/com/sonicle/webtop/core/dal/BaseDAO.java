@@ -46,6 +46,9 @@ import org.jooq.ExecuteContext;
 import org.jooq.Field;
 import org.jooq.RecordMapperProvider;
 import org.jooq.SQLDialect;
+import org.jooq.conf.MappedSchema;
+import org.jooq.conf.RenderMapping;
+import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultExecuteListener;
@@ -57,25 +60,44 @@ import org.jooq.impl.DefaultExecuteListenerProvider;
  */
 public class BaseDAO {
 	
-	public SQLDialect getDialect(Connection con) {
-		return SQLDialect.POSTGRES;
-	}
-	
 	public DSLContext getDSL(Connection con) {
-		Configuration configuration = new DefaultConfiguration()
-				.set(con)
-				.set(getDialect(con))
-				.set(new DefaultExecuteListenerProvider(new DAOExecuteListener()));
-		return DSL.using(configuration);
+		return getDSL(con, null, null);
 	}
 	
 	public DSLContext getDSL(Connection con, RecordMapperProvider rmp) {
+		return getDSL(con, null, rmp);
+	}
+	
+	public DSLContext getDSL(Connection con, MappedSchema mappedSchema) {
+		Settings settings = null;
+		if (mappedSchema != null) {
+			settings = new Settings()
+					.withRenderMapping(
+							new RenderMapping()
+							.withSchemata(mappedSchema)
+					);
+		}
+		return getDSL(con, settings, null);
+	}
+	
+	public DSLContext getDSL(Connection con, Settings settings, RecordMapperProvider recordMapperProvider) {
 		Configuration configuration = new DefaultConfiguration()
 				.set(con)
-				.set(getDialect(con))
-				.set(rmp)
+				.set(createDialect(con))
 				.set(new DefaultExecuteListenerProvider(new DAOExecuteListener()));
+		if (settings != null) configuration.set(settings);
+		if (recordMapperProvider != null) configuration.set(recordMapperProvider);
 		return DSL.using(configuration);
+	}
+	
+	public static SQLDialect createDialect(Connection con) {
+		return SQLDialect.POSTGRES;
+	}
+	
+	public static MappedSchema createMappedSchema(String mapFrom, String mapTo) {
+		return new MappedSchema()
+				.withInput(mapFrom)
+				.withOutput(mapTo);
 	}
 	
 	public static DateTime createRevisionTimestamp() {
