@@ -16,7 +16,7 @@ package com.sonicle.webtop.core.jooq.core;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Core extends org.jooq.impl.SchemaImpl {
 
-	private static final long serialVersionUID = -832586392;
+	private static final long serialVersionUID = -1954944243;
 
 	/**
 	 * The reference instance of <code>core</code>
@@ -73,6 +73,7 @@ public class Core extends org.jooq.impl.SchemaImpl {
 			com.sonicle.webtop.core.jooq.core.tables.FileTypes.FILE_TYPES,
 			com.sonicle.webtop.core.jooq.core.tables.ImChats.IM_CHATS,
 			com.sonicle.webtop.core.jooq.core.tables.ImMessages.IM_MESSAGES,
+			com.sonicle.webtop.core.jooq.core.tables.Languages.LANGUAGES,
 			com.sonicle.webtop.core.jooq.core.tables.LocalVault.LOCAL_VAULT,
 			com.sonicle.webtop.core.jooq.core.tables.MasterData.MASTER_DATA,
 			com.sonicle.webtop.core.jooq.core.tables.MediaTypes.MEDIA_TYPES,

@@ -67,6 +67,11 @@ public class Tables {
 	public static final com.sonicle.webtop.core.jooq.core.tables.ImMessages IM_MESSAGES = com.sonicle.webtop.core.jooq.core.tables.ImMessages.IM_MESSAGES;
 
 	/**
+	 * The table core.languages
+	 */
+	public static final com.sonicle.webtop.core.jooq.core.tables.Languages LANGUAGES = com.sonicle.webtop.core.jooq.core.tables.Languages.LANGUAGES;
+
+	/**
 	 * The table core.local_vault
 	 */
 	public static final com.sonicle.webtop.core.jooq.core.tables.LocalVault LOCAL_VAULT = com.sonicle.webtop.core.jooq.core.tables.LocalVault.LOCAL_VAULT;
