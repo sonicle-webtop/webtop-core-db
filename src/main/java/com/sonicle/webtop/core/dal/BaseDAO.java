@@ -104,7 +104,7 @@ public class BaseDAO {
 		return DateTime.now(DateTimeZone.UTC);
 	}
 	
-	public static Condition createCondition(com.github.rutledgepaulv.qbuilders.conditions.Condition<?> conditionPredicate, com.github.rutledgepaulv.qbuilders.visitors.ContextualNodeVisitor<? extends Condition, Void> visitor) {
+	public static Condition createCondition(com.sonicle.commons.qbuilders.conditions.Condition<?> conditionPredicate, com.sonicle.commons.qbuilders.visitors.ContextualNodeVisitor<? extends Condition, Void> visitor) {
 		return (conditionPredicate != null) ? conditionPredicate.query(visitor) : DSL.trueCondition();
 	}
 	
