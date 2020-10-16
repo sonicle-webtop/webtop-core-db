@@ -1,4 +1,4 @@
-# WebTop Framework - DB Module
+# WebTop Framework - DB Module (DEPRECATED)
 
 [![License](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.txt)
 
